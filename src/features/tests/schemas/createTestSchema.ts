@@ -1,0 +1,50 @@
+import { z } from 'zod';
+import { TEST_LIMITS } from '../constants/test.constants';
+
+/**
+ * Zod schema for the Create Test form.
+ *
+ * Validates all fields shown in the Figma "Create Test" screen:
+ * test type tabs, subject/topic dropdowns, name, duration,
+ * difficulty radios, marking scheme, and question count.
+ */
+export const createTestSchema = z.object({
+  testType: z.enum(['chapterwise', 'pyq', 'mock-test'], {
+    error: 'Please select a test type',
+  }),
+
+  subject: z.string().min(1, 'Subject is required'),
+
+  title: z.string().min(1, 'Name of Test is required'),
+
+  topic: z.string().min(1, 'Topic is required'),
+
+  subTopic: z.string().optional(),
+
+  duration: z
+    .number({ error: 'Duration is required' })
+    .int('Duration must be a whole number')
+    .min(TEST_LIMITS.MIN_DURATION, `Minimum duration is ${TEST_LIMITS.MIN_DURATION} minute(s)`)
+    .max(TEST_LIMITS.MAX_DURATION, `Maximum duration is ${TEST_LIMITS.MAX_DURATION} minutes`),
+
+  difficultyLevel: z.enum(['easy', 'medium', 'difficult'], {
+    error: 'Please select a difficulty level',
+  }),
+
+  markingScheme: z.object({
+    wrongAnswer: z.number({ error: 'Wrong answer marks are required' }),
+    unattempted: z.number({ error: 'Unattempted marks are required' }),
+    correctAnswer: z
+      .number({ error: 'Correct answer marks are required' })
+      .positive('Correct answer marks must be positive'),
+  }),
+
+  totalQuestions: z
+    .number({ error: 'Number of questions is required' })
+    .int('Must be a whole number')
+    .min(TEST_LIMITS.MIN_QUESTIONS, `Minimum ${TEST_LIMITS.MIN_QUESTIONS} question(s)`)
+    .max(TEST_LIMITS.MAX_QUESTIONS, `Maximum ${TEST_LIMITS.MAX_QUESTIONS} questions`),
+});
+
+/** Inferred type for the Create Test form values. */
+export type CreateTestFormValues = z.infer<typeof createTestSchema>;
