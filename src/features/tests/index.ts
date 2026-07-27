@@ -41,4 +41,5 @@ export {
   TEST_LIMITS,
   TEST_FORM_DEFAULTS,
   TEST_MESSAGES,
-} from './constants';
+// Pages
+export { CreateTestPage } from './pages/CreateTestPage';

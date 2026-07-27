@@ -5,6 +5,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { NotFound } from '@/pages/NotFound';
 
 import { LoginPage } from '@/features/auth/pages/LoginPage';
+import { CreateTestPage } from '@/features/tests';
 
 /**
  * Application route configuration.
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
                 Dashboard — implement in feature module
               </div>
             ),
+          },
+          {
+            path: 'tests/create',
+            element: <CreateTestPage />,
           },
         ],
       },
