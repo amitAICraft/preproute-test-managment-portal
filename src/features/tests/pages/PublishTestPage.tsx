@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { CheckCircle2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { QuestionListSidebar } from '../components/question-builder/QuestionListSidebar';
 import { PublishSettingsMain } from '../components/publish/PublishSettingsMain';
 import { PUBLISH_TEST_MESSAGES } from '../constants/publish.constants';
@@ -17,41 +16,45 @@ export function PublishTestPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   
   const totalQuestions = testResponse?.totalQuestions || 50;
-  // Assume all questions are completed before reaching publish page
   const completedQuestions = Array.from({ length: totalQuestions }, (_, i) => i);
 
   return (
-    <div className="flex h-[calc(100vh-3.5rem)] flex-col -m-6 bg-white overflow-hidden">
+    <div className="w-full flex flex-col space-y-5 bg-slate-50/50 p-6 min-h-[calc(100vh-3.5rem)] overflow-x-hidden">
       
-      {/* Top Header - No Breadcrumbs here per Figma */}
-      <div className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 px-6">
-        <div className="text-sm text-slate-500">
-          {PUBLISH_TEST_MESSAGES.TITLE}
+      {/* Fix 1: Top Breadcrumb Container with px-[20px] left/right padding and proper top/bottom spacing */}
+      <div className="w-full rounded-xl border border-slate-200 bg-white px-[20px] py-4 flex items-center justify-between shadow-xs">
+        <div className="flex items-center gap-2 text-sm text-slate-500">
+          <span>{PUBLISH_TEST_MESSAGES.TITLE}</span>
         </div>
       </div>
 
-      {/* Split Content Area */}
-      <div className="flex flex-1 overflow-hidden">
+      {/* Fix 2 & Fix 3: Secondary Sidebar + Main Publish Area in responsive flex layout */}
+      <div className="flex w-full items-start gap-5 min-w-0 flex-1">
+        {/* Secondary Question Creation Sidebar (no clipping, no negative margins) */}
         <QuestionListSidebar
           totalQuestions={totalQuestions}
-          activeQuestionIndex={-1} // Nothing selected
+          activeQuestionIndex={-1}
           completedQuestions={completedQuestions}
           onSelectQuestion={() => {}}
           isCollapsed={sidebarCollapsed}
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
         
-        <div className="flex flex-1 flex-col overflow-hidden">
-          {/* Sub header specifically for publish main area */}
-          <div className="px-10 pt-10 pb-6 flex items-center gap-4 bg-slate-50/30">
-            <h1 className="text-xl font-bold text-slate-800">{PUBLISH_TEST_MESSAGES.TEST_CREATED}</h1>
-            <Badge variant="outline" className="gap-1.5 rounded-full px-3 py-1 font-medium bg-white border border-emerald-500 text-emerald-500">
-              <CheckCircle2 className="size-3.5" />
-              {PUBLISH_TEST_MESSAGES.ALL_QUESTIONS_DONE}
-            </Badge>
+        {/* Main Publish Content occupying remaining width */}
+        <div className="flex-1 min-w-0 flex flex-col space-y-5">
+          {/* Header Card with Test Created + Success Badge */}
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-xs flex flex-col space-y-6">
+            <div className="flex items-center gap-[30px]">
+              <h1 className="text-xl font-bold text-slate-900">{PUBLISH_TEST_MESSAGES.TEST_CREATED}</h1>
+              {/* Fix 7: Success Badge matching Figma specs: pl-[10px] pr-[10px] gap-[30px] rounded-[8px] */}
+              <div className="inline-flex items-center gap-1.5 rounded-[8px] border border-emerald-500 bg-emerald-50/30 pl-[10px] pr-[10px] py-1 text-xs font-medium text-emerald-600">
+                <CheckCircle2 className="size-4 text-emerald-500 shrink-0" />
+                <span>{PUBLISH_TEST_MESSAGES.ALL_QUESTIONS_DONE}</span>
+              </div>
+            </div>
+            
+            <PublishSettingsMain testId={testId || undefined} test={testResponse} />
           </div>
-          
-          <PublishSettingsMain testId={testId || undefined} test={testResponse} />
         </div>
       </div>
 

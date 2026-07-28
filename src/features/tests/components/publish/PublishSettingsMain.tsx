@@ -5,16 +5,27 @@ import { Button } from '@/components/ui/button';
 import { TestDetailsCard } from '../TestDetailsCard';
 import { EditTestDialog } from '../edit-test/EditTestDialog';
 import { Tabs } from '@/components/ui/tabs';
-import { RadioGroupField } from '@/components/forms/RadioGroupField';
-import { TextField } from '@/components/forms/TextField';
 import { usePublishTest } from '../../hooks/usePublishTest';
 import { PUBLISH_TEST_MESSAGES, PUBLISH_DURATIONS } from '../../constants/publish.constants';
 import type { Test } from '../../types/test.types';
+import { cn } from '@/lib/utils';
 
 const PUBLISH_TABS = [
   { label: PUBLISH_TEST_MESSAGES.PUBLISH_NOW, value: 'publish_now' },
   { label: PUBLISH_TEST_MESSAGES.SCHEDULE_PUBLISH, value: 'schedule_publish' },
 ] as const;
+
+// Reorder durations so 2 columns map visually:
+// Col 1: Always Available (0), 1 Week (1), 2 Weeks (2)
+// Col 2: 3 Weeks (3), 1 Month (4), Custom Duration (5)
+const GRID_ORDERED_DURATIONS = [
+  PUBLISH_DURATIONS[0], // Always Available
+  PUBLISH_DURATIONS[3], // 3 Weeks
+  PUBLISH_DURATIONS[1], // 1 Week
+  PUBLISH_DURATIONS[4], // 1 Month
+  PUBLISH_DURATIONS[2], // 2 Weeks
+  PUBLISH_DURATIONS[5], // Custom Duration
+];
 
 interface PublishSettingsMainProps {
   testId?: string;
@@ -30,134 +41,166 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
   const duration = watch('duration');
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto bg-slate-50/30">
-      <div className="mx-auto w-full max-w-4xl p-6 space-y-8">
-        
-        {/* Test Details Card */}
-        <TestDetailsCard onEdit={() => setEditDialogOpen(true)} test={test} />
-        <EditTestDialog
-          open={editDialogOpen}
-          onOpenChange={setEditDialogOpen}
-          existingTest={test}
-        />
+    <div className="w-full flex flex-col space-y-6">
+      {/* Test Details Card */}
+      <TestDetailsCard onEdit={() => setEditDialogOpen(true)} test={test} />
+      <EditTestDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        existingTest={test}
+      />
 
-        {/* Form Area */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-          
-          <div className="w-fit">
-            <Controller
-              name="publishType"
-              control={control}
-              render={({ field }) => (
-                <Tabs
-                  options={PUBLISH_TABS}
-                  value={field.value}
-                  onChange={field.onChange}
+      {/* Form Area */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        
+        {/* Publish Type Tabs */}
+        <div className="w-fit">
+          <Controller
+            name="publishType"
+            control={control}
+            render={({ field }) => (
+              <Tabs
+                options={PUBLISH_TABS}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </div>
+
+        {/* Schedule Publish Date & Time Pickers */}
+        {publishType === 'schedule_publish' && (
+          <div className="space-y-4 pt-2">
+            <h2 className="text-base font-semibold text-slate-800">{PUBLISH_TEST_MESSAGES.SELECT_DATE_AND_TIME}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={PUBLISH_TEST_MESSAGES.SELECT_DATE}
+                  {...register('scheduleDate')}
+                  className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 pr-10"
                 />
-              )}
-            />
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <Calendar className="size-5" />
+                </div>
+              </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={PUBLISH_TEST_MESSAGES.SELECT_TIME}
+                  {...register('scheduleTime')}
+                  className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 pr-10"
+                />
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <ChevronDown className="size-5" />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Live Until Section */}
+        <div className="space-y-4 pt-2">
+          <div>
+            <h2 className="text-base font-semibold text-slate-800">{PUBLISH_TEST_MESSAGES.LIVE_UNTIL}</h2>
+            <p className="mt-1 text-xs text-slate-500">{PUBLISH_TEST_MESSAGES.LIVE_UNTIL_DESC}</p>
           </div>
 
-          {publishType === 'schedule_publish' && (
-            <div className="space-y-6 pt-4">
-              <h2 className="text-lg font-bold text-slate-800">{PUBLISH_TEST_MESSAGES.SELECT_DATE_AND_TIME}</h2>
-              <div className="grid grid-cols-2 gap-6 max-w-2xl pt-2">
-                <div className="relative">
-                  <TextField
-                    label=""
-                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_DATE}
-                    {...register('scheduleDate')}
-                    error={errors.scheduleDate?.message}
-                  />
-                  <div className="absolute right-3 top-3 text-slate-400 pointer-events-none">
-                    <Calendar className="size-5" />
-                  </div>
+          {/* Fix 4: Live Until Radio Group with 2-Column Grid Layout matching Figma */}
+          <Controller
+            name="duration"
+            control={control}
+            render={({ field }) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-5 w-full max-w-2xl pt-2">
+                {GRID_ORDERED_DURATIONS.map((option) => {
+                  const isSelected = field.value === option.value;
+                  return (
+                    <label
+                      key={option.value}
+                      className="group flex cursor-pointer items-center gap-3 py-0.5"
+                    >
+                      <div
+                        className={cn(
+                          'flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-all',
+                          isSelected
+                            ? 'border-[#7489FF] bg-white'
+                            : 'border-slate-300 group-hover:border-slate-400'
+                        )}
+                      >
+                        {isSelected && <div className="size-2.5 rounded-full bg-[#7489FF]" />}
+                      </div>
+                      <span className="text-sm font-medium text-slate-700">
+                        {option.label}
+                      </span>
+                      <input
+                        type="radio"
+                        name={field.name}
+                        value={option.value}
+                        checked={isSelected}
+                        onChange={() => field.onChange(option.value)}
+                        className="sr-only"
+                      />
+                    </label>
+                  );
+                })}
+              </div>
+            )}
+          />
+          {errors.duration?.message && (
+            <p className="text-xs text-red-500">{errors.duration.message}</p>
+          )}
+
+          {/* Fix 5: Custom Duration Date & Time Pickers */}
+          {duration === 'custom' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl pt-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={PUBLISH_TEST_MESSAGES.SELECT_END_DATE}
+                  {...register('endDate')}
+                  className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 pr-10"
+                />
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <Calendar className="size-5" />
                 </div>
-                <div className="relative">
-                  <TextField
-                    label=""
-                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_TIME}
-                    {...register('scheduleTime')}
-                    error={errors.scheduleTime?.message}
-                  />
-                  <div className="absolute right-3 top-3 text-slate-400 pointer-events-none">
-                    <ChevronDown className="size-5" />
-                  </div>
+              </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder={PUBLISH_TEST_MESSAGES.SELECT_END_TIME}
+                  {...register('endTime')}
+                  className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 pr-10"
+                />
+                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <ChevronDown className="size-5" />
                 </div>
               </div>
             </div>
           )}
+        </div>
 
-          <div className="space-y-6 pt-4">
-            <div>
-              <h2 className="text-lg font-bold text-slate-800">{PUBLISH_TEST_MESSAGES.LIVE_UNTIL}</h2>
-              <p className="mt-1 text-sm text-slate-500">{PUBLISH_TEST_MESSAGES.LIVE_UNTIL_DESC}</p>
-            </div>
+        {/* Fix 6: Footer Buttons */}
+        <div className="flex items-center justify-end gap-4 pt-8 border-t border-slate-100">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onCancel}
+            className="h-11 px-8 rounded-lg bg-[#F4F6FF] text-[#7489FF] hover:bg-[#EBEEFF] hover:text-[#5B73E8] font-medium"
+          >
+            {PUBLISH_TEST_MESSAGES.CANCEL}
+          </Button>
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="h-11 px-10 rounded-lg bg-[#7489FF] hover:bg-[#5B73E8] text-white font-medium shadow-xs"
+          >
+            {PUBLISH_TEST_MESSAGES.CONFIRM}
+          </Button>
+        </div>
 
-            <Controller
-              name="duration"
-              control={control}
-              render={({ field }) => (
-                <RadioGroupField
-                  label=""
-                  name={field.name}
-                  options={PUBLISH_DURATIONS}
-                  value={field.value}
-                  onChange={field.onChange}
-                  error={errors.duration?.message}
-                  className="grid grid-cols-2 gap-y-8 max-w-2xl" // Using grid for 2 columns
-                />
-              )}
-            />
-
-            {duration === 'custom' && (
-              <div className="grid grid-cols-2 gap-6 max-w-2xl pt-2">
-                <div className="relative">
-                  <TextField
-                    label=""
-                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_END_DATE}
-                    {...register('endDate')}
-                    error={errors.endDate?.message}
-                  />
-                  <div className="absolute right-3 top-3 text-slate-400 pointer-events-none">
-                    <Calendar className="size-5" />
-                  </div>
-                </div>
-                <div className="relative">
-                  <TextField
-                    label=""
-                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_END_TIME}
-                    {...register('endTime')}
-                    error={errors.endTime?.message}
-                  />
-                  <div className="absolute right-3 top-3 text-slate-400 pointer-events-none">
-                    <ChevronDown className="size-5" />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="flex justify-end gap-4 pt-12">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={onCancel}
-              className="px-8 bg-[#f4f6ff] text-blue-600 hover:bg-indigo-50 hover:text-blue-700 font-medium"
-            >
-              {PUBLISH_TEST_MESSAGES.CANCEL}
-            </Button>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="px-12 bg-blue-500 hover:bg-blue-600 font-medium"
-            >
-              {PUBLISH_TEST_MESSAGES.CONFIRM}
-            </Button>
-          </div>
-
-        </form>
-      </div>
+      </form>
     </div>
   );
 }
