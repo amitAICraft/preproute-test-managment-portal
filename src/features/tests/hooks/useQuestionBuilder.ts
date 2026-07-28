@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { questionBuilderSchema, type QuestionBuilderFormValues } from '../schemas/questionBuilderSchema';
 import { useBulkCreateQuestionsMutation } from '@/services/questionApi';
 
-export function useQuestionBuilder() {
+export function useQuestionBuilder(testId?: string) {
   const [bulkCreate, { isLoading }] = useBulkCreateQuestionsMutation();
   const form = useForm<QuestionBuilderFormValues>({
     resolver: zodResolver(questionBuilderSchema),
@@ -37,7 +37,7 @@ export function useQuestionBuilder() {
           correct_option: data.correctOptionId || 'option1',
           explanation: data.solutionText || '',
           difficulty: data.difficulty || 'medium',
-          test_id: 'test-uuid-placeholder' // Needs to be replaced when routing is implemented
+          test_id: testId || 'test-uuid-placeholder' // Uses the testId from URL if available
         }]
       }).unwrap();
       

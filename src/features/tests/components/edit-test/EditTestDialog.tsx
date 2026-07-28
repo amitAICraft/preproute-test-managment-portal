@@ -146,53 +146,59 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
               />
             </div>
 
-            {/* Marking Scheme */}
+            {/* Marking Scheme & Questions */}
             <div className="space-y-4">
               <h3 className="text-base font-medium text-foreground">
                 {TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}
               </h3>
-              <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-3">
-                <TextField
-                  label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}
-                  type="number"
-                  placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.WRONG_ANSWER}
-                  error={errors.markingScheme?.wrongAnswer?.message}
-                  {...register('markingScheme.wrongAnswer', { valueAsNumber: true })}
-                />
-                <TextField
-                  label={TEST_FORM_CONSTANTS.LABELS.UNATTEMPTED}
-                  type="number"
-                  placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.UNATTEMPTED}
-                  error={errors.markingScheme?.unattempted?.message}
-                  {...register('markingScheme.unattempted', { valueAsNumber: true })}
-                />
-                <TextField
-                  label={TEST_FORM_CONSTANTS.LABELS.CORRECT_ANSWER}
-                  type="number"
-                  placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.CORRECT_ANSWER}
-                  error={errors.markingScheme?.correctAnswer?.message}
-                  {...register('markingScheme.correctAnswer', { valueAsNumber: true })}
-                />
+              <div className="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-12 items-end">
+                <div className="md:col-span-2">
+                  <TextField
+                    label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}
+                    type="number"
+                    placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.WRONG_ANSWER}
+                    error={errors.markingScheme?.wrongAnswer?.message}
+                    {...register('markingScheme.wrongAnswer', { valueAsNumber: true })}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <TextField
+                    label={TEST_FORM_CONSTANTS.LABELS.UNATTEMPTED}
+                    type="number"
+                    placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.UNATTEMPTED}
+                    error={errors.markingScheme?.unattempted?.message}
+                    {...register('markingScheme.unattempted', { valueAsNumber: true })}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <TextField
+                    label={TEST_FORM_CONSTANTS.LABELS.CORRECT_ANSWER}
+                    type="number"
+                    placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.CORRECT_ANSWER}
+                    error={errors.markingScheme?.correctAnswer?.message}
+                    {...register('markingScheme.correctAnswer', { valueAsNumber: true })}
+                  />
+                </div>
+                <div className="md:col-span-3">
+                  <TextField
+                    label={TEST_FORM_CONSTANTS.LABELS.NO_OF_QUESTIONS}
+                    type="number"
+                    placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.QUESTIONS}
+                    error={errors.totalQuestions?.message}
+                    {...register('totalQuestions', { valueAsNumber: true })}
+                  />
+                </div>
+                <div className="md:col-span-3">
+                  <TextField
+                    label={TEST_FORM_CONSTANTS.LABELS.TOTAL_MARKS}
+                    name="totalMarks"
+                    type="text"
+                    placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
+                    disabled
+                    className="cursor-not-allowed bg-slate-50"
+                  />
+                </div>
               </div>
-            </div>
-
-            {/* Questions & Marks */}
-            <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-              <TextField
-                label={TEST_FORM_CONSTANTS.LABELS.NO_OF_QUESTIONS}
-                type="number"
-                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.QUESTIONS}
-                error={errors.totalQuestions?.message}
-                {...register('totalQuestions', { valueAsNumber: true })}
-              />
-              <TextField
-                label={TEST_FORM_CONSTANTS.LABELS.TOTAL_MARKS}
-                name="totalMarks"
-                type="text"
-                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
-                disabled
-                className="cursor-not-allowed bg-slate-50"
-              />
             </div>
           </div>
         </DialogBody>
@@ -203,7 +209,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
             variant="ghost"
             onClick={handleClose}
             disabled={isLoading}
-            className="bg-slate-50 px-8 text-blue-600 hover:bg-slate-100 hover:text-blue-700"
+            className="bg-[#f4f6ff] px-8 text-blue-600 hover:bg-indigo-50 hover:text-blue-700"
           >
             {TEST_FORM_CONSTANTS.CANCEL}
           </Button>

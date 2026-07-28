@@ -6,7 +6,7 @@ import { publishTestSchema, type PublishTestFormValues } from '../schemas/publis
 import { ROUTES } from '@/constants/routes';
 import { usePublishTestMutation } from '@/services/publishApi';
 
-export function usePublishTest() {
+export function usePublishTest(testId?: string) {
   const navigate = useNavigate();
   const [publishTest, { isLoading }] = usePublishTestMutation();
   
@@ -24,7 +24,7 @@ export function usePublishTest() {
 
   const onSubmit = async (data: PublishTestFormValues) => {
     try {
-      await publishTest({ testId: 'test-uuid-placeholder' }).unwrap();
+      await publishTest({ testId: testId || '' }).unwrap();
       toast.success('Test published successfully!');
       navigate(ROUTES.DASHBOARD);
     } catch {

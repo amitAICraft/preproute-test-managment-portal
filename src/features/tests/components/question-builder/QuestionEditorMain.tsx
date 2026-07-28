@@ -15,13 +15,17 @@ import {
   SUB_TOPIC_OPTIONS,
 } from '../../constants/questionBuilder.constants';
 import { useQuestionBuilder } from '../../hooks/useQuestionBuilder';
+import type { Test } from '../../types/test.types';
+
 interface QuestionEditorMainProps {
   activeQuestionIndex: number;
   totalQuestions: number;
+  testId?: string;
+  test?: Test;
 }
 
-export function QuestionEditorMain({ activeQuestionIndex, totalQuestions }: QuestionEditorMainProps) {
-  const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder();
+export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId, test }: QuestionEditorMainProps) {
+  const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder(testId);
   const { watch, setValue } = form;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
@@ -32,7 +36,7 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions }: Ques
     <div className="flex flex-1 flex-col overflow-y-auto bg-slate-50/30">
       <div className="mx-auto w-full max-w-4xl p-6 space-y-6">
         {/* Test Details Card */}
-        <TestDetailsCard onEdit={() => setEditDialogOpen(true)} />
+        <TestDetailsCard onEdit={() => setEditDialogOpen(true)} test={test} />
         <EditTestDialog
           open={editDialogOpen}
           onOpenChange={setEditDialogOpen}

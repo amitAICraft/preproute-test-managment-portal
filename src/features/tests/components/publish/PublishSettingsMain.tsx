@@ -9,14 +9,20 @@ import { RadioGroupField } from '@/components/forms/RadioGroupField';
 import { TextField } from '@/components/forms/TextField';
 import { usePublishTest } from '../../hooks/usePublishTest';
 import { PUBLISH_TEST_MESSAGES, PUBLISH_DURATIONS } from '../../constants/publish.constants';
+import type { Test } from '../../types/test.types';
 
 const PUBLISH_TABS = [
   { label: PUBLISH_TEST_MESSAGES.PUBLISH_NOW, value: 'publish_now' },
   { label: PUBLISH_TEST_MESSAGES.SCHEDULE_PUBLISH, value: 'schedule_publish' },
 ] as const;
 
-export function PublishSettingsMain() {
-  const { form, onSubmit, onCancel, isLoading } = usePublishTest();
+interface PublishSettingsMainProps {
+  testId?: string;
+  test?: Test;
+}
+
+export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) {
+  const { form, onSubmit, onCancel, isLoading } = usePublishTest(testId);
   const { control, handleSubmit, watch, register, formState: { errors } } = form;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
@@ -28,7 +34,7 @@ export function PublishSettingsMain() {
       <div className="mx-auto w-full max-w-4xl p-6 space-y-8">
         
         {/* Test Details Card */}
-        <TestDetailsCard onEdit={() => setEditDialogOpen(true)} />
+        <TestDetailsCard onEdit={() => setEditDialogOpen(true)} test={test} />
         <EditTestDialog
           open={editDialogOpen}
           onOpenChange={setEditDialogOpen}
@@ -137,7 +143,7 @@ export function PublishSettingsMain() {
               type="button"
               variant="ghost"
               onClick={onCancel}
-              className="px-8 bg-slate-50 text-blue-600 hover:bg-slate-100 hover:text-blue-700 font-medium"
+              className="px-8 bg-[#f4f6ff] text-blue-600 hover:bg-indigo-50 hover:text-blue-700 font-medium"
             >
               {PUBLISH_TEST_MESSAGES.CANCEL}
             </Button>

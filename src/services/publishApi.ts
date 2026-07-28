@@ -27,6 +27,7 @@ export const publishApi = baseApi.injectEndpoints({
       invalidatesTags: (_result, _error, { testId }) => [
         { type: 'Publish', id: testId },
         { type: 'Test', id: testId },
+        { type: 'Test', id: 'LIST' },
       ],
     }),
   }),

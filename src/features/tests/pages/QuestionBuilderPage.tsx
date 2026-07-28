@@ -1,13 +1,24 @@
 import { useState } from 'react';
+import { useSearchParams, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { QuestionListSidebar } from '../components/question-builder/QuestionListSidebar';
 import { QuestionEditorMain } from '../components/question-builder/QuestionEditorMain';
 import { QUESTION_BUILDER_MESSAGES } from '../constants/questionBuilder.constants';
+import { useGetTestByIdQuery } from '@/features/tests/api/testApi';
 
 export function QuestionBuilderPage() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const testId = searchParams.get('testId');
+  const { data: testResponse, isLoading } = useGetTestByIdQuery(testId || '', {
+    skip: !testId,
+  });
+  
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [activeQuestion, setActiveQuestion] = useState(3); // 4th question (0-indexed)
-  const completedQuestions = [0, 1, 2, 3];
+  const [activeQuestion, setActiveQuestion] = useState(0); // First question (0-indexed)
+  const completedQuestions = [0]; // Placeholder
+
+  const totalQuestions = testResponse?.totalQuestions || 50;
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col -m-6 bg-white overflow-hidden">
@@ -22,7 +33,12 @@ export function QuestionBuilderPage() {
           <span className="text-slate-800 font-medium">{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CHAPTER_WISE}</span>
         </div>
         
-        <Button className="bg-blue-500 hover:bg-blue-600 font-medium px-8">
+        <Button 
+          className="bg-blue-500 hover:bg-blue-600 font-medium px-8"
+          onClick={() => {
+            if (testId) navigate(`/tests/create/publish?testId=${testId}`);
+          }}
+        >
           {QUESTION_BUILDER_MESSAGES.PUBLISH}
         </Button>
       </div>
@@ -30,7 +46,7 @@ export function QuestionBuilderPage() {
       {/* Split Content Area */}
       <div className="flex flex-1 overflow-hidden">
         <QuestionListSidebar
-          totalQuestions={50}
+          totalQuestions={totalQuestions}
           activeQuestionIndex={activeQuestion}
           completedQuestions={completedQuestions}
           onSelectQuestion={setActiveQuestion}
@@ -40,7 +56,9 @@ export function QuestionBuilderPage() {
         
         <QuestionEditorMain 
           activeQuestionIndex={activeQuestion}
-          totalQuestions={50}
+          totalQuestions={totalQuestions}
+          testId={testId || undefined}
+          test={testResponse}
         />
       </div>
 

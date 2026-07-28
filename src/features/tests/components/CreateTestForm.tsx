@@ -24,8 +24,8 @@ export function CreateTestForm() {
   const navigate = useNavigate();
   
   const { form, onSubmit, isLoading } = useCreateTest({
-    onSuccess: () => {
-      navigate(ROUTES.DASHBOARD); 
+    onSuccess: (createdTest) => {
+      navigate(`/tests/create/questions?testId=${createdTest.id}`); 
     },
   });
 
@@ -125,52 +125,57 @@ export function CreateTestForm() {
         />
       </div>
 
-      {/* Marking Scheme Section */}
+      {/* Marking Scheme & Questions Row */}
       <div className="space-y-4">
         <h3 className="text-base font-medium text-foreground">{TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}</h3>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-3">
-          <TextField
-            label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}
-            type="number"
-            placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.WRONG_ANSWER}
-            error={errors.markingScheme?.wrongAnswer?.message}
-            {...register('markingScheme.wrongAnswer', { valueAsNumber: true })}
-          />
-          <TextField
-            label={TEST_FORM_CONSTANTS.LABELS.UNATTEMPTED}
-            type="number"
-            placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.UNATTEMPTED}
-            error={errors.markingScheme?.unattempted?.message}
-            {...register('markingScheme.unattempted', { valueAsNumber: true })}
-          />
-          <TextField
-            label={TEST_FORM_CONSTANTS.LABELS.CORRECT_ANSWER}
-            type="number"
-            placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.CORRECT_ANSWER}
-            error={errors.markingScheme?.correctAnswer?.message}
-            {...register('markingScheme.correctAnswer', { valueAsNumber: true })}
-          />
+        <div className="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-12 items-end">
+          <div className="md:col-span-2">
+            <TextField
+              label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}
+              type="number"
+              placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.WRONG_ANSWER}
+              error={errors.markingScheme?.wrongAnswer?.message}
+              {...register('markingScheme.wrongAnswer', { valueAsNumber: true })}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <TextField
+              label={TEST_FORM_CONSTANTS.LABELS.UNATTEMPTED}
+              type="number"
+              placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.UNATTEMPTED}
+              error={errors.markingScheme?.unattempted?.message}
+              {...register('markingScheme.unattempted', { valueAsNumber: true })}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <TextField
+              label={TEST_FORM_CONSTANTS.LABELS.CORRECT_ANSWER}
+              type="number"
+              placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.CORRECT_ANSWER}
+              error={errors.markingScheme?.correctAnswer?.message}
+              {...register('markingScheme.correctAnswer', { valueAsNumber: true })}
+            />
+          </div>
+          <div className="md:col-span-3">
+            <TextField
+              label={TEST_FORM_CONSTANTS.LABELS.NO_OF_QUESTIONS}
+              type="number"
+              placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.QUESTIONS}
+              error={errors.totalQuestions?.message}
+              {...register('totalQuestions', { valueAsNumber: true })}
+            />
+          </div>
+          <div className="md:col-span-3">
+            <TextField
+              label={TEST_FORM_CONSTANTS.LABELS.TOTAL_MARKS}
+              name="totalMarks"
+              type="text"
+              placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
+              disabled
+              className="bg-slate-50 cursor-not-allowed"
+            />
+          </div>
         </div>
-      </div>
-
-      {/* Questions & Marks Section */}
-      <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-        <TextField
-          label={TEST_FORM_CONSTANTS.LABELS.NO_OF_QUESTIONS}
-          type="number"
-          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.QUESTIONS}
-          error={errors.totalQuestions?.message}
-          {...register('totalQuestions', { valueAsNumber: true })}
-        />
-        <TextField
-          label={TEST_FORM_CONSTANTS.LABELS.TOTAL_MARKS}
-          name="totalMarks"
-          type="text"
-          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
-          disabled
-          className="bg-slate-50 cursor-not-allowed"
-          // In a real app, Total Marks might be calculated automatically (e.g., totalQuestions * correctAnswer)
-        />
       </div>
 
       <div className="flex justify-end gap-4 pt-6">
@@ -178,7 +183,7 @@ export function CreateTestForm() {
           type="button"
           variant="ghost"
           onClick={() => navigate(ROUTES.DASHBOARD)}
-          className="px-8 bg-slate-50 text-blue-600 hover:bg-slate-100 hover:text-blue-700"
+          className="px-8 bg-[#f4f6ff] text-blue-600 hover:bg-indigo-50 hover:text-blue-700"
         >
           {CREATE_TEST_ACTIONS.CANCEL}
         </Button>

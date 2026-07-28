@@ -1,15 +1,24 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { CheckCircle2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { QuestionListSidebar } from '../components/question-builder/QuestionListSidebar';
 import { PublishSettingsMain } from '../components/publish/PublishSettingsMain';
 import { PUBLISH_TEST_MESSAGES } from '../constants/publish.constants';
+import { useGetTestByIdQuery } from '@/features/tests/api/testApi';
 
 export function PublishTestPage() {
+  const [searchParams] = useSearchParams();
+  const testId = searchParams.get('testId');
+  const { data: testResponse } = useGetTestByIdQuery(testId || '', {
+    skip: !testId,
+  });
+
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  // On the publish page, typically all questions are done and the active question might just be the last one, or none.
-  const totalQuestions = 50;
-  const completedQuestions = Array.from({ length: 50 }, (_, i) => i);
+  
+  const totalQuestions = testResponse?.totalQuestions || 50;
+  // Assume all questions are completed before reaching publish page
+  const completedQuestions = Array.from({ length: totalQuestions }, (_, i) => i);
 
   return (
     <div className="flex h-[calc(100vh-3.5rem)] flex-col -m-6 bg-white overflow-hidden">
@@ -42,7 +51,7 @@ export function PublishTestPage() {
             </Badge>
           </div>
           
-          <PublishSettingsMain />
+          <PublishSettingsMain testId={testId || undefined} test={testResponse} />
         </div>
       </div>
 
