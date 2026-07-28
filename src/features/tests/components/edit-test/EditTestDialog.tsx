@@ -13,7 +13,7 @@ import {
   SUBJECT_OPTIONS,
   TOPIC_OPTIONS,
   SUB_TOPIC_OPTIONS,
-  EDIT_TEST_DIALOG,
+  TEST_FORM_CONSTANTS,
 } from '../../constants/test.constants';
 import type { Test } from '../../types';
 
@@ -31,7 +31,7 @@ interface EditTestDialogProps {
  *
  * Reuses the `useUpdateTest` hook for business logic and validation,
  * and renders the same form fields as the Create Test form.
- * All user-facing strings are pulled from `EDIT_TEST_DIALOG` constants.
+ * All user-facing strings are pulled from `TEST_FORM_CONSTANTS` constants.
  */
 export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDialogProps) {
   const { form, onSubmit, isLoading } = useUpdateTest(existingTest, {
@@ -51,7 +51,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogHeader title={EDIT_TEST_DIALOG.TITLE} onClose={handleClose} />
+        <DialogHeader title={TEST_FORM_CONSTANTS.TITLE} onClose={handleClose} />
 
         <DialogBody>
           <div className="space-y-8">
@@ -76,37 +76,37 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
             {/* Two-column form grid */}
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
               <SelectField
-                label={EDIT_TEST_DIALOG.LABELS.SUBJECT}
+                label={TEST_FORM_CONSTANTS.LABELS.SUBJECT}
                 options={SUBJECT_OPTIONS}
-                placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.DROPDOWN}
+                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
                 error={errors.subject?.message}
                 {...register('subject')}
               />
               <TextField
-                label={EDIT_TEST_DIALOG.LABELS.NAME_OF_TEST}
-                placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.TEST_NAME}
+                label={TEST_FORM_CONSTANTS.LABELS.NAME_OF_TEST}
+                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.TEST_NAME}
                 error={errors.title?.message}
                 {...register('title')}
               />
 
               <SelectField
-                label={EDIT_TEST_DIALOG.LABELS.TOPIC}
+                label={TEST_FORM_CONSTANTS.LABELS.TOPIC}
                 options={TOPIC_OPTIONS}
-                placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.DROPDOWN}
+                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
                 error={errors.topic?.message}
                 {...register('topic')}
               />
               <SelectField
-                label={EDIT_TEST_DIALOG.LABELS.SUB_TOPIC}
+                label={TEST_FORM_CONSTANTS.LABELS.SUB_TOPIC}
                 options={SUB_TOPIC_OPTIONS}
-                placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.DROPDOWN}
+                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
                 error={errors.subTopic?.message}
                 {...register('subTopic')}
               />
 
               <TextField
-                label={EDIT_TEST_DIALOG.LABELS.DURATION}
-                placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.DURATION}
+                label={TEST_FORM_CONSTANTS.LABELS.DURATION}
+                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DURATION}
                 type="number"
                 error={errors.duration?.message}
                 {...register('duration', { valueAsNumber: true })}
@@ -116,7 +116,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
                 control={control}
                 render={({ field }) => (
                   <RadioGroupField
-                    label={EDIT_TEST_DIALOG.LABELS.DIFFICULTY}
+                    label={TEST_FORM_CONSTANTS.LABELS.DIFFICULTY}
                     name={field.name}
                     options={DIFFICULTY_LEVELS}
                     value={field.value}
@@ -130,27 +130,27 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
             {/* Marking Scheme */}
             <div className="space-y-4">
               <h3 className="text-base font-medium text-foreground">
-                {EDIT_TEST_DIALOG.LABELS.MARKING_SCHEME}
+                {TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}
               </h3>
               <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-3">
                 <TextField
-                  label={EDIT_TEST_DIALOG.LABELS.WRONG_ANSWER}
+                  label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}
                   type="number"
-                  placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.WRONG_ANSWER}
+                  placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.WRONG_ANSWER}
                   error={errors.markingScheme?.wrongAnswer?.message}
                   {...register('markingScheme.wrongAnswer', { valueAsNumber: true })}
                 />
                 <TextField
-                  label={EDIT_TEST_DIALOG.LABELS.UNATTEMPTED}
+                  label={TEST_FORM_CONSTANTS.LABELS.UNATTEMPTED}
                   type="number"
-                  placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.UNATTEMPTED}
+                  placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.UNATTEMPTED}
                   error={errors.markingScheme?.unattempted?.message}
                   {...register('markingScheme.unattempted', { valueAsNumber: true })}
                 />
                 <TextField
-                  label={EDIT_TEST_DIALOG.LABELS.CORRECT_ANSWER}
+                  label={TEST_FORM_CONSTANTS.LABELS.CORRECT_ANSWER}
                   type="number"
-                  placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.CORRECT_ANSWER}
+                  placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.CORRECT_ANSWER}
                   error={errors.markingScheme?.correctAnswer?.message}
                   {...register('markingScheme.correctAnswer', { valueAsNumber: true })}
                 />
@@ -160,17 +160,17 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
             {/* Questions & Marks */}
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
               <TextField
-                label={EDIT_TEST_DIALOG.LABELS.NO_OF_QUESTIONS}
+                label={TEST_FORM_CONSTANTS.LABELS.NO_OF_QUESTIONS}
                 type="number"
-                placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.QUESTIONS}
+                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.QUESTIONS}
                 error={errors.totalQuestions?.message}
                 {...register('totalQuestions', { valueAsNumber: true })}
               />
               <TextField
-                label={EDIT_TEST_DIALOG.LABELS.TOTAL_MARKS}
+                label={TEST_FORM_CONSTANTS.LABELS.TOTAL_MARKS}
                 name="totalMarks"
                 type="text"
-                placeholder={EDIT_TEST_DIALOG.PLACEHOLDERS.MARKS}
+                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
                 disabled
                 className="cursor-not-allowed bg-slate-50"
               />
@@ -186,15 +186,15 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
             disabled={isLoading}
             className="bg-slate-50 px-8 text-blue-600 hover:bg-slate-100 hover:text-blue-700"
           >
-            {EDIT_TEST_DIALOG.CANCEL}
+            {TEST_FORM_CONSTANTS.CANCEL}
           </Button>
           <LoadingButton
             type="submit"
             isLoading={isLoading}
-            loadingText={EDIT_TEST_DIALOG.SAVING}
+            loadingText={TEST_FORM_CONSTANTS.SAVING}
             className="bg-blue-500 px-12 hover:bg-blue-600"
           >
-            {EDIT_TEST_DIALOG.SAVE}
+            {TEST_FORM_CONSTANTS.SAVE}
           </LoadingButton>
         </DialogFooter>
       </form>

@@ -8,7 +8,8 @@ import {
   SUBJECT_OPTIONS,
   TOPIC_OPTIONS,
   SUB_TOPIC_OPTIONS,
-  CREATE_TEST_ACTIONS
+  CREATE_TEST_ACTIONS,
+  TEST_FORM_CONSTANTS
 } from '../constants/test.constants';
 import { TextField } from '@/components/forms/TextField';
 import { SelectField } from '@/components/forms/SelectField';
@@ -56,39 +57,39 @@ export function CreateTestForm() {
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
         {/* Subject & Name */}
         <SelectField
-          label="Subject"
+          label={TEST_FORM_CONSTANTS.LABELS.SUBJECT}
           options={SUBJECT_OPTIONS}
-          placeholder="Choose from Drop-down"
+          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
           error={errors.subject?.message}
           {...register('subject')}
         />
         <TextField
-          label="Name of Test"
-          placeholder="Enter name of Test"
+          label={TEST_FORM_CONSTANTS.LABELS.NAME_OF_TEST}
+          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.TEST_NAME}
           error={errors.title?.message}
           {...register('title')}
         />
 
         {/* Topic & Sub Topic */}
         <SelectField
-          label="Topic"
+          label={TEST_FORM_CONSTANTS.LABELS.TOPIC}
           options={TOPIC_OPTIONS}
-          placeholder="Choose from Drop-down"
+          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
           error={errors.topic?.message}
           {...register('topic')}
         />
         <SelectField
-          label="Sub Topic"
+          label={TEST_FORM_CONSTANTS.LABELS.SUB_TOPIC}
           options={SUB_TOPIC_OPTIONS}
-          placeholder="Choose from Drop-down"
+          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
           error={errors.subTopic?.message}
           {...register('subTopic')}
         />
 
         {/* Duration & Difficulty */}
         <TextField
-          label="Duration (Minutes)"
-          placeholder="Enter the time"
+          label={TEST_FORM_CONSTANTS.LABELS.DURATION}
+          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DURATION}
           type="number"
           error={errors.duration?.message}
           {...register('duration', { valueAsNumber: true })}
@@ -98,7 +99,7 @@ export function CreateTestForm() {
           control={control}
           render={({ field }) => (
             <RadioGroupField
-              label="Test Difficulty Level"
+              label={TEST_FORM_CONSTANTS.LABELS.DIFFICULTY}
               name={field.name}
               options={DIFFICULTY_LEVELS}
               value={field.value}
@@ -111,26 +112,26 @@ export function CreateTestForm() {
 
       {/* Marking Scheme Section */}
       <div className="space-y-4">
-        <h3 className="text-base font-medium text-foreground">Marking Scheme:</h3>
+        <h3 className="text-base font-medium text-foreground">{TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}</h3>
         <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-3">
           <TextField
-            label="Wrong Answer"
+            label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}
             type="number"
-            placeholder="-1"
+            placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.WRONG_ANSWER}
             error={errors.markingScheme?.wrongAnswer?.message}
             {...register('markingScheme.wrongAnswer', { valueAsNumber: true })}
           />
           <TextField
-            label="Unattempted"
+            label={TEST_FORM_CONSTANTS.LABELS.UNATTEMPTED}
             type="number"
-            placeholder="+0"
+            placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.UNATTEMPTED}
             error={errors.markingScheme?.unattempted?.message}
             {...register('markingScheme.unattempted', { valueAsNumber: true })}
           />
           <TextField
-            label="Correct Answer"
+            label={TEST_FORM_CONSTANTS.LABELS.CORRECT_ANSWER}
             type="number"
-            placeholder="+5"
+            placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.CORRECT_ANSWER}
             error={errors.markingScheme?.correctAnswer?.message}
             {...register('markingScheme.correctAnswer', { valueAsNumber: true })}
           />
@@ -140,17 +141,17 @@ export function CreateTestForm() {
       {/* Questions & Marks Section */}
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
         <TextField
-          label="No of Questions"
+          label={TEST_FORM_CONSTANTS.LABELS.NO_OF_QUESTIONS}
           type="number"
-          placeholder="Ex:100"
+          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.QUESTIONS}
           error={errors.totalQuestions?.message}
           {...register('totalQuestions', { valueAsNumber: true })}
         />
         <TextField
-          label="Total Marks"
+          label={TEST_FORM_CONSTANTS.LABELS.TOTAL_MARKS}
           name="totalMarks"
           type="text"
-          placeholder="Ex:250 Marks"
+          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
           disabled
           className="bg-slate-50 cursor-not-allowed"
           // In a real app, Total Marks might be calculated automatically (e.g., totalQuestions * correctAnswer)

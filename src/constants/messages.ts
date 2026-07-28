@@ -3,6 +3,9 @@
  */
 export const MESSAGES = {
   LOGIN: {
+    APP_NAME_PREFIX: 'Prep',
+    APP_NAME_SUFFIX: 'route',
+    TITLE: 'Login',
     SUCCESS: 'Logged in successfully',
     ERROR: 'Failed to log in. Please check your credentials.',
     INVALID_CREDENTIALS: 'Invalid User ID or Password.',
@@ -18,6 +21,11 @@ export const MESSAGES = {
     GENERIC: 'Something went wrong. Please try again.',
     UNAUTHORIZED: 'You are not authorized to perform this action.',
     NOT_FOUND: 'The requested resource could not be found.',
+  },
+  LAYOUT: {
+    APP_NAME: 'Preproute',
+    DASHBOARD: 'Dashboard',
+    LOGOUT: 'Logout',
   },
   VALIDATION: {
     REQUIRED: 'This field is required',

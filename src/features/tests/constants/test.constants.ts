@@ -104,7 +104,7 @@ export const CREATE_TEST_ACTIONS = {
   SAVING: 'Saving...',
 } as const;
 
-export const EDIT_TEST_DIALOG = {
+export const TEST_FORM_CONSTANTS = {
   TITLE: 'Edit Test creation',
   SAVE: 'Save',
   CANCEL: 'Cancel',

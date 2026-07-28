@@ -9,12 +9,13 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { MESSAGES } from '@/constants/messages';
 
 /**
  * Navigation items — extend this array as features are added.
  */
 const navItems = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { label: MESSAGES.LAYOUT.DASHBOARD, href: '/dashboard', icon: LayoutDashboard },
 ];
 
 /**
@@ -45,7 +46,7 @@ export function AppLayout() {
         <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-4">
           {sidebarOpen && (
             <span className="text-lg font-bold text-sidebar-foreground">
-              {import.meta.env.VITE_APP_NAME || 'App'}
+              {import.meta.env.VITE_APP_NAME || MESSAGES.LAYOUT.APP_NAME}
             </span>
           )}
           <Button
@@ -93,7 +94,7 @@ export function AppLayout() {
             )}
           >
             <LogOut className="size-5 shrink-0" />
-            {sidebarOpen && <span>Logout</span>}
+            {sidebarOpen && <span>{MESSAGES.LAYOUT.LOGOUT}</span>}
           </Button>
         </div>
       </aside>
@@ -113,7 +114,7 @@ export function AppLayout() {
       >
         <div className="flex h-14 items-center justify-between border-b border-sidebar-border px-4">
           <span className="text-lg font-bold text-sidebar-foreground">
-            {import.meta.env.VITE_APP_NAME || 'App'}
+            {import.meta.env.VITE_APP_NAME || MESSAGES.LAYOUT.APP_NAME}
           </span>
           <Button
             variant="ghost"
@@ -151,7 +152,7 @@ export function AppLayout() {
             className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
           >
             <LogOut className="size-5 shrink-0" />
-            <span>Logout</span>
+            <span>{MESSAGES.LAYOUT.LOGOUT}</span>
           </Button>
         </div>
       </aside>
