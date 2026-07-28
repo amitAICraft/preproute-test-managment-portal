@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Controller } from 'react-hook-form';
-import { Calendar, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TestDetailsCard } from '../TestDetailsCard';
 import { EditTestDialog } from '../edit-test/EditTestDialog';
@@ -9,6 +8,7 @@ import { usePublishTest } from '../../hooks/usePublishTest';
 import { PUBLISH_TEST_MESSAGES, PUBLISH_DURATIONS } from '../../constants/publish.constants';
 import type { Test } from '../../types/test.types';
 import { cn } from '@/lib/utils';
+import { DatePickerField, TimePickerField } from './DateTimePickerField';
 
 const PUBLISH_TABS = [
   { label: PUBLISH_TEST_MESSAGES.PUBLISH_NOW, value: 'publish_now' },
@@ -34,7 +34,7 @@ interface PublishSettingsMainProps {
 
 export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) {
   const { form, onSubmit, onCancel, isLoading } = usePublishTest(testId);
-  const { control, handleSubmit, watch, register, formState: { errors } } = form;
+  const { control, handleSubmit, watch, formState: { errors } } = form;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const publishType = watch('publishType');
@@ -73,29 +73,37 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
           <div className="space-y-4 pt-2">
             <h2 className="text-base font-semibold text-slate-800">{PUBLISH_TEST_MESSAGES.SELECT_DATE_AND_TIME}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder={PUBLISH_TEST_MESSAGES.SELECT_DATE}
-                  {...register('scheduleDate')}
-                  className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 pr-10"
-                />
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                  <Calendar className="size-5" />
-                </div>
-              </div>
+              {/* Schedule Date — shared DatePickerField */}
+              <Controller
+                name="scheduleDate"
+                control={control}
+                render={({ field }) => (
+                  <DatePickerField
+                    id="scheduleDate"
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_DATE}
+                    error={!!errors.scheduleDate}
+                    errorMessage={errors.scheduleDate?.message}
+                  />
+                )}
+              />
 
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder={PUBLISH_TEST_MESSAGES.SELECT_TIME}
-                  {...register('scheduleTime')}
-                  className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 pr-10"
-                />
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                  <ChevronDown className="size-5" />
-                </div>
-              </div>
+              {/* Schedule Time — shared TimePickerField */}
+              <Controller
+                name="scheduleTime"
+                control={control}
+                render={({ field }) => (
+                  <TimePickerField
+                    id="scheduleTime"
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_TIME}
+                    error={!!errors.scheduleTime}
+                    errorMessage={errors.scheduleTime?.message}
+                  />
+                )}
+              />
             </div>
           </div>
         )}
@@ -154,29 +162,37 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
           {/* Fix 5: Custom Duration Date & Time Pickers */}
           {duration === 'custom' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl pt-4">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder={PUBLISH_TEST_MESSAGES.SELECT_END_DATE}
-                  {...register('endDate')}
-                  className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 pr-10"
-                />
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                  <Calendar className="size-5" />
-                </div>
-              </div>
+              {/* End Date — shared DatePickerField */}
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field }) => (
+                  <DatePickerField
+                    id="endDate"
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_END_DATE}
+                    error={!!errors.endDate}
+                    errorMessage={errors.endDate?.message}
+                  />
+                )}
+              />
 
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder={PUBLISH_TEST_MESSAGES.SELECT_END_TIME}
-                  {...register('endTime')}
-                  className="flex h-12 w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 pr-10"
-                />
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
-                  <ChevronDown className="size-5" />
-                </div>
-              </div>
+              {/* End Time — shared TimePickerField */}
+              <Controller
+                name="endTime"
+                control={control}
+                render={({ field }) => (
+                  <TimePickerField
+                    id="endTime"
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_END_TIME}
+                    error={!!errors.endTime}
+                    errorMessage={errors.endTime?.message}
+                  />
+                )}
+              />
             </div>
           )}
         </div>
