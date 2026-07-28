@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Outlet, Link, useLocation } from 'react-router';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router';
 import {
   LayoutDashboard,
   Menu,
@@ -10,6 +10,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { MESSAGES } from '@/constants/messages';
+import { useAppDispatch } from '@/app/hooks';
+import { logout } from '@/features/auth/authSlice';
+import { ROUTES } from '@/constants/routes';
 
 /**
  * Navigation items — extend this array as features are added.
@@ -32,6 +35,13 @@ export function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate(ROUTES.LOGIN, { replace: true });
+  };
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -88,6 +98,7 @@ export function AppLayout() {
         <div className="border-t border-sidebar-border p-2">
           <Button
             variant="ghost"
+            onClick={handleLogout}
             className={cn(
               'w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent',
               !sidebarOpen && 'justify-center px-0',
@@ -149,6 +160,7 @@ export function AppLayout() {
         <div className="border-t border-sidebar-border p-2">
           <Button
             variant="ghost"
+            onClick={handleLogout}
             className="w-full justify-start gap-3 text-sidebar-foreground hover:bg-sidebar-accent"
           >
             <LogOut className="size-5 shrink-0" />
