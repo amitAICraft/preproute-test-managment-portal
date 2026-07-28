@@ -41,7 +41,10 @@ export {
   TEST_LIMITS,
   TEST_FORM_DEFAULTS,
   TEST_MESSAGES,
+  DASHBOARD_MESSAGES,
+  TEST_STATUS_BADGE_VARIANT,
 } from './constants';
+export type { TestStatusBadgeVariant } from './constants';
 
 // Pages
 export * from './pages/CreateTestPage';

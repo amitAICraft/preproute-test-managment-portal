@@ -10,4 +10,7 @@ export {
   SUB_TOPIC_OPTIONS,
   CREATE_TEST_ACTIONS,
   TEST_FORM_CONSTANTS,
+  DASHBOARD_MESSAGES,
+  TEST_STATUS_BADGE_VARIANT,
 } from './test.constants';
+export type { TestStatusBadgeVariant } from './test.constants';

@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router';
 import { Plus, FileText } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { PageContainer } from '@/components/layout/PageContainer';
@@ -7,81 +6,82 @@ import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/common/EmptyState';
 import { ErrorState } from '@/components/common/ErrorState';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { DASHBOARD_MESSAGES } from '@/features/tests';
 import { DashboardTable } from '../components/DashboardTable';
-import { useGetTestsQuery } from '@/features/tests/api/testApi';
+import { useDashboard } from '../hooks/useDashboard';
 
+/**
+ * DashboardPage — pure renderer.
+ *
+ * All business logic (navigation, API, delete signal) lives in `useDashboard`.
+ * All UI strings come from `DASHBOARD_MESSAGES` constants.
+ * All routes come from `ROUTES` constants (via the hook).
+ */
 export function DashboardPage() {
-  const navigate = useNavigate();
-  const { data, isLoading, isError, error } = useGetTestsQuery();
+  const {
+    tests,
+    isLoading,
+    isError,
+    error,
+    handleCreateNew,
+    handleEdit,
+    handleView,
+    handleDelete,
+  } = useDashboard();
 
-  const handleCreateNew = () => {
-    navigate('/tests/create');
-  };
-
-  const handleEdit = (id: string) => {
-    // Navigate to edit/view page if it existed, or handle it as needed.
-    // For now, based on requirements, wire the action up.
-    // The test specifies no hardcoded routes, but editing might go to QuestionBuilder? 
-    // Wait, the assignment requires to provide actions "Edit", "View", "Delete". 
-    // They don't necessarily need to be fully wired up to pages that don't exist yet 
-    // (the prompt says: "Stop after Dashboard is fully complete. Do NOT proceed to Preview or any other page.")
-    // But they should trigger some console.log or sonner toast for now if the page is missing.
-    // However, we do have /tests/create/questions which is the Question Builder. 
-    // I'll just navigate to a placeholder or log for edit/view/delete unless specified.
-    console.log('Edit test:', id);
-  };
-
-  const handleView = (id: string) => {
-    console.log('View test:', id);
-  };
-
-  const handleDelete = (id: string) => {
-    console.log('Delete test:', id);
-  };
+  const errorMessage =
+    error && typeof error === 'object' && 'data' in error
+      ? ((error.data as { message?: string })?.message ?? DASHBOARD_MESSAGES.ERROR_FALLBACK)
+      : DASHBOARD_MESSAGES.ERROR_FALLBACK;
 
   return (
     <PageContainer>
       <ContentContainer className="py-8">
         <PageHeader
-          title="Dashboard"
-          description="Manage and track all your tests."
+          title={DASHBOARD_MESSAGES.PAGE_TITLE}
+          description={DASHBOARD_MESSAGES.PAGE_DESCRIPTION}
           actions={
-            <Button onClick={handleCreateNew}>
-              <Plus className="mr-2 h-4 w-4" />
-              Create New Test
+            <Button onClick={handleCreateNew} id="dashboard-create-btn">
+              <Plus className="h-4 w-4" aria-hidden="true" />
+              {DASHBOARD_MESSAGES.CREATE_BUTTON}
             </Button>
           }
         />
 
         {isLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <LoadingSpinner size="lg" />
+          <div
+            className="flex justify-center items-center py-20"
+            role="status"
+            aria-label={DASHBOARD_MESSAGES.LOADING_LABEL}
+          >
+            <LoadingSpinner size={40} />
           </div>
         ) : isError ? (
           <ErrorState
-            title="Failed to load tests"
-            message={
-              error && typeof error === 'object' && 'data' in error
-                ? (error.data as any)?.message || 'An unexpected error occurred.'
-                : 'An unexpected error occurred while fetching your tests.'
-            }
+            title={DASHBOARD_MESSAGES.ERROR_TITLE}
+            message={errorMessage}
           />
-        ) : data?.data && data.data.length > 0 ? (
+        ) : tests.length > 0 ? (
           <DashboardTable
-            tests={data.data}
+            tests={tests}
             onEdit={handleEdit}
             onView={handleView}
             onDelete={handleDelete}
           />
         ) : (
           <EmptyState
-            icon={<FileText className="h-12 w-12" />}
-            title="No tests found"
-            description="You haven't created any tests yet. Click the button above to get started."
+            icon={<FileText className="h-12 w-12" aria-hidden="true" />}
+            title={DASHBOARD_MESSAGES.EMPTY_TITLE}
+            description={DASHBOARD_MESSAGES.EMPTY_DESCRIPTION}
             action={
-              <Button onClick={handleCreateNew} variant="outline" className="mt-4">
-                <Plus className="mr-2 h-4 w-4" />
-                Create New Test
+              <Button
+                onClick={handleCreateNew}
+                variant="outline"
+                className="mt-4"
+                id="dashboard-empty-create-btn"
+              >
+                <Plus className="h-4 w-4" aria-hidden="true" />
+                {DASHBOARD_MESSAGES.CREATE_BUTTON}
               </Button>
             }
           />

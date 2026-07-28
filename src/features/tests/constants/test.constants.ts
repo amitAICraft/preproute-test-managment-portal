@@ -134,3 +134,41 @@ export const TEST_FORM_CONSTANTS = {
     MARKS: 'Ex:250 Marks',
   },
 } as const;
+
+// ── Dashboard strings ─────────────────────────────────────
+
+export const DASHBOARD_MESSAGES = {
+  PAGE_TITLE: 'Dashboard',
+  PAGE_DESCRIPTION: 'Manage and track all your tests.',
+  CREATE_BUTTON: 'Create New Test',
+  LOADING_LABEL: 'Loading tests…',
+  EMPTY_TITLE: 'No tests found',
+  EMPTY_DESCRIPTION: "You haven't created any tests yet. Click the button above to get started.",
+  ERROR_TITLE: 'Failed to load tests',
+  ERROR_FALLBACK: 'An unexpected error occurred while fetching your tests.',
+  TABLE: {
+    COL_NAME: 'Test Name',
+    COL_SUBJECT: 'Subject',
+    COL_STATUS: 'Status',
+    COL_DATE: 'Created Date',
+    COL_ACTIONS: 'Actions',
+    NO_SUBJECT: '—',
+  },
+  ACTIONS: {
+    VIEW: 'View test',
+    EDIT: 'Edit test',
+    DELETE: 'Delete test',
+    DELETE_UNAVAILABLE: 'Delete is not available',
+  },
+} as const;
+
+// ── Status → Badge variant map ────────────────────────────
+// Kept here (constants layer) so the component stays logic-free.
+
+export const TEST_STATUS_BADGE_VARIANT = {
+  published: 'success',
+  draft: 'warning',
+  archived: 'secondary',
+} as const satisfies Record<string, 'success' | 'warning' | 'secondary'>;
+
+export type TestStatusBadgeVariant = (typeof TEST_STATUS_BADGE_VARIANT)[keyof typeof TEST_STATUS_BADGE_VARIANT];
