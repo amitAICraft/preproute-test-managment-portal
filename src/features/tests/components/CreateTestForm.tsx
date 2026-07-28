@@ -16,7 +16,6 @@ import { RadioGroupField } from '@/components/forms/RadioGroupField';
 import { Tabs } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/common/LoadingButton';
-import { SectionCard } from '@/components/layout/SectionCard';
 
 // Mock options moved to constants
 
@@ -149,6 +148,7 @@ export function CreateTestForm() {
         />
         <TextField
           label="Total Marks"
+          name="totalMarks"
           type="text"
           placeholder="Ex:250 Marks"
           disabled

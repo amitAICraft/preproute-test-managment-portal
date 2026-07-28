@@ -15,11 +15,11 @@ export function QuestionBuilderPage() {
       {/* Top Header */}
       <div className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 px-6">
         <div className="flex items-center gap-2 text-sm text-slate-500">
-          <span>Test Creation</span>
+          <span>{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.TEST_CREATION}</span>
           <span>/</span>
-          <span>Create Test</span>
+          <span>{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CREATE_TEST}</span>
           <span>/</span>
-          <span className="text-slate-800 font-medium">Chapter Wise</span>
+          <span className="text-slate-800 font-medium">{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CHAPTER_WISE}</span>
         </div>
         
         <Button className="bg-blue-500 hover:bg-blue-600 font-medium px-8">

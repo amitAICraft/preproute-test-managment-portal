@@ -20,7 +20,7 @@ export function RichTextEditor({ value, onChange, placeholder, className }: Rich
           placeholder: placeholder || 'Type here',
         }}
         data={value}
-        onChange={(event, editor) => {
+        onChange={(_, editor) => {
           const data = editor.getData();
           onChange(data);
         }}

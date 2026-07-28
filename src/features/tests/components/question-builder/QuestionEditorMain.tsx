@@ -5,7 +5,7 @@ import { TestDetailsCard } from '../TestDetailsCard';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { OptionField } from '@/components/forms/OptionField';
 import { SelectField } from '@/components/forms/SelectField';
-import { FormField } from '@/components/forms/FormField';
+import { Controller } from 'react-hook-form';
 import {
   QUESTION_BUILDER_MESSAGES,
   DIFFICULTY_OPTIONS,
@@ -22,7 +22,7 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions }: Ques
   const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder();
   const { watch, setValue } = form;
 
-  const options = watch('options');
+  const options = watch('options') || [];
   const correctOptionId = watch('correctOptionId');
 
   return (
@@ -62,8 +62,9 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions }: Ques
             </div>
 
             {/* Question Text Editor */}
-            <FormField
+            <Controller
               name="questionText"
+              control={form.control}
               render={({ field }) => (
                 <RichTextEditor
                   value={field.value}
@@ -85,8 +86,10 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions }: Ques
                   isCorrect={correctOptionId === opt.id}
                   onTextChange={(val) => {
                     const newOpts = [...options];
-                    newOpts[index].text = val;
-                    setValue('options', newOpts);
+                    if (newOpts[index]) {
+                      newOpts[index].text = val;
+                      setValue('options', newOpts);
+                    }
                   }}
                   onSelectCorrect={() => setValue('correctOptionId', opt.id)}
                   onDelete={() => {
@@ -100,8 +103,9 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions }: Ques
             {/* Solution */}
             <div className="space-y-3">
               <h3 className="font-semibold">{QUESTION_BUILDER_MESSAGES.ADD_SOLUTION}</h3>
-              <FormField
+              <Controller
                 name="solutionText"
+                control={form.control}
                 render={({ field }) => (
                   <RichTextEditor
                     value={field.value || ''}
