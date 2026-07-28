@@ -9,8 +9,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { MESSAGES } from '@/constants/messages';
-import { useAppDispatch } from '@/app/hooks';
-import { logout } from '@/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { logout, selectCurrentUser } from '@/features/auth/authSlice';
 import { ROUTES } from '@/constants/routes';
 
 /**
@@ -37,6 +37,7 @@ export function AppLayout() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const currentUser = useAppSelector(selectCurrentUser);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -193,8 +194,8 @@ export function AppLayout() {
               <img src="/persona-profile.svg" alt="Profile" className="size-10 rounded-full object-cover" />
               
               <div className="hidden sm:flex flex-col">
-                <span className="text-[14px] font-semibold text-slate-900 leading-tight">Alex Wando</span>
-                <span className="text-[12px] text-slate-500 mt-0.5">Admin</span>
+                <span className="text-[14px] font-semibold text-slate-900 leading-tight">{currentUser?.name ?? '—'}</span>
+                <span className="text-[12px] text-slate-500 mt-0.5">{currentUser?.role ?? '—'}</span>
               </div>
               
               <img src="/down-arrow-icon.svg" alt="" className="size-3 ml-2" />
