@@ -22,7 +22,7 @@ export function usePublishTest(testId?: string) {
     },
   });
 
-  const onSubmit = async (data: PublishTestFormValues) => {
+  const onSubmit = async (_data: PublishTestFormValues) => {
     try {
       await publishTest({ testId: testId || '' }).unwrap();
       toast.success('Test published successfully!');

@@ -10,7 +10,7 @@ export function QuestionBuilderPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const testId = searchParams.get('testId');
-  const { data: testResponse, isLoading } = useGetTestByIdQuery(testId || '', {
+  const { data: testResponse } = useGetTestByIdQuery(testId || '', {
     skip: !testId,
   });
   

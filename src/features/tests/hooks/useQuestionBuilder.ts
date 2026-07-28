@@ -37,7 +37,7 @@ export function useQuestionBuilder(testId?: string) {
           correct_option: data.correctOptionId || 'option1',
           explanation: data.solutionText || '',
           difficulty: data.difficulty || 'medium',
-          test_id: testId || 'test-uuid-placeholder' // Uses the testId from URL if available
+          test_id: testId || '', // testId always comes from URL — empty string lets backend reject gracefully
         }]
       }).unwrap();
       

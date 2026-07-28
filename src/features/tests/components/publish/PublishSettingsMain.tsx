@@ -38,7 +38,7 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
         <EditTestDialog
           open={editDialogOpen}
           onOpenChange={setEditDialogOpen}
-          existingTest={undefined}
+          existingTest={test}
         />
 
         {/* Form Area */}

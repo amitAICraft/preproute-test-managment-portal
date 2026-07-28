@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormProvider } from 'react-hook-form';
+import { FormProvider, useWatch } from 'react-hook-form';
 import { Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TestDetailsCard } from '../TestDetailsCard';
@@ -11,10 +11,12 @@ import { Controller } from 'react-hook-form';
 import {
   QUESTION_BUILDER_MESSAGES,
   DIFFICULTY_OPTIONS,
-  TOPIC_OPTIONS,
-  SUB_TOPIC_OPTIONS,
 } from '../../constants/questionBuilder.constants';
 import { useQuestionBuilder } from '../../hooks/useQuestionBuilder';
+import {
+  useGetTopicsBySubjectQuery,
+  useGetSubTopicsQuery,
+} from '@/services/taxonomyApi';
 import type { Test } from '../../types/test.types';
 
 interface QuestionEditorMainProps {
@@ -32,6 +34,18 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
   const options = watch('options') || [];
   const correctOptionId = watch('correctOptionId');
 
+  // Wire Question Settings dropdowns to the test's real taxonomy
+  const selectedTopic = useWatch({ control: form.control, name: 'topic' });
+  const { data: topics = [] } = useGetTopicsBySubjectQuery(test?.subject || '', {
+    skip: !test?.subject,
+  });
+  const { data: subTopics = [] } = useGetSubTopicsQuery(
+    selectedTopic ? [selectedTopic] : (test?.topic ? [test.topic] : []),
+    { skip: !selectedTopic && !test?.topic },
+  );
+  const topicOptions = topics.map((t) => ({ label: t.name, value: t.id }));
+  const subTopicOptions = subTopics.map((st) => ({ label: st.name, value: st.id }));
+
   return (
     <div className="flex flex-1 flex-col overflow-y-auto bg-slate-50/30">
       <div className="mx-auto w-full max-w-4xl p-6 space-y-6">
@@ -40,7 +54,7 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
         <EditTestDialog
           open={editDialogOpen}
           onOpenChange={setEditDialogOpen}
-          existingTest={undefined}
+          existingTest={test}
         />
 
         {/* Editor Area */}
@@ -153,13 +167,13 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
                 <SelectField
                   name="topic"
                   label={QUESTION_BUILDER_MESSAGES.TOPIC}
-                  options={TOPIC_OPTIONS}
+                  options={topicOptions}
                 />
                 
                 <SelectField
                   name="subTopic"
                   label={QUESTION_BUILDER_MESSAGES.SUB_TOPIC}
-                  options={SUB_TOPIC_OPTIONS}
+                  options={subTopicOptions}
                 />
               </div>
             </div>
