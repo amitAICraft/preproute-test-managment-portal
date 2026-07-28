@@ -22,13 +22,14 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       userId: '',
       password: '',
     },
+    mode: 'onChange',
   });
 
   const onSubmit = async (data: LoginFormValues) => {
@@ -36,7 +37,7 @@ export function LoginForm() {
       const response = await login(data).unwrap();
       dispatch(setCredentials({ token: response.token, user: response.user }));
       authStorage.setAuth(response.token, response.user);
-      
+
       toast.success(MESSAGES.LOGIN.SUCCESS);
       navigate(ROUTES.DASHBOARD, { replace: true });
     } catch (err) {
@@ -45,13 +46,14 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full max-w-sm">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-7 w-full">
       <TextField
         label={MESSAGES.LOGIN.USER_ID_LABEL}
         placeholder={MESSAGES.LOGIN.USER_ID_PLACEHOLDER}
         autoComplete="username"
         disabled={isLoading}
         error={errors.userId?.message}
+        className="h-12 rounded-lg text-sm"
         {...register('userId')}
       />
 
@@ -60,11 +62,16 @@ export function LoginForm() {
         placeholder={MESSAGES.LOGIN.PASSWORD_PLACEHOLDER}
         disabled={isLoading}
         error={errors.password?.message}
+        className="h-12 rounded-lg text-sm"
         {...register('password')}
       />
 
-      <div className="flex justify-start">
-        <a href="#" className="text-sm text-primary hover:underline underline-offset-4">
+      {/* Forgot password — Figma: blue, regular weight, left-aligned */}
+      <div className="flex justify-start mt-2">
+        <a
+          href="#"
+          className="text-sm font-normal text-blue-500 hover:text-blue-600 hover:underline underline-offset-4 transition-colors"
+        >
           {MESSAGES.LOGIN.FORGOT_PASSWORD}
         </a>
       </div>
@@ -73,11 +80,13 @@ export function LoginForm() {
         <ErrorState message={MESSAGES.LOGIN.INVALID_CREDENTIALS} />
       )}
 
+      {/* Button disabled until form is valid — reuses react-hook-form isValid */}
       <LoadingButton
         type="submit"
         isLoading={isLoading}
         loadingText={MESSAGES.LOGIN.BUTTON_LOADING}
-        className="w-full h-11 mt-2 text-base font-semibold bg-blue-600 hover:bg-blue-700"
+        disabled={!isValid || isLoading}
+        className="w-full h-12 mt-1 text-base font-semibold rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {MESSAGES.LOGIN.BUTTON_DEFAULT}
       </LoadingButton>

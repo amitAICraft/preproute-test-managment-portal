@@ -1,19 +1,18 @@
-import type { ReactNode } from 'react';
-
 /**
- * LoginHero — The left panel of the login screen matching the Figma split layout.
- * Removes hardcoded CSS art in favor of a clean container ready for actual assets.
+ * LoginHero — Left panel illustration.
+ *
+ * Renders the official SVG asset. The panel itself has NO background —
+ * it inherits the page background from LoginPage, exactly matching
+ * 01-login-page.png where both panels share the same light blue-gray.
  */
-export function LoginHero({ children }: { children?: ReactNode }) {
+export function LoginHero() {
   return (
-    <div className="hidden lg:flex flex-1 items-center justify-center bg-slate-50 relative">
-      {/* 
-        This is the container for the illustration (e.g. laptop character).
-        Render children (like an <img />) here when assets are available.
-      */}
-      <div className="relative flex flex-col items-center justify-center w-full max-w-lg">
-        {children}
-      </div>
+    <div className="flex flex-1 items-center justify-center">
+      <img
+        src="/login-left-bar-icon.svg"
+        alt="PrepRoute illustration"
+        className="w-full max-w-[75%] max-h-[85vh] object-contain"
+      />
     </div>
   );
 }

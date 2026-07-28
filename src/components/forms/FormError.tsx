@@ -11,7 +11,7 @@ export function FormError({ error, className, id, ...props }: FormErrorProps) {
   return (
     <span
       id={id}
-      className={cn('text-xs text-destructive mt-1', className)}
+      className={cn('text-xs text-destructive mt-0', className)}
       {...props}
     >
       {error}

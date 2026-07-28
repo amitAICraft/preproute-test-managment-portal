@@ -1,14 +1,29 @@
 import type { ReactNode } from 'react';
 
 /**
- * LoginCard — A layout wrapper for the right panel of the login screen.
+ * LoginCard — White floating card on the right panel.
+ *
+ * Matches 01-login-page.png:
+ * - Full available height with top/bottom padding (not a small centered box)
+ * - Thin light-blue/slate border
+ * - Rounded corners (xl)
+ * - Minimal shadow
+ * - Content top-aligned with generous padding on all sides
  */
 export function LoginCard({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-1 flex-col justify-center px-8 md:px-16 lg:px-24 border-l border-border bg-white">
-      <div className="w-full max-w-sm mx-auto">
-        {children}
-      </div>
+    <div
+      className="
+        w-full h-full
+        bg-white
+        rounded-xl
+        border border-blue-100
+        shadow-sm
+        flex flex-col justify-center
+        px-8 sm:px-12 lg:px-16 py-10 lg:py-16
+      "
+    >
+      {children}
     </div>
   );
 }
