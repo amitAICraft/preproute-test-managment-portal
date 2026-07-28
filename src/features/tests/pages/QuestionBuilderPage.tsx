@@ -26,14 +26,11 @@ export function QuestionBuilderPage() {
   const totalQuestions = testResponse?.totalQuestions || 50;
 
   return (
-    /**
-     * -m-6 cancels the AppLayout's p-6 on <main> so the QB can own its
-     * full viewport height. overflow-hidden prevents horizontal scrollbars.
-     */
-    <div className="flex h-[calc(100vh-4rem)] flex-col -m-6 bg-white overflow-hidden">
+    <div className="w-full flex flex-col space-y-5 bg-slate-50/50 p-6 min-h-[calc(100vh-3.5rem)] overflow-x-hidden">
       
-      {/* ── Breadcrumb / Publish row ── */}
-      <div className="flex shrink-0 items-center justify-between px-8 pt-5 pb-3">
+      {/* ── Breadcrumb / Publish Container ── */}
+      {/* Wrapped in its own container with border, border-radius, 20px left/right padding */}
+      <div className="w-full rounded-xl border border-slate-200 bg-white px-[20px] py-4 flex items-center justify-between shadow-xs">
         <div className="flex items-center gap-2 text-sm text-slate-500">
           <span>{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.TEST_CREATION}</span>
           <span className="text-slate-300">/</span>
@@ -54,9 +51,9 @@ export function QuestionBuilderPage() {
         </Button>
       </div>
 
-      {/* ── Split content: Secondary Sidebar + Main Editor ── */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Secondary sidebar — sits immediately to the right of the primary sidebar */}
+      {/* ── Split Content Area: Secondary Sidebar + Question Editor ── */}
+      <div className="flex w-full items-start gap-5 min-w-0 flex-1">
+        {/* Secondary sidebar — standalone card sitting beside main editor */}
         <QuestionListSidebar
           totalQuestions={totalQuestions}
           activeQuestionIndex={activeQuestion}
@@ -66,7 +63,7 @@ export function QuestionBuilderPage() {
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
         
-        {/* Main editor — takes all remaining width */}
+        {/* Main editor — takes remaining space */}
         <QuestionEditorMain 
           activeQuestionIndex={activeQuestion}
           totalQuestions={totalQuestions}

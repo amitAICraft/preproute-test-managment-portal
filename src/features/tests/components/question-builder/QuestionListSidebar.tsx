@@ -24,12 +24,15 @@ export function QuestionListSidebar({
   return (
     <div
       className={cn(
-        'flex h-full flex-col border-r border-slate-200 bg-white shrink-0 transition-all duration-300',
-        isCollapsed ? 'w-16' : 'w-[220px]'
+        'flex flex-col rounded-xl border border-slate-200 bg-white shadow-xs shrink-0 transition-all duration-300',
+        isCollapsed ? 'w-16 p-3 items-center' : 'w-[220px] p-4'
       )}
     >
       {/* Header */}
-      <div className="flex h-14 items-center justify-between border-b border-slate-200 px-4">
+      <div className={cn(
+        "flex items-center justify-between border-b border-slate-100 pb-3 mb-3 w-full",
+        isCollapsed && "justify-center border-none pb-0 mb-2"
+      )}>
         {!isCollapsed && (
           <h2 className="text-sm font-semibold text-slate-800 whitespace-nowrap">
             {QUESTION_BUILDER_MESSAGES.TITLE}
@@ -37,10 +40,7 @@ export function QuestionListSidebar({
         )}
         <button
           onClick={onToggleCollapse}
-          className={cn(
-            'flex size-7 shrink-0 items-center justify-center rounded hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors',
-            isCollapsed && 'mx-auto'
-          )}
+          className="flex size-7 shrink-0 items-center justify-center rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
           title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? (
@@ -56,13 +56,13 @@ export function QuestionListSidebar({
 
       {/* Total Questions sub-header */}
       {!isCollapsed && (
-        <div className="px-4 py-3 text-xs text-slate-500 font-medium">
+        <div className="pb-3 text-xs text-slate-500 font-medium">
           {QUESTION_BUILDER_MESSAGES.TOTAL_QUESTIONS} . {totalQuestions}
         </div>
       )}
 
       {/* Question list */}
-      <div className="flex-1 overflow-y-auto px-3 pb-4 space-y-2 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto space-y-2 w-full custom-scrollbar pr-0.5 max-h-[calc(100vh-16rem)]">
         {questions.map((index) => {
           const isCompleted = completedQuestions.includes(index);
           const isActive = index === activeQuestionIndex;
@@ -75,9 +75,10 @@ export function QuestionListSidebar({
                 className={cn(
                   'mx-auto flex size-8 items-center justify-center rounded-full border text-xs font-medium transition-all',
                   isCompleted
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-600'
-                    : 'border-slate-200 text-slate-400 hover:border-slate-300 hover:bg-slate-50',
-                  isActive && 'ring-2 ring-emerald-400 border-emerald-500 bg-white font-semibold'
+                    ? 'border-emerald-500 bg-emerald-50 text-emerald-600 font-semibold'
+                    : isActive
+                    ? 'border-[#7489FF] bg-blue-50/50 text-[#7489FF] font-semibold ring-2 ring-[#7489FF]/30'
+                    : 'border-slate-200 text-slate-400 hover:border-slate-300 hover:bg-slate-50'
                 )}
                 title={`Question ${index + 1}`}
               >
@@ -91,23 +92,26 @@ export function QuestionListSidebar({
               key={index}
               onClick={() => onSelectQuestion(index)}
               className={cn(
-                'flex w-full items-center justify-between rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
+                'flex w-full items-center justify-between rounded-full border px-3 py-2 text-xs font-medium transition-all',
                 isCompleted
-                  ? 'border-emerald-500 bg-white text-slate-700'
-                  : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50',
-                isActive && 'border-emerald-500 bg-emerald-50/40 text-emerald-700 font-semibold shadow-xs'
+                  ? 'border-emerald-500 bg-emerald-50/20 text-emerald-700'
+                  : isActive
+                  ? 'border-[#7489FF] bg-blue-50/40 text-[#7489FF] font-semibold shadow-2xs'
+                  : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
               )}
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <div
                   className={cn(
-                    'flex size-5 shrink-0 items-center justify-center rounded-full',
+                    'flex size-5 shrink-0 items-center justify-center rounded-full text-[11px]',
                     isCompleted
                       ? 'bg-emerald-500 text-white'
-                      : 'border border-emerald-500 text-emerald-500'
+                      : isActive
+                      ? 'border-2 border-[#7489FF] text-[#7489FF] bg-white font-bold'
+                      : 'border border-slate-300 text-slate-400 bg-slate-50 font-medium'
                   )}
                 >
-                  <Check className="size-3" />
+                  {isCompleted ? <Check className="size-3" /> : index + 1}
                 </div>
                 <span className="truncate whitespace-nowrap">
                   Question {index + 1}
@@ -116,7 +120,11 @@ export function QuestionListSidebar({
               <ChevronRight
                 className={cn(
                   'size-3.5 shrink-0 ml-1',
-                  isCompleted || isActive ? 'text-emerald-500' : 'text-slate-300'
+                  isCompleted
+                    ? 'text-emerald-500'
+                    : isActive
+                    ? 'text-[#7489FF]'
+                    : 'text-slate-300'
                 )}
               />
             </button>

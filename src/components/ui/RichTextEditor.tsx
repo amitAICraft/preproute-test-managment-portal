@@ -11,7 +11,7 @@ interface RichTextEditorProps {
 
 export function RichTextEditor({ value, onChange, placeholder, className }: RichTextEditorProps) {
   return (
-    <div className={`rich-text-editor-container border rounded-md overflow-hidden bg-white ${className}`}>
+    <div className={`rich-text-editor-container border border-slate-200 rounded-lg overflow-hidden bg-white ${className || ''}`}>
       <CKEditor
         editor={ClassicEditor}
         config={{
@@ -19,10 +19,12 @@ export function RichTextEditor({ value, onChange, placeholder, className }: Rich
           toolbar: ['bold', 'italic', 'underline', 'strikethrough', '|', 'link', 'bulletedList', 'numberedList'],
           placeholder: placeholder || 'Type here',
         }}
-        data={value}
+        data={value || ''}
         onChange={(_, editor) => {
           const data = editor.getData();
-          onChange(data);
+          if (data !== value) {
+            onChange(data);
+          }
         }}
       />
     </div>
