@@ -5,16 +5,28 @@ interface FormErrorProps extends HTMLAttributes<HTMLSpanElement> {
   error?: string;
 }
 
+/**
+ * FormError — reserved-height error message slot.
+ *
+ * Always renders in the DOM so that the parent FormField height
+ * never changes when errors appear or disappear.
+ * The min-h ensures a stable layout regardless of validation state.
+ */
 export function FormError({ error, className, id, ...props }: FormErrorProps) {
-  if (!error) return null;
-
   return (
     <span
       id={id}
-      className={cn('text-xs text-destructive mt-0', className)}
+      role={error ? 'alert' : undefined}
+      aria-live="polite"
+      className={cn(
+        'block min-h-[1.25rem] text-xs text-destructive leading-[2.375]',
+        !error && 'invisible',
+        className,
+      )}
       {...props}
     >
-      {error}
+      {error ?? '\u00A0'}{/* non-breaking space keeps line height when empty */}
     </span>
   );
 }
+

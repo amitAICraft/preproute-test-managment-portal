@@ -3,7 +3,7 @@ import { QUESTION_BUILDER_MESSAGES } from '../constants/questionBuilder.constant
 
 export function CreateTestPage() {
   return (
-    <div className="mx-auto max-w-4xl py-6">
+    <div className="w-full max-w-[1200px] px-8 py-6">
       {/* Breadcrumb Header */}
       <div className="mb-8 flex items-center space-x-2 text-base text-slate-500">
         <span>{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.TEST_CREATION}</span>

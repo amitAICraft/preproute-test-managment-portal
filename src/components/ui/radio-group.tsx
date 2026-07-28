@@ -15,7 +15,7 @@ interface RadioGroupProps {
 
 export function RadioGroup({ options, value, onChange, name, className }: RadioGroupProps) {
   return (
-    <div className={cn('flex flex-wrap items-center gap-x-8 gap-y-4', className)}>
+    <div className={cn('flex items-center justify-between h-12 w-full', className)}>
       {options.map((option) => {
         const isSelected = value === option.value;
         return (
@@ -31,7 +31,7 @@ export function RadioGroup({ options, value, onChange, name, className }: RadioG
                   : 'border-slate-300 group-hover:border-blue-400'
               )}
             />
-            <span className="text-sm font-medium text-slate-700">
+            <span className="text-[16px] font-medium text-[#374151]">
               {option.label}
             </span>
             <input

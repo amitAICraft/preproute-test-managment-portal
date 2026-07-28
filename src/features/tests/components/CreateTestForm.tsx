@@ -129,9 +129,9 @@ export function CreateTestForm() {
       </div>
 
       {/* Marking Scheme & Questions Row */}
-      <div className="space-y-4">
-        <h3 className="text-base font-medium text-foreground">{TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}</h3>
-        <div className="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-12 items-end">
+      <div className="space-y-6">
+        <h3 className="text-base font-medium text-[#374151]">{TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}</h3>
+        <div className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-12 items-start">
           <div className="md:col-span-2">
             <TextField
               label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}
@@ -176,18 +176,18 @@ export function CreateTestForm() {
               placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
               disabled
               value={totalMarks > 0 ? `${totalMarks} Marks` : ''}
-              className="bg-slate-50 cursor-not-allowed"
+              className="bg-slate-50 cursor-not-allowed text-slate-400 border-slate-200 opacity-70"
             />
           </div>
         </div>
       </div>
 
-      <div className="flex justify-end gap-4 pt-6">
+      <div className="flex justify-end gap-6 pt-10">
         <Button
           type="button"
           variant="ghost"
           onClick={() => navigate(ROUTES.DASHBOARD)}
-          className="px-8 bg-[#f4f6ff] text-blue-600 hover:bg-indigo-50 hover:text-blue-700"
+          className="px-12 h-12 rounded-lg bg-[#F4F6FF] text-[#7489FF] hover:bg-[#EBEEFF] hover:text-[#5B73E8] font-medium"
         >
           {CREATE_TEST_ACTIONS.CANCEL}
         </Button>
@@ -195,7 +195,7 @@ export function CreateTestForm() {
           type="submit"
           isLoading={isLoading}
           loadingText={CREATE_TEST_ACTIONS.SAVING}
-          className="px-12 bg-blue-500 hover:bg-blue-600"
+          className="px-14 h-12 rounded-lg bg-[#7489FF] text-white hover:bg-[#5B73E8] font-medium"
         >
           {CREATE_TEST_ACTIONS.NEXT}
         </LoadingButton>

@@ -9,10 +9,10 @@ import type { TestType, DifficultyLevel, MarkingScheme } from '../types';
 
 // ── Test type options (tab component) ────────────────────
 
-export const TEST_TYPES: readonly { label: string; value: TestType }[] = [
+export const TEST_TYPES: readonly { label: string; value: TestType; disabled?: boolean }[] = [
   { label: 'Chapterwise', value: 'chapterwise' },
-  { label: 'PYQ', value: 'pyq' },
-  { label: 'Mock Test', value: 'mock-test' },
+  { label: 'PYQ', value: 'pyq', disabled: true },
+  { label: 'Mock Test', value: 'mock-test', disabled: true },
 ] as const;
 
 // ── Difficulty level options (radio group) ───────────────
