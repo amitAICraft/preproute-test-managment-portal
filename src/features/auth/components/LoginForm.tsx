@@ -40,9 +40,27 @@ export function LoginForm() {
 
       toast.success(MESSAGES.LOGIN.SUCCESS);
       navigate(ROUTES.DASHBOARD, { replace: true });
-    } catch (err) {
-      toast.error(MESSAGES.LOGIN.ERROR);
+    } catch (err: any) {
+      const errMsg = err?.status === 'FETCH_ERROR'
+        ? 'Network connection failed. Please check your internet connection.'
+        : (err?.data?.message || MESSAGES.LOGIN.ERROR);
+      toast.error(errMsg);
     }
+  };
+
+  const getErrorMessage = () => {
+    if (!error) return null;
+    if ('status' in error) {
+      if (error.status === 'FETCH_ERROR') {
+        return 'Network connection failed. Please check your internet connection.';
+      }
+      if (error.status === 500) {
+        return 'An unexpected server error occurred. Please try again later.';
+      }
+      const data = error.data as { message?: string } | undefined;
+      return data?.message ?? MESSAGES.LOGIN.INVALID_CREDENTIALS;
+    }
+    return 'An unexpected error occurred.';
   };
 
   return (
@@ -77,7 +95,7 @@ export function LoginForm() {
       </div>
 
       {error && (
-        <ErrorState message={MESSAGES.LOGIN.INVALID_CREDENTIALS} />
+        <ErrorState message={getErrorMessage()} />
       )}
 
       {/* Button disabled until form is valid — reuses react-hook-form isValid */}

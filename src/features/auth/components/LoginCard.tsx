@@ -16,7 +16,7 @@ export function LoginCard({ children }: { children: ReactNode }) {
       className="
         w-full h-full
         bg-white
-        rounded-xl
+        rounded-lg
         border border-blue-100
         shadow-sm
         flex flex-col justify-center

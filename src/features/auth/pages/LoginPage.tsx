@@ -17,12 +17,12 @@ export function LoginPage() {
     <div className="flex h-screen w-full overflow-hidden" style={{ backgroundColor: '#EAF0F8' }}>
 
       {/* Left panel — illustration, increased width to match Figma */}
-      <div className="hidden lg:flex lg:w-[55%] items-center justify-center">
+      <div className="hidden lg:flex lg:w-[50%] items-center justify-center">
         <LoginHero />
       </div>
 
       {/* Right panel — white floating card, reduced outer padding */}
-      <div className="flex flex-1 lg:w-[45%] items-center justify-center p-4 lg:p-6">
+      <div className="flex flex-1 lg:w-[50%] items-center justify-center p-4 lg:p-6">
         <LoginCard>
           <LoginHeader />
           <LoginForm />
