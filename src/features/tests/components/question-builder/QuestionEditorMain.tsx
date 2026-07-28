@@ -18,6 +18,7 @@ import {
   useGetSubTopicsQuery,
 } from '@/services/taxonomyApi';
 import type { Test } from '../../types/test.types';
+import { cn } from '@/lib/utils';
 
 interface QuestionEditorMainProps {
   activeQuestionIndex: number;
@@ -29,7 +30,7 @@ interface QuestionEditorMainProps {
 
 export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId, test, onSaveSuccess }: QuestionEditorMainProps) {
   const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder(testId, onSaveSuccess);
-  const { watch, setValue } = form;
+  const { watch, setValue, formState: { isDirty } } = form;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const options = watch('options') || [];
@@ -62,25 +63,43 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
         <FormProvider {...form}>
           <div className="space-y-6">
             
-            {/* Header: Question Number and Actions */}
+            {/* Header: Question Number and MCQ/CSV Actions */}
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold">
                 Question {activeQuestionIndex + 1}<span className="text-slate-400 font-normal">/{totalQuestions}</span>
               </h2>
+              {/* Fix 7: MCQ and CSV disabled grey buttons */}
               <div className="flex items-center gap-3">
-                <Button variant="outline" size="sm" className="gap-2 text-slate-600">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled
+                  className="gap-2 bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-75"
+                >
                   <Plus className="size-4" /> MCQ
                 </Button>
-                <Button variant="outline" size="sm" className="gap-2 text-slate-600">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled
+                  className="gap-2 bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-75"
+                >
                   <Download className="size-4" /> CSV
                 </Button>
               </div>
             </div>
             
+            {/* Fix 8: Delete All Edits disabled initially, enabled when form is dirty */}
             <div className="flex justify-start">
               <Button 
                 variant="ghost" 
-                className="text-red-500 hover:text-red-600 hover:bg-red-50 p-0 h-auto gap-2 text-sm font-medium"
+                disabled={!isDirty}
+                className={cn(
+                  "p-0 h-auto gap-2 text-sm font-medium transition-colors",
+                  isDirty
+                    ? "text-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer"
+                    : "text-slate-300 cursor-not-allowed opacity-60 hover:bg-transparent"
+                )}
                 onClick={handleDeleteAllEdits}
               >
                 <Trash2 className="size-4" />
@@ -115,13 +134,13 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
                     const newOpts = [...options];
                     if (newOpts[index]) {
                       newOpts[index].text = val;
-                      setValue('options', newOpts);
+                      setValue('options', newOpts, { shouldDirty: true });
                     }
                   }}
-                  onSelectCorrect={() => setValue('correctOptionId', opt.id)}
+                  onSelectCorrect={() => setValue('correctOptionId', opt.id, { shouldDirty: true })}
                   onDelete={() => {
                     const newOpts = options.filter((_, i) => i !== index);
-                    setValue('options', newOpts);
+                    setValue('options', newOpts, { shouldDirty: true });
                   }}
                 />
               ))}
