@@ -5,7 +5,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { NotFound } from '@/pages/NotFound';
 
 import { LoginPage } from '@/features/auth/pages/LoginPage';
-import { CreateTestPage } from '@/features/tests';
+import { CreateTestPage, QuestionBuilderPage, PublishTestPage } from '@/features/tests';
 
 /**
  * Application route configuration.
@@ -42,6 +42,14 @@ export const router = createBrowserRouter([
           {
             path: 'tests/create',
             element: <CreateTestPage />,
+          },
+          {
+            path: 'tests/create/questions',
+            element: <QuestionBuilderPage />,
+          },
+          {
+            path: 'tests/create/publish',
+            element: <PublishTestPage />,
           },
         ],
       },

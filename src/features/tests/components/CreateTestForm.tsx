@@ -1,7 +1,15 @@
 import { Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { ROUTES } from '@/constants/routes';
 import { useCreateTest } from '../hooks/useCreateTest';
-import { TEST_TYPES, DIFFICULTY_LEVELS } from '../constants/test.constants';
+import { 
+  TEST_TYPES, 
+  DIFFICULTY_LEVELS,
+  SUBJECT_OPTIONS,
+  TOPIC_OPTIONS,
+  SUB_TOPIC_OPTIONS,
+  CREATE_TEST_ACTIONS
+} from '../constants/test.constants';
 import { TextField } from '@/components/forms/TextField';
 import { SelectField } from '@/components/forms/SelectField';
 import { RadioGroupField } from '@/components/forms/RadioGroupField';
@@ -10,23 +18,7 @@ import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/common/LoadingButton';
 import { SectionCard } from '@/components/layout/SectionCard';
 
-// Mock options since we don't have endpoints for these yet
-const SUBJECT_OPTIONS = [
-  { label: 'Physics', value: 'physics' },
-  { label: 'Chemistry', value: 'chemistry' },
-  { label: 'Mathematics', value: 'mathematics' },
-];
-
-const TOPIC_OPTIONS = [
-  { label: 'Kinematics', value: 'kinematics' },
-  { label: 'Thermodynamics', value: 'thermodynamics' },
-  { label: 'Optics', value: 'optics' },
-];
-
-const SUB_TOPIC_OPTIONS = [
-  { label: '1D Motion', value: '1d-motion' },
-  { label: '2D Motion', value: '2d-motion' },
-];
+// Mock options moved to constants
 
 export function CreateTestForm() {
   const navigate = useNavigate();
@@ -35,7 +27,7 @@ export function CreateTestForm() {
     onSuccess: () => {
       // Navigate to the next step, e.g., Question Builder
       // navigate(`/tests/${test.id}/questions`);
-      navigate('/dashboard'); // Fallback for now since Question Builder is not implemented
+      navigate(ROUTES.DASHBOARD); // Fallback for now since Question Builder is not implemented
     },
   });
 
@@ -165,23 +157,22 @@ export function CreateTestForm() {
         />
       </div>
 
-      {/* Form Actions */}
       <div className="flex justify-end gap-4 pt-6">
         <Button
           type="button"
           variant="ghost"
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate(ROUTES.DASHBOARD)}
           className="px-8 bg-slate-50 text-blue-600 hover:bg-slate-100 hover:text-blue-700"
         >
-          Cancel
+          {CREATE_TEST_ACTIONS.CANCEL}
         </Button>
         <LoadingButton
           type="submit"
           isLoading={isLoading}
-          loadingText="Saving..."
+          loadingText={CREATE_TEST_ACTIONS.SAVING}
           className="px-12 bg-blue-500 hover:bg-blue-600"
         >
-          Next
+          {CREATE_TEST_ACTIONS.NEXT}
         </LoadingButton>
       </div>
 

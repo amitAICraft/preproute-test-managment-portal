@@ -47,8 +47,8 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full max-w-sm">
       <TextField
-        label="User ID"
-        placeholder="Enter User ID"
+        label={MESSAGES.LOGIN.USER_ID_LABEL}
+        placeholder={MESSAGES.LOGIN.USER_ID_PLACEHOLDER}
         autoComplete="username"
         disabled={isLoading}
         error={errors.userId?.message}
@@ -56,8 +56,8 @@ export function LoginForm() {
       />
 
       <PasswordField
-        label="Password"
-        placeholder="Enter Password"
+        label={MESSAGES.LOGIN.PASSWORD_LABEL}
+        placeholder={MESSAGES.LOGIN.PASSWORD_PLACEHOLDER}
         disabled={isLoading}
         error={errors.password?.message}
         {...register('password')}
@@ -65,7 +65,7 @@ export function LoginForm() {
 
       <div className="flex justify-start">
         <a href="#" className="text-sm text-primary hover:underline underline-offset-4">
-          Forgot password?
+          {MESSAGES.LOGIN.FORGOT_PASSWORD}
         </a>
       </div>
 

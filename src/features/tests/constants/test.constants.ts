@@ -80,3 +80,26 @@ export const TEST_MESSAGES = {
     INVALID_DURATION: 'Duration must be a positive number',
   },
 } as const;
+
+export const SUBJECT_OPTIONS = [
+  { label: 'Physics', value: 'physics' },
+  { label: 'Chemistry', value: 'chemistry' },
+  { label: 'Mathematics', value: 'mathematics' },
+] as const;
+
+export const TOPIC_OPTIONS = [
+  { label: 'Kinematics', value: 'kinematics' },
+  { label: 'Thermodynamics', value: 'thermodynamics' },
+  { label: 'Optics', value: 'optics' },
+] as const;
+
+export const SUB_TOPIC_OPTIONS = [
+  { label: '1D Motion', value: '1d-motion' },
+  { label: '2D Motion', value: '2d-motion' },
+] as const;
+
+export const CREATE_TEST_ACTIONS = {
+  CANCEL: 'Cancel',
+  NEXT: 'Next',
+  SAVING: 'Saving...',
+} as const;

@@ -41,5 +41,9 @@ export {
   TEST_LIMITS,
   TEST_FORM_DEFAULTS,
   TEST_MESSAGES,
+} from './constants';
+
 // Pages
-export { CreateTestPage } from './pages/CreateTestPage';
+export * from './pages/CreateTestPage';
+export * from './pages/QuestionBuilderPage';
+export * from './pages/PublishTestPage';

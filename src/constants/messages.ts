@@ -8,6 +8,11 @@ export const MESSAGES = {
     INVALID_CREDENTIALS: 'Invalid User ID or Password.',
     BUTTON_LOADING: 'Logging in...',
     BUTTON_DEFAULT: 'Login',
+    USER_ID_LABEL: 'User ID',
+    USER_ID_PLACEHOLDER: 'Enter User ID',
+    PASSWORD_LABEL: 'Password',
+    PASSWORD_PLACEHOLDER: 'Enter Password',
+    FORGOT_PASSWORD: 'Forgot password?',
   },
   ERRORS: {
     GENERIC: 'Something went wrong. Please try again.',
