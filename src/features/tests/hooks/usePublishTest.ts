@@ -13,6 +13,8 @@ export function usePublishTest() {
     defaultValues: {
       publishType: 'publish_now',
       duration: 'always',
+      scheduleDate: '',
+      scheduleTime: '',
       endDate: '',
       endTime: '',
     },

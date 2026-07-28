@@ -8,6 +8,9 @@ export const PUBLISH_TEST_MESSAGES = {
   LIVE_UNTIL_DESC: 'Choose how long this test should remain available on the platform.',
   CANCEL: 'Cancel',
   CONFIRM: 'Confirm',
+  SELECT_DATE_AND_TIME: 'Select Date and Time',
+  SELECT_DATE: 'Select Date',
+  SELECT_TIME: 'Select Time',
   SELECT_END_DATE: 'Select End Date',
   SELECT_END_TIME: 'Select End Time',
 } as const;

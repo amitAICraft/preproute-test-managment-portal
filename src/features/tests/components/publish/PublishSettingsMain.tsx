@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Controller } from 'react-hook-form';
 import { Calendar, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TestDetailsCard } from '../TestDetailsCard';
+import { EditTestDialog } from '../edit-test/EditTestDialog';
 import { Tabs } from '@/components/ui/tabs';
 import { RadioGroupField } from '@/components/forms/RadioGroupField';
 import { TextField } from '@/components/forms/TextField';
@@ -16,7 +18,9 @@ const PUBLISH_TABS = [
 export function PublishSettingsMain() {
   const { form, onSubmit, onCancel } = usePublishTest();
   const { control, handleSubmit, watch, register, formState: { errors, isSubmitting } } = form;
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
+  const publishType = watch('publishType');
   const duration = watch('duration');
 
   return (
@@ -24,7 +28,12 @@ export function PublishSettingsMain() {
       <div className="mx-auto w-full max-w-4xl p-6 space-y-8">
         
         {/* Test Details Card */}
-        <TestDetailsCard onEdit={() => {}} />
+        <TestDetailsCard onEdit={() => setEditDialogOpen(true)} />
+        <EditTestDialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          existingTest={undefined}
+        />
 
         {/* Form Area */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -42,6 +51,36 @@ export function PublishSettingsMain() {
               )}
             />
           </div>
+
+          {publishType === 'schedule_publish' && (
+            <div className="space-y-6 pt-4">
+              <h2 className="text-lg font-bold text-slate-800">{PUBLISH_TEST_MESSAGES.SELECT_DATE_AND_TIME}</h2>
+              <div className="grid grid-cols-2 gap-6 max-w-2xl pt-2">
+                <div className="relative">
+                  <TextField
+                    label=""
+                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_DATE}
+                    {...register('scheduleDate')}
+                    error={errors.scheduleDate?.message}
+                  />
+                  <div className="absolute right-3 top-3 text-slate-400 pointer-events-none">
+                    <Calendar className="size-5" />
+                  </div>
+                </div>
+                <div className="relative">
+                  <TextField
+                    label=""
+                    placeholder={PUBLISH_TEST_MESSAGES.SELECT_TIME}
+                    {...register('scheduleTime')}
+                    error={errors.scheduleTime?.message}
+                  />
+                  <div className="absolute right-3 top-3 text-slate-400 pointer-events-none">
+                    <ChevronDown className="size-5" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="space-y-6 pt-4">
             <div>

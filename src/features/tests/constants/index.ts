@@ -9,4 +9,5 @@ export {
   TOPIC_OPTIONS,
   SUB_TOPIC_OPTIONS,
   CREATE_TEST_ACTIONS,
+  EDIT_TEST_DIALOG,
 } from './test.constants';

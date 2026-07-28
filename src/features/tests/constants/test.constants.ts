@@ -103,3 +103,34 @@ export const CREATE_TEST_ACTIONS = {
   NEXT: 'Next',
   SAVING: 'Saving...',
 } as const;
+
+export const EDIT_TEST_DIALOG = {
+  TITLE: 'Edit Test creation',
+  SAVE: 'Save',
+  CANCEL: 'Cancel',
+  SAVING: 'Saving...',
+  LABELS: {
+    SUBJECT: 'Subject',
+    NAME_OF_TEST: 'Name of Test',
+    TOPIC: 'Topic',
+    SUB_TOPIC: 'Sub Topic',
+    DURATION: 'Duration (Minutes)',
+    DIFFICULTY: 'Test Difficulty Level',
+    MARKING_SCHEME: 'Marking Scheme:',
+    WRONG_ANSWER: 'Wrong Answer',
+    UNATTEMPTED: 'Unattempted',
+    CORRECT_ANSWER: 'Correct Answer',
+    NO_OF_QUESTIONS: 'No of Questions',
+    TOTAL_MARKS: 'Total Marks',
+  },
+  PLACEHOLDERS: {
+    DROPDOWN: 'Choose from Drop-down',
+    TEST_NAME: 'Enter name of Test',
+    DURATION: 'Enter the time',
+    WRONG_ANSWER: '-1',
+    UNATTEMPTED: '+0',
+    CORRECT_ANSWER: '+5',
+    QUESTIONS: 'Ex:250 Marks',
+    MARKS: 'Ex:250 Marks',
+  },
+} as const;

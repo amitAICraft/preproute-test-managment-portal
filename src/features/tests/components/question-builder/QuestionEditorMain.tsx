@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import { Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TestDetailsCard } from '../TestDetailsCard';
+import { EditTestDialog } from '../edit-test/EditTestDialog';
 import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { OptionField } from '@/components/forms/OptionField';
 import { SelectField } from '@/components/forms/SelectField';
@@ -21,6 +23,7 @@ interface QuestionEditorMainProps {
 export function QuestionEditorMain({ activeQuestionIndex, totalQuestions }: QuestionEditorMainProps) {
   const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder();
   const { watch, setValue } = form;
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const options = watch('options') || [];
   const correctOptionId = watch('correctOptionId');
@@ -29,7 +32,12 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions }: Ques
     <div className="flex flex-1 flex-col overflow-y-auto bg-slate-50/30">
       <div className="mx-auto w-full max-w-4xl p-6 space-y-6">
         {/* Test Details Card */}
-        <TestDetailsCard onEdit={() => {}} />
+        <TestDetailsCard onEdit={() => setEditDialogOpen(true)} />
+        <EditTestDialog
+          open={editDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          existingTest={undefined}
+        />
 
         {/* Editor Area */}
         <FormProvider {...form}>
