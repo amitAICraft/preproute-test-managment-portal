@@ -12,7 +12,7 @@ import { logout } from '@/features/auth/authSlice';
  * Inner fetchBaseQuery — reads token from Redux state.
  */
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_URL as string,
+  baseUrl: "https://admin-moderator-backend-staging.up.railway.app/api",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
     if (token) {

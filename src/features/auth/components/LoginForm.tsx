@@ -34,6 +34,7 @@ export function LoginForm() {
   const onSubmit = async (data: LoginFormValues) => {
     try {
       const response = await login(data).unwrap();
+      console.log("resonse.....",response)
       dispatch(setCredentials({ token: response.token, user: response.user }));
       authStorage.setAuth(response.token, response.user);
       

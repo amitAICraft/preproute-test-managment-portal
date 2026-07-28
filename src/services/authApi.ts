@@ -24,7 +24,10 @@ export const authApi = baseApi.injectEndpoints({
       query: (credentials) => ({
         url: '/auth/login',
         method: 'POST',
-        body: credentials,
+        body: {
+  "userId": "vedant-admin",
+  "password": "vedant123"
+},
       }),
       transformResponse: (response: ApiResponse<LoginData>) => response.data,
       invalidatesTags: ['Auth'],
