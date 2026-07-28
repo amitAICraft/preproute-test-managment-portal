@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { questionBuilderSchema, type QuestionBuilderFormValues } from '../schemas/questionBuilderSchema';
 import { useBulkCreateQuestionsMutation } from '@/services/questionApi';
 
-export function useQuestionBuilder(testId?: string) {
+export function useQuestionBuilder(testId?: string, onSaveSuccess?: () => void) {
   const [bulkCreate, { isLoading }] = useBulkCreateQuestionsMutation();
   const form = useForm<QuestionBuilderFormValues>({
     resolver: zodResolver(questionBuilderSchema),
@@ -40,8 +40,9 @@ export function useQuestionBuilder(testId?: string) {
           test_id: testId || '', // testId always comes from URL — empty string lets backend reject gracefully
         }]
       }).unwrap();
-      
       toast.success('Question saved successfully');
+      form.reset();
+      onSaveSuccess?.();
     } catch {
       toast.error('Failed to save question');
     }

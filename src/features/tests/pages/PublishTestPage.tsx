@@ -25,7 +25,7 @@ export function PublishTestPage() {
       
       {/* Top Header - No Breadcrumbs here per Figma */}
       <div className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 px-6">
-        <div className="text-sm text-slate-800 font-medium">
+        <div className="text-sm text-slate-500">
           {PUBLISH_TEST_MESSAGES.TITLE}
         </div>
       </div>
@@ -45,7 +45,7 @@ export function PublishTestPage() {
           {/* Sub header specifically for publish main area */}
           <div className="px-10 pt-10 pb-6 flex items-center gap-4 bg-slate-50/30">
             <h1 className="text-xl font-bold text-slate-800">{PUBLISH_TEST_MESSAGES.TEST_CREATED}</h1>
-            <Badge variant="success" className="gap-1.5 rounded-full px-3 py-1 font-medium bg-emerald-50 border border-emerald-200">
+            <Badge variant="outline" className="gap-1.5 rounded-full px-3 py-1 font-medium bg-white border border-emerald-500 text-emerald-500">
               <CheckCircle2 className="size-3.5" />
               {PUBLISH_TEST_MESSAGES.ALL_QUESTIONS_DONE}
             </Badge>

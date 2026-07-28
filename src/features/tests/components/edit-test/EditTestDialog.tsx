@@ -52,6 +52,9 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
 
   const selectedSubject = useWatch({ control, name: 'subject' });
   const selectedTopic = useWatch({ control, name: 'topic' });
+  const totalQuestions = useWatch({ control, name: 'totalQuestions' });
+  const correctAnswerMarks = useWatch({ control, name: 'markingScheme.correctAnswer' });
+  const totalMarks = (totalQuestions || 0) * (correctAnswerMarks || 0);
 
   const { data: subjects = [] } = useGetSubjectsQuery(undefined, { skip: !open });
   const { data: topics = [] } = useGetTopicsBySubjectQuery(selectedSubject, {
@@ -195,6 +198,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
                     type="text"
                     placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
                     disabled
+                    value={totalMarks > 0 ? `${totalMarks} Marks` : ''}
                     className="cursor-not-allowed bg-slate-50"
                   />
                 </div>

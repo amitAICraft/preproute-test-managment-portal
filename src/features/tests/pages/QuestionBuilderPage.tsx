@@ -15,8 +15,13 @@ export function QuestionBuilderPage() {
   });
   
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [activeQuestion, setActiveQuestion] = useState(0); // First question (0-indexed)
-  const completedQuestions = [0]; // Placeholder
+  const [activeQuestion, setActiveQuestion] = useState(0); 
+  const [completedQuestions, setCompletedQuestions] = useState<number[]>([]);
+  
+  const handleSaveSuccess = () => {
+    setCompletedQuestions((prev) => Array.from(new Set([...prev, activeQuestion])));
+    setActiveQuestion((prev) => Math.min(prev + 1, totalQuestions - 1));
+  };
 
   const totalQuestions = testResponse?.totalQuestions || 50;
 
@@ -59,6 +64,7 @@ export function QuestionBuilderPage() {
           totalQuestions={totalQuestions}
           testId={testId || undefined}
           test={testResponse}
+          onSaveSuccess={handleSaveSuccess}
         />
       </div>
 

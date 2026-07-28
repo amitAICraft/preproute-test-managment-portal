@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FormProvider, useWatch } from 'react-hook-form';
-import { Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Trash2, ChevronLeft, ChevronRight, Plus, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { TestDetailsCard } from '../TestDetailsCard';
 import { EditTestDialog } from '../edit-test/EditTestDialog';
@@ -24,10 +24,11 @@ interface QuestionEditorMainProps {
   totalQuestions: number;
   testId?: string;
   test?: Test;
+  onSaveSuccess?: () => void;
 }
 
-export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId, test }: QuestionEditorMainProps) {
-  const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder(testId);
+export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId, test, onSaveSuccess }: QuestionEditorMainProps) {
+  const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder(testId, onSaveSuccess);
   const { watch, setValue } = form;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
@@ -68,10 +69,10 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
               </h2>
               <div className="flex items-center gap-3">
                 <Button variant="outline" size="sm" className="gap-2 text-slate-600">
-                  <span className="text-lg font-light">+</span> MCQ
+                  <Plus className="size-4" /> MCQ
                 </Button>
                 <Button variant="outline" size="sm" className="gap-2 text-slate-600">
-                  <span className="text-lg font-light">↓</span> CSV
+                  <Download className="size-4" /> CSV
                 </Button>
               </div>
             </div>

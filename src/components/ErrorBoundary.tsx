@@ -30,7 +30,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // TODO: Replace with a real error reporting service (e.g. Sentry)
     console.error('[ErrorBoundary] Uncaught error:', error, errorInfo);
   }
 

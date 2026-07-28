@@ -33,6 +33,9 @@ export function CreateTestForm() {
 
   const selectedSubject = useWatch({ control, name: 'subject' });
   const selectedTopic = useWatch({ control, name: 'topic' });
+  const totalQuestions = useWatch({ control, name: 'totalQuestions' });
+  const correctAnswerMarks = useWatch({ control, name: 'markingScheme.correctAnswer' });
+  const totalMarks = (totalQuestions || 0) * (correctAnswerMarks || 0);
 
   const { data: subjects = [] } = useGetSubjectsQuery();
   const { data: topics = [] } = useGetTopicsBySubjectQuery(selectedSubject, {
@@ -172,6 +175,7 @@ export function CreateTestForm() {
               type="text"
               placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
               disabled
+              value={totalMarks > 0 ? `${totalMarks} Marks` : ''}
               className="bg-slate-50 cursor-not-allowed"
             />
           </div>
