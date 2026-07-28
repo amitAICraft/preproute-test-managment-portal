@@ -6,6 +6,7 @@ import { NotFound } from '@/pages/NotFound';
 
 import { LoginPage } from '@/features/auth/pages/LoginPage';
 import { CreateTestPage, QuestionBuilderPage, PublishTestPage } from '@/features/tests';
+import { DashboardPage } from '@/features/dashboard';
 
 /**
  * Application route configuration.
@@ -33,11 +34,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'dashboard',
-            element: (
-              <div className="flex items-center justify-center py-20 text-muted-foreground">
-                Dashboard — implement in feature module
-              </div>
-            ),
+            element: <DashboardPage />,
           },
           {
             path: 'tests/create',
