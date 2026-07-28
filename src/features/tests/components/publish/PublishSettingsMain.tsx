@@ -16,8 +16,8 @@ const PUBLISH_TABS = [
 ] as const;
 
 export function PublishSettingsMain() {
-  const { form, onSubmit, onCancel } = usePublishTest();
-  const { control, handleSubmit, watch, register, formState: { errors, isSubmitting } } = form;
+  const { form, onSubmit, onCancel, isLoading } = usePublishTest();
+  const { control, handleSubmit, watch, register, formState: { errors } } = form;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const publishType = watch('publishType');
@@ -143,7 +143,7 @@ export function PublishSettingsMain() {
             </Button>
             <Button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isLoading}
               className="px-12 bg-blue-500 hover:bg-blue-600 font-medium"
             >
               {PUBLISH_TEST_MESSAGES.CONFIRM}

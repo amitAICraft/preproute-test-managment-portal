@@ -4,9 +4,11 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { publishTestSchema, type PublishTestFormValues } from '../schemas/publishTestSchema';
 import { ROUTES } from '@/constants/routes';
+import { usePublishTestMutation } from '@/services/publishApi';
 
 export function usePublishTest() {
   const navigate = useNavigate();
+  const [publishTest, { isLoading }] = usePublishTestMutation();
   
   const form = useForm<PublishTestFormValues>({
     resolver: zodResolver(publishTestSchema),
@@ -22,9 +24,7 @@ export function usePublishTest() {
 
   const onSubmit = async (data: PublishTestFormValues) => {
     try {
-      // Mock API call
-      console.log('Publishing test...', data);
-      await new Promise((resolve) => setTimeout(resolve, 800));
+      await publishTest({ testId: 'test-uuid-placeholder' }).unwrap();
       toast.success('Test published successfully!');
       navigate(ROUTES.DASHBOARD);
     } catch {
@@ -33,12 +33,13 @@ export function usePublishTest() {
   };
 
   const onCancel = () => {
-    navigate(ROUTES.DASHBOARD); // or wherever makes sense
+    navigate(ROUTES.DASHBOARD);
   };
 
   return {
     form,
     onSubmit,
     onCancel,
+    isLoading
   };
 }

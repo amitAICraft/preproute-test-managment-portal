@@ -20,6 +20,45 @@ import type {
  * Uses `transformResponse` to unwrap the `ApiResponse<T>` envelope,
  * consistent with the pattern established in `authApi`.
  */
+// ── Mapping Helpers ──────────────────────────────────────
+
+const mapBackendToFrontendTest = (backendTest: any): Test => ({
+  id: backendTest.id,
+  testType: backendTest.type || 'chapterwise',
+  subject: backendTest.subject,
+  title: backendTest.name,
+  topic: backendTest.topics?.[0] || '',
+  subTopic: backendTest.sub_topics?.[0] || '',
+  duration: backendTest.total_time || 0,
+  difficultyLevel: backendTest.difficulty || 'easy',
+  markingScheme: {
+    wrongAnswer: backendTest.wrong_marks || -1,
+    unattempted: backendTest.unattempt_marks || 0,
+    correctAnswer: backendTest.correct_marks || 5,
+  },
+  totalQuestions: backendTest.total_questions || 0,
+  totalMarks: backendTest.total_marks || 0,
+  status: backendTest.status || 'draft',
+  createdAt: backendTest.created_at || new Date().toISOString(),
+  updatedAt: backendTest.updated_at || new Date().toISOString(),
+});
+
+const mapFrontendToBackendRequest = (frontendReq: CreateTestRequest | UpdateTestRequest) => ({
+  name: frontendReq.title,
+  type: frontendReq.testType,
+  subject: frontendReq.subject,
+  topics: [frontendReq.topic].filter(Boolean),
+  sub_topics: frontendReq.subTopic ? [frontendReq.subTopic] : [],
+  correct_marks: frontendReq.markingScheme.correctAnswer,
+  wrong_marks: frontendReq.markingScheme.wrongAnswer,
+  unattempt_marks: frontendReq.markingScheme.unattempted,
+  difficulty: frontendReq.difficultyLevel,
+  total_time: frontendReq.duration,
+  total_marks: (frontendReq as any).totalMarks || (frontendReq.totalQuestions * frontendReq.markingScheme.correctAnswer),
+  total_questions: frontendReq.totalQuestions,
+  status: 'draft',
+});
+
 export const testApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // ── GET /tests ─────────────────────────────────────────
@@ -28,7 +67,16 @@ export const testApi = baseApi.injectEndpoints({
         url: '/tests',
         params: params ?? undefined,
       }),
-      transformResponse: (response: ApiResponse<PaginatedTests>) => response.data,
+      transformResponse: (response: ApiResponse<any[]>) => {
+        const mappedData = response.data.map(mapBackendToFrontendTest);
+        return {
+          data: mappedData,
+          total: mappedData.length,
+          page: 1,
+          limit: mappedData.length,
+          totalPages: 1,
+        };
+      },
       providesTags: (result) =>
         result
           ? [
@@ -41,7 +89,7 @@ export const testApi = baseApi.injectEndpoints({
     // ── GET /tests/:id ────────────────────────────────────
     getTestById: builder.query<Test, string>({
       query: (id) => `/tests/${id}`,
-      transformResponse: (response: ApiResponse<Test>) => response.data,
+      transformResponse: (response: ApiResponse<any>) => mapBackendToFrontendTest(response.data),
       providesTags: (_result, _error, id) => [{ type: 'Test', id }],
     }),
 
@@ -50,9 +98,9 @@ export const testApi = baseApi.injectEndpoints({
       query: (body) => ({
         url: '/tests',
         method: 'POST',
-        body,
+        body: mapFrontendToBackendRequest(body),
       }),
-      transformResponse: (response: ApiResponse<Test>) => response.data,
+      transformResponse: (response: ApiResponse<any>) => mapBackendToFrontendTest(response.data),
       invalidatesTags: [{ type: 'Test', id: 'LIST' }],
     }),
 
@@ -61,9 +109,9 @@ export const testApi = baseApi.injectEndpoints({
       query: ({ id, ...body }) => ({
         url: `/tests/${id}`,
         method: 'PUT',
-        body,
+        body: mapFrontendToBackendRequest(body as UpdateTestRequest),
       }),
-      transformResponse: (response: ApiResponse<Test>) => response.data,
+      transformResponse: (response: ApiResponse<any>) => mapBackendToFrontendTest(response.data),
       invalidatesTags: (_result, _error, { id }) => [
         { type: 'Test', id },
         { type: 'Test', id: 'LIST' },

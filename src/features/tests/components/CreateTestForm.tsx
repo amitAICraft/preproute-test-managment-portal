@@ -1,16 +1,18 @@
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '@/constants/routes';
 import { useCreateTest } from '../hooks/useCreateTest';
 import { 
   TEST_TYPES, 
   DIFFICULTY_LEVELS,
-  SUBJECT_OPTIONS,
-  TOPIC_OPTIONS,
-  SUB_TOPIC_OPTIONS,
   CREATE_TEST_ACTIONS,
   TEST_FORM_CONSTANTS
 } from '../constants/test.constants';
+import { 
+  useGetSubjectsQuery, 
+  useGetTopicsBySubjectQuery, 
+  useGetSubTopicsQuery 
+} from '@/services/taxonomyApi';
 import { TextField } from '@/components/forms/TextField';
 import { SelectField } from '@/components/forms/SelectField';
 import { RadioGroupField } from '@/components/forms/RadioGroupField';
@@ -18,20 +20,31 @@ import { Tabs } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/common/LoadingButton';
 
-// Mock options moved to constants
-
 export function CreateTestForm() {
   const navigate = useNavigate();
   
   const { form, onSubmit, isLoading } = useCreateTest({
     onSuccess: () => {
-      // Navigate to the next step, e.g., Question Builder
-      // navigate(`/tests/${test.id}/questions`);
-      navigate(ROUTES.DASHBOARD); // Fallback for now since Question Builder is not implemented
+      navigate(ROUTES.DASHBOARD); 
     },
   });
 
   const { register, control, handleSubmit, formState: { errors } } = form;
+
+  const selectedSubject = useWatch({ control, name: 'subject' });
+  const selectedTopic = useWatch({ control, name: 'topic' });
+
+  const { data: subjects = [] } = useGetSubjectsQuery();
+  const { data: topics = [] } = useGetTopicsBySubjectQuery(selectedSubject, {
+    skip: !selectedSubject,
+  });
+  const { data: subTopics = [] } = useGetSubTopicsQuery(selectedTopic ? [selectedTopic] : [], {
+    skip: !selectedTopic,
+  });
+
+  const subjectOptions = subjects.map((s) => ({ label: s.name, value: s.id }));
+  const topicOptions = topics.map((t) => ({ label: t.name, value: t.id }));
+  const subTopicOptions = subTopics.map((st) => ({ label: st.name, value: st.id }));
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
@@ -58,7 +71,7 @@ export function CreateTestForm() {
         {/* Subject & Name */}
         <SelectField
           label={TEST_FORM_CONSTANTS.LABELS.SUBJECT}
-          options={SUBJECT_OPTIONS}
+          options={subjectOptions}
           placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
           error={errors.subject?.message}
           {...register('subject')}
@@ -73,16 +86,18 @@ export function CreateTestForm() {
         {/* Topic & Sub Topic */}
         <SelectField
           label={TEST_FORM_CONSTANTS.LABELS.TOPIC}
-          options={TOPIC_OPTIONS}
+          options={topicOptions}
           placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
           error={errors.topic?.message}
+          disabled={!selectedSubject}
           {...register('topic')}
         />
         <SelectField
           label={TEST_FORM_CONSTANTS.LABELS.SUB_TOPIC}
-          options={SUB_TOPIC_OPTIONS}
+          options={subTopicOptions}
           placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
           error={errors.subTopic?.message}
+          disabled={!selectedTopic}
           {...register('subTopic')}
         />
 

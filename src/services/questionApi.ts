@@ -1,6 +1,22 @@
 import { baseApi } from './baseApi';
+import type { ApiResponse } from '@/types';
 
 // ── Types ────────────────────────────────────────────────
+
+export interface BackendQuestion {
+  id: string;
+  type: string;
+  question: string;
+  option1: string;
+  option2: string;
+  option3: string;
+  option4: string;
+  correct_option: string;
+  explanation: string;
+  difficulty: string;
+  test_id: string;
+}
+
 export interface Question {
   id: string;
   testId: string;
@@ -8,112 +24,68 @@ export interface Question {
   type: 'mcq' | 'true-false' | 'short-answer';
   options: QuestionOption[];
   correctAnswer: string;
-  marks: number;
-  order: number;
-  createdAt: string;
-  updatedAt: string;
+  explanation?: string;
+  difficulty?: string;
 }
 
 export interface QuestionOption {
-  id: string;
+  id: string; // usually 'option1', 'option2', etc for frontend mapping
   text: string;
   isCorrect: boolean;
 }
 
-export interface CreateQuestionRequest {
-  testId: string;
-  text: string;
-  type: Question['type'];
-  options: Omit<QuestionOption, 'id'>[];
-  correctAnswer: string;
-  marks: number;
+export interface BulkCreateQuestionsRequest {
+  questions: Omit<BackendQuestion, 'id'>[];
 }
 
-export interface UpdateQuestionRequest {
-  id: string;
-  text?: string;
-  type?: Question['type'];
-  options?: Omit<QuestionOption, 'id'>[];
-  correctAnswer?: string;
-  marks?: number;
-  order?: number;
+export interface FetchBulkQuestionsRequest {
+  question_ids: string[];
 }
 
-export interface ReorderQuestionsRequest {
-  testId: string;
-  questionIds: string[];
-}
+// ── Mapping Helpers ──────────────────────────────────────
+
+const mapBackendToFrontendQuestion = (backendQ: BackendQuestion): Question => ({
+  id: backendQ.id,
+  testId: backendQ.test_id,
+  text: backendQ.question,
+  type: (backendQ.type as any) || 'mcq',
+  options: [
+    { id: 'option1', text: backendQ.option1, isCorrect: backendQ.correct_option === 'option1' },
+    { id: 'option2', text: backendQ.option2, isCorrect: backendQ.correct_option === 'option2' },
+    { id: 'option3', text: backendQ.option3, isCorrect: backendQ.correct_option === 'option3' },
+    { id: 'option4', text: backendQ.option4, isCorrect: backendQ.correct_option === 'option4' },
+  ],
+  correctAnswer: backendQ.correct_option,
+  explanation: backendQ.explanation,
+  difficulty: backendQ.difficulty,
+});
 
 // ── Injected endpoints ───────────────────────────────────
 export const questionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getQuestionsByTest: builder.query<Question[], string>({
-      query: (testId) => `/tests/${testId}/questions`,
-      providesTags: (result, _error, testId) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Question' as const, id })),
-              { type: 'Question', id: `TEST-${testId}` },
-            ]
-          : [{ type: 'Question', id: `TEST-${testId}` }],
-    }),
-
-    getQuestionById: builder.query<Question, string>({
-      query: (id) => `/questions/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Question', id }],
-    }),
-
-    createQuestion: builder.mutation<Question, CreateQuestionRequest>({
-      query: ({ testId, ...body }) => ({
-        url: `/tests/${testId}/questions`,
+    fetchBulkQuestions: builder.mutation<Question[], FetchBulkQuestionsRequest>({
+      query: (body) => ({
+        url: '/questions/fetchBulk',
         method: 'POST',
         body,
       }),
-      invalidatesTags: (_result, _error, { testId }) => [
-        { type: 'Question', id: `TEST-${testId}` },
-        { type: 'Test', id: testId },
-      ],
+      transformResponse: (response: ApiResponse<BackendQuestion[]>) => 
+        response.data.map(mapBackendToFrontendQuestion),
     }),
 
-    updateQuestion: builder.mutation<Question, UpdateQuestionRequest>({
-      query: ({ id, ...body }) => ({
-        url: `/questions/${id}`,
-        method: 'PATCH',
+    bulkCreateQuestions: builder.mutation<Question[], BulkCreateQuestionsRequest>({
+      query: (body) => ({
+        url: '/questions/bulk',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: (_result, _error, { id }) => [{ type: 'Question', id }],
-    }),
-
-    deleteQuestion: builder.mutation<void, { id: string; testId: string }>({
-      query: ({ id }) => ({
-        url: `/questions/${id}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: (_result, _error, { id, testId }) => [
-        { type: 'Question', id },
-        { type: 'Question', id: `TEST-${testId}` },
-        { type: 'Test', id: testId },
-      ],
-    }),
-
-    reorderQuestions: builder.mutation<void, ReorderQuestionsRequest>({
-      query: ({ testId, questionIds }) => ({
-        url: `/tests/${testId}/questions/reorder`,
-        method: 'PUT',
-        body: { questionIds },
-      }),
-      invalidatesTags: (_result, _error, { testId }) => [
-        { type: 'Question', id: `TEST-${testId}` },
-      ],
+      transformResponse: (response: ApiResponse<BackendQuestion[]>) => 
+        response.data.map(mapBackendToFrontendQuestion),
     }),
   }),
 });
 
 export const {
-  useGetQuestionsByTestQuery,
-  useGetQuestionByIdQuery,
-  useCreateQuestionMutation,
-  useUpdateQuestionMutation,
-  useDeleteQuestionMutation,
-  useReorderQuestionsMutation,
+  useFetchBulkQuestionsMutation,
+  useBulkCreateQuestionsMutation,
 } = questionApi;

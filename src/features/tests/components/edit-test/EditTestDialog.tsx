@@ -1,4 +1,4 @@
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { Dialog, DialogHeader, DialogBody, DialogFooter } from '@/components/ui/dialog';
 import { TextField } from '@/components/forms/TextField';
 import { SelectField } from '@/components/forms/SelectField';
@@ -10,11 +10,13 @@ import { useUpdateTest } from '../../hooks/useUpdateTest';
 import {
   TEST_TYPES,
   DIFFICULTY_LEVELS,
-  SUBJECT_OPTIONS,
-  TOPIC_OPTIONS,
-  SUB_TOPIC_OPTIONS,
   TEST_FORM_CONSTANTS,
 } from '../../constants/test.constants';
+import { 
+  useGetSubjectsQuery, 
+  useGetTopicsBySubjectQuery, 
+  useGetSubTopicsQuery 
+} from '@/services/taxonomyApi';
 import type { Test } from '../../types';
 
 interface EditTestDialogProps {
@@ -48,6 +50,21 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
     }
   };
 
+  const selectedSubject = useWatch({ control, name: 'subject' });
+  const selectedTopic = useWatch({ control, name: 'topic' });
+
+  const { data: subjects = [] } = useGetSubjectsQuery(undefined, { skip: !open });
+  const { data: topics = [] } = useGetTopicsBySubjectQuery(selectedSubject, {
+    skip: !selectedSubject || !open,
+  });
+  const { data: subTopics = [] } = useGetSubTopicsQuery(selectedTopic ? [selectedTopic] : [], {
+    skip: !selectedTopic || !open,
+  });
+
+  const subjectOptions = subjects.map((s) => ({ label: s.name, value: s.id }));
+  const topicOptions = topics.map((t) => ({ label: t.name, value: t.id }));
+  const subTopicOptions = subTopics.map((st) => ({ label: st.name, value: st.id }));
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -77,7 +94,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
               <SelectField
                 label={TEST_FORM_CONSTANTS.LABELS.SUBJECT}
-                options={SUBJECT_OPTIONS}
+                options={subjectOptions}
                 placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
                 error={errors.subject?.message}
                 {...register('subject')}
@@ -91,16 +108,18 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
 
               <SelectField
                 label={TEST_FORM_CONSTANTS.LABELS.TOPIC}
-                options={TOPIC_OPTIONS}
+                options={topicOptions}
                 placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
                 error={errors.topic?.message}
+                disabled={!selectedSubject}
                 {...register('topic')}
               />
               <SelectField
                 label={TEST_FORM_CONSTANTS.LABELS.SUB_TOPIC}
-                options={SUB_TOPIC_OPTIONS}
+                options={subTopicOptions}
                 placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
                 error={errors.subTopic?.message}
+                disabled={!selectedTopic}
                 {...register('subTopic')}
               />
 
