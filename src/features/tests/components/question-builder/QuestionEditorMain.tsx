@@ -49,7 +49,7 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto bg-slate-50/30">
-      <div className="mx-auto w-full max-w-4xl p-6 space-y-6">
+      <div className="w-full px-6 py-4 space-y-5">
         {/* Test Details Card */}
         <TestDetailsCard onEdit={() => setEditDialogOpen(true)} test={test} />
         <EditTestDialog
@@ -181,11 +181,11 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
 
             {/* Footer Actions */}
             <div className="flex items-center justify-between pt-8 pb-4">
-              <Button variant="destructive" className="bg-red-400 hover:bg-red-500 font-medium">
+              <Button variant="destructive" className="bg-[#FF6B6B] hover:bg-[#E55555] font-medium px-6 h-10 rounded-lg">
                 {QUESTION_BUILDER_MESSAGES.EXIT_TEST_CREATION}
               </Button>
               
-              <Button onClick={handleNext} className="bg-blue-500 hover:bg-blue-600 font-medium px-8">
+              <Button onClick={handleNext} className="bg-[#7489FF] hover:bg-[#5B73E8] font-medium px-8 h-10 rounded-lg">
                 {QUESTION_BUILDER_MESSAGES.NEXT}
               </Button>
             </div>

@@ -26,20 +26,27 @@ export function QuestionBuilderPage() {
   const totalQuestions = testResponse?.totalQuestions || 50;
 
   return (
-    <div className="flex h-[calc(100vh-3.5rem)] flex-col -m-6 bg-white overflow-hidden">
+    /**
+     * -m-6 cancels the AppLayout's p-6 on <main> so the QB can own its
+     * full viewport height.  overflow-hidden prevents the double-scrollbar
+     * that caused horizontal overflow.
+     */
+    <div className="flex h-[calc(100vh-4rem)] flex-col -m-6 bg-white overflow-hidden">
       
-      {/* Top Header */}
+      {/* ── Breadcrumb / Publish row ── */}
       <div className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 px-6">
         <div className="flex items-center gap-2 text-sm text-slate-500">
           <span>{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.TEST_CREATION}</span>
           <span>/</span>
           <span>{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CREATE_TEST}</span>
           <span>/</span>
-          <span className="text-slate-800 font-medium">{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CHAPTER_WISE}</span>
+          <span className="font-medium text-slate-800">
+            {QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CHAPTER_WISE}
+          </span>
         </div>
         
         <Button 
-          className="bg-blue-500 hover:bg-blue-600 font-medium px-8"
+          className="bg-[#7489FF] hover:bg-[#5B73E8] font-medium px-8 h-10 rounded-lg"
           onClick={() => {
             if (testId) navigate(`/tests/create/publish?testId=${testId}`);
           }}
@@ -48,8 +55,9 @@ export function QuestionBuilderPage() {
         </Button>
       </div>
 
-      {/* Split Content Area */}
+      {/* ── Split content: Secondary Sidebar + Main Editor ── */}
       <div className="flex flex-1 overflow-hidden">
+        {/* Secondary sidebar — sits immediately to the right of the primary sidebar */}
         <QuestionListSidebar
           totalQuestions={totalQuestions}
           activeQuestionIndex={activeQuestion}
@@ -59,6 +67,7 @@ export function QuestionBuilderPage() {
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
         
+        {/* Main editor — takes all remaining width, no fixed max-w */}
         <QuestionEditorMain 
           activeQuestionIndex={activeQuestion}
           totalQuestions={totalQuestions}
