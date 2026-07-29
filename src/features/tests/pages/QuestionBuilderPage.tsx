@@ -8,6 +8,8 @@ import { QUESTION_BUILDER_MESSAGES } from '../constants/questionBuilder.constant
 import { useGetTestByIdQuery } from '@/features/tests/api/testApi';
 import { useFetchBulkQuestionsQuery } from '@/services/questionApi';
 
+const EMPTY_ARRAY: any[] = [];
+
 export function QuestionBuilderPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -16,11 +18,13 @@ export function QuestionBuilderPage() {
     skip: !testId,
   });
 
-  const questionIds = testResponse?.questions || [];
-  const { data: questions = [] } = useFetchBulkQuestionsQuery(
+  const questionIds = testResponse?.questions || EMPTY_ARRAY;
+  const { data: questionsResponse } = useFetchBulkQuestionsQuery(
     { question_ids: questionIds },
     { skip: questionIds.length === 0 }
   );
+  // Stable reference for questions
+  const questions = questionsResponse || EMPTY_ARRAY;
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(0);

@@ -245,22 +245,15 @@ export function QuestionEditorMain({
             ))}
           </div>
 
-          {/* Solution Section — Rich Text Editor bound via Controller */}
+          {/* Solution Section — Plain Textarea */}
           <div className="space-y-3">
             <h3 className="font-semibold text-slate-800">
               {QUESTION_BUILDER_MESSAGES.ADD_SOLUTION}
             </h3>
-            <Controller
-              name="solutionText"
-              control={form.control}
-              render={({ field }) => (
-                <RichTextEditor
-                  value={field.value || ''}
-                  onChange={field.onChange}
-                  placeholder={QUESTION_BUILDER_MESSAGES.PLACEHOLDERS.EDITOR}
-                  className="min-h-[120px]"
-                />
-              )}
+            <textarea
+              className="min-h-[120px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#7489FF] focus:outline-none focus:ring-1 focus:ring-[#7489FF]"
+              placeholder={QUESTION_BUILDER_MESSAGES.PLACEHOLDERS.EDITOR}
+              {...form.register('solutionText')}
             />
           </div>
 
