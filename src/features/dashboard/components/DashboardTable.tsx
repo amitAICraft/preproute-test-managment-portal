@@ -81,26 +81,21 @@ export function DashboardTable({ tests, onEdit, onView, onDelete }: DashboardTab
                       <Edit className="h-4 w-4" aria-hidden="true" />
                     </Button>
 
-                    {/* Delete — disabled if mutation is unavailable */}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      disabled={!onDelete}
-                      onClick={() => onDelete?.(test.id)}
-                      aria-label={
-                        onDelete
-                          ? `${DASHBOARD_MESSAGES.ACTIONS.DELETE}: ${test.title}`
-                          : DASHBOARD_MESSAGES.ACTIONS.DELETE_UNAVAILABLE
-                      }
-                      title={
-                        onDelete
-                          ? DASHBOARD_MESSAGES.ACTIONS.DELETE
-                          : DASHBOARD_MESSAGES.ACTIONS.DELETE_UNAVAILABLE
-                      }
-                      className="text-destructive hover:text-destructive hover:bg-destructive/10 disabled:opacity-40"
+                    {/* Delete — disabled since delete API is unavailable */}
+                    <span
+                      title="Delete functionality is currently unavailable because the backend API does not support deleting tests."
+                      className="inline-block"
                     >
-                      <Trash2 className="h-4 w-4" aria-hidden="true" />
-                    </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled
+                        aria-label={DASHBOARD_MESSAGES.ACTIONS.DELETE_UNAVAILABLE}
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10 disabled:opacity-40"
+                      >
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
+                      </Button>
+                    </span>
                   </div>
                 </TableCell>
               </TableRow>

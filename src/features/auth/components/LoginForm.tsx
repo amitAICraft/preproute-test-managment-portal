@@ -72,7 +72,8 @@ export function LoginForm() {
         autoComplete="username"
         disabled={isLoading}
         error={errors.userId?.message}
-        className="h-12 rounded-lg text-sm"
+        className="rounded-lg text-sm"
+        style={{ height: 'calc(var(--spacing) * 12)' }}
         {...register('userId')}
       />
 
@@ -81,7 +82,8 @@ export function LoginForm() {
         placeholder={MESSAGES.LOGIN.PASSWORD_PLACEHOLDER}
         disabled={isLoading}
         error={errors.password?.message}
-        className="h-12 rounded-lg text-sm"
+        className="rounded-lg text-sm"
+        style={{ height: 'calc(var(--spacing) * 12)' }}
         {...register('password')}
       />
 

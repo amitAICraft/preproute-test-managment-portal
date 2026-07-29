@@ -35,8 +35,17 @@ export function useCreateTest(options?: { onSuccess?: (test: Test) => void }) {
         toast.success(TEST_MESSAGES.CREATE.SUCCESS);
         form.reset();
         options?.onSuccess?.(created);
-      } catch {
-        toast.error(TEST_MESSAGES.CREATE.ERROR);
+      } catch (err: any) {
+        let errorMsg = TEST_MESSAGES.CREATE.ERROR;
+        if (err && typeof err === 'object') {
+          const responseData = (err as any).data;
+          if (responseData && typeof responseData === 'object' && typeof responseData.message === 'string') {
+            errorMsg = responseData.message;
+          } else if (typeof (err as any).message === 'string') {
+            errorMsg = (err as any).message;
+          }
+        }
+        toast.error(errorMsg);
       }
     },
     [createTest, form, options],

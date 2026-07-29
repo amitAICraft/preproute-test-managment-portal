@@ -48,10 +48,14 @@ export const TEST_FORM_DEFAULTS = {
   title: '',
   topics: [] as string[],
   subTopics: [] as string[],
-  duration: 0,
+  duration: undefined as any,
   difficultyLevel: 'easy' as DifficultyLevel,
-  markingScheme: { ...DEFAULT_MARKING_SCHEME },
-  totalQuestions: 0,
+  markingScheme: {
+    wrongAnswer: undefined as any,
+    unattempted: undefined as any,
+    correctAnswer: undefined as any,
+  },
+  totalQuestions: undefined as any,
 } as const;
 
 // ── User-facing messages ─────────────────────────────────

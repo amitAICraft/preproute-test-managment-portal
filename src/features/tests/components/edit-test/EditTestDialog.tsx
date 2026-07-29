@@ -327,7 +327,8 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
             variant="ghost"
             onClick={handleClose}
             disabled={isLoading}
-            className="bg-[#f4f6ff] px-8 text-blue-600 hover:bg-indigo-50 hover:text-blue-700"
+            className="bg-[#f4f6ff] px-8 font-medium hover:bg-indigo-50"
+            style={{ color: '#7489FF' }}
           >
             {TEST_FORM_CONSTANTS.CANCEL}
           </Button>
@@ -335,7 +336,8 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
             type="submit"
             isLoading={isLoading}
             loadingText={TEST_FORM_CONSTANTS.SAVING}
-            className="bg-blue-500 px-12 hover:bg-blue-600"
+            className="px-12 font-medium"
+            style={{ backgroundColor: '#7489FF', color: '#FFFFFF' }}
           >
             {TEST_FORM_CONSTANTS.SAVE}
           </LoadingButton>

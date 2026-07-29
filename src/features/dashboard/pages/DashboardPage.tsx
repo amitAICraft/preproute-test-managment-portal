@@ -52,7 +52,11 @@ export function DashboardPage() {
           title={DASHBOARD_MESSAGES.PAGE_TITLE}
           description={DASHBOARD_MESSAGES.PAGE_DESCRIPTION}
           actions={
-            <Button onClick={handleCreateNew} id="dashboard-create-btn">
+            <Button
+              onClick={handleCreateNew}
+              id="dashboard-create-btn"
+              style={{ backgroundColor: '#7489FF', color: '#FFFFFF' }}
+            >
               <Plus className="h-4 w-4" aria-hidden="true" />
               {DASHBOARD_MESSAGES.CREATE_BUTTON}
             </Button>
@@ -84,9 +88,9 @@ export function DashboardPage() {
             action={
               <Button
                 onClick={handleCreateNew}
-                variant="outline"
                 className="mt-4"
                 id="dashboard-empty-create-btn"
+                style={{ backgroundColor: '#7489FF', color: '#FFFFFF' }}
               >
                 <Plus className="h-4 w-4" aria-hidden="true" />
                 {DASHBOARD_MESSAGES.CREATE_BUTTON}
