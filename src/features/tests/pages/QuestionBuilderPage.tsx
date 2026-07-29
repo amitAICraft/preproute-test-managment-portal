@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { QuestionListSidebar } from '../components/question-builder/QuestionListSidebar';
 import { QuestionEditorMain } from '../components/question-builder/QuestionEditorMain';
@@ -69,6 +70,10 @@ export function QuestionBuilderPage() {
         <Button
           className="h-10 rounded-lg bg-[#7489FF] px-8 font-medium shadow-xs hover:bg-[#5B73E8]"
           onClick={() => {
+            if (questions.length === 0) {
+              toast.error('Minimum 1 question required before publishing');
+              return;
+            }
             if (testId) navigate(`/tests/create/publish?testId=${testId}`);
           }}
         >

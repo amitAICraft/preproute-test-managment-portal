@@ -55,8 +55,9 @@ export function QuestionEditorMain({
   const options = watch('options') || [];
   const correctOptionId = watch('correctOptionId');
 
-  // ── Dependent Taxonomy Loading for Question Settings (Topic / Sub-Topic) ──
-  const { data: subjects = [] } = useGetSubjectsQuery();
+  // Stable references for taxonomy arrays when undefined
+  const { data: subjectsData } = useGetSubjectsQuery();
+  const subjects = subjectsData || [];
 
   // Find real subjectId from subject name or ID
   const currentSubjectObj = subjects.find(
@@ -65,9 +66,10 @@ export function QuestionEditorMain({
   const subjectId = currentSubjectObj?.id || test?.subject || '';
 
   // Fetch topics for this subject
-  const { data: topics = [] } = useGetTopicsBySubjectQuery(subjectId, {
+  const { data: topicsData } = useGetTopicsBySubjectQuery(subjectId, {
     skip: !subjectId,
   });
+  const topics = topicsData || [];
 
   // Watch topic in form or fallback to test.topic
   const selectedTopicInForm = useWatch({ control: form.control, name: 'topic' });
@@ -81,14 +83,19 @@ export function QuestionEditorMain({
   const topicId = currentTopicObj?.id || selectedTopicInForm || test?.topics?.[0] || '';
 
   // Fetch sub-topics for topicId
-  const { data: subTopics = [] } = useGetSubTopicsQuery(topicId ? [topicId] : [], {
+  const { data: subTopicsData } = useGetSubTopicsQuery(topicId ? [topicId] : [], {
     skip: !topicId,
   });
+  const subTopics = subTopicsData || [];
 
   const topicOptions = topics.map((t) => ({ label: t.name, value: t.name }));
   const subTopicOptions = subTopics.map((st) => ({ label: st.name, value: st.name }));
 
+  const currentTopicName = currentTopicObj?.name;
+  const firstSubTopicName = subTopics.length > 0 ? subTopics[0]?.name : undefined;
+
   // Sync form state when switching questions or when questions data arrives
+  // Only run when activeQuestionIndex or questions array changes, to avoid resetting form while typing.
   useEffect(() => {
     const draft = draftQuestions[activeQuestionIndex];
     const savedQ = questions[activeQuestionIndex];
@@ -118,11 +125,12 @@ export function QuestionEditorMain({
         correctOptionId: '',
         solutionText: '',
         difficulty: test?.difficultyLevel || 'easy',
-        topic: currentTopicObj?.name || test?.topics?.[0] || '',
-        subTopic: subTopics.length > 0 ? subTopics[0]?.name : test?.subTopics?.[0] || '',
+        topic: currentTopicName || test?.topics?.[0] || '',
+        subTopic: firstSubTopicName || test?.subTopics?.[0] || '',
       });
     }
-  }, [activeQuestionIndex, questions, test, currentTopicObj, subTopics, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeQuestionIndex, questions]); // Deliberately limited to prevent reset on typing
 
   // Save drafts when form changes
   useEffect(() => {
@@ -225,10 +233,14 @@ export function QuestionEditorMain({
                 onSelectCorrect={() =>
                   setValue('correctOptionId', opt.id, { shouldDirty: true, shouldTouch: true })
                 }
-                onDelete={() => {
-                  const newOpts = options.filter((_, i) => i !== index);
-                  setValue('options', newOpts, { shouldDirty: true, shouldTouch: true });
-                }}
+                onDelete={
+                  options.length > 1
+                    ? () => {
+                        const newOpts = options.filter((_, i) => i !== index);
+                        setValue('options', newOpts, { shouldDirty: true, shouldTouch: true });
+                      }
+                    : undefined
+                }
               />
             ))}
           </div>
