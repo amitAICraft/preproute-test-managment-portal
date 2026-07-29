@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTests } from '@/features/tests';
 import { ROUTES } from '@/constants/routes';
@@ -5,43 +6,47 @@ import { ROUTES } from '@/constants/routes';
 /**
  * useDashboard — encapsulates all business logic for the Dashboard page.
  *
- * The page component remains a pure renderer.
- * If a delete API is added in future, wire it here — not in the component.
+ * Edit opens the EditTestDialog (modal) — matching Figma 04-edit-test-details-modal.png.
+ * View navigates to the Question Builder so the user can review questions.
+ * Delete is intentionally omitted — no DELETE endpoint exists in the API.
  */
 export function useDashboard() {
   const navigate = useNavigate();
   const { tests, isLoading, isFetching, isError, error } = useTests();
 
+  /** ID of the test currently being edited in the dialog. null = dialog closed. */
+  const [editTestId, setEditTestId] = useState<string | null>(null);
+
   const handleCreateNew = () => {
     navigate(ROUTES.TESTS.CREATE);
   };
 
-  /** Navigate to the Question Builder for an existing test. */
+  /**
+   * Edit — opens the EditTestDialog modal with the selected test pre-loaded.
+   * Matches Figma: 04-edit-test-details-modal.png shows a modal, not a page nav.
+   */
   const handleEdit = (id: string) => {
-    navigate(`${ROUTES.TESTS.QUESTIONS}?testId=${id}`);
+    setEditTestId(id);
+  };
+
+  /** Close the Edit dialog and clear the selected test id. */
+  const closeEditDialog = () => {
+    setEditTestId(null);
   };
 
   /**
-   * View is the same destination as edit for now — a future /tests/:id/preview
-   * route can replace this without touching the page component.
+   * View — navigates to the Question Builder for the selected test.
+   * No separate read-only preview route is defined in the assignment or API docs,
+   * so the Question Builder (which loads test data by testId) is the correct destination.
    */
   const handleView = (id: string) => {
     navigate(`${ROUTES.TESTS.QUESTIONS}?testId=${id}`);
   };
 
   /**
-   * DELETE /tests/:id does not exist in the current backend.
-   * Leave `handleDelete` as undefined so the table can disable the button
-   * gracefully rather than wiring a silent no-op.
-   *
-   * Uncomment the block below and add `useDeleteTestMutation` to testApi
-   * when the backend supports deletion.
-   *
-   * const [deleteTest] = useDeleteTestMutation();
-   * const handleDelete = async (id: string) => {
-   *   await deleteTest(id).unwrap();
-   *   toast.success(TEST_MESSAGES.DELETE.SUCCESS);
-   * };
+   * DELETE /tests/:id does not exist in the backend API documentation.
+   * The button is left permanently disabled rather than wired to a no-op.
+   * Wire useDeleteTestMutation here if the endpoint is added in future.
    */
   const handleDelete = undefined;
 
@@ -51,6 +56,8 @@ export function useDashboard() {
     isFetching,
     isError,
     error,
+    editTestId,
+    closeEditDialog,
     handleCreateNew,
     handleEdit,
     handleView,
