@@ -21,6 +21,7 @@ interface RichTextEditorProps {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  error?: string;
 }
 
 const MenuBar = ({ editor }: { editor: any }) => {
@@ -130,7 +131,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
   );
 };
 
-export function RichTextEditor({ value, onChange, placeholder, className }: RichTextEditorProps) {
+export function RichTextEditor({ value, onChange, placeholder, className, error }: RichTextEditorProps) {
   // Stable ref to prevent unnecessary updates or feedback loops
   const lastPushedRef = useRef(value);
 
@@ -180,7 +181,9 @@ export function RichTextEditor({ value, onChange, placeholder, className }: Rich
   }, [value, editor]);
 
   return (
-    <div className="rich-text-editor-container flex flex-col rounded-lg border border-slate-200 bg-white focus-within:ring-1 focus-within:ring-[#7489FF] focus-within:border-[#7489FF] transition-all overflow-hidden">
+    <div className={cn("rich-text-editor-container flex flex-col rounded-lg border bg-white focus-within:ring-1 transition-all overflow-hidden",
+      error ? "border-red-500 focus-within:border-red-500 focus-within:ring-red-500" : "border-slate-200 focus-within:border-[#7489FF] focus-within:ring-[#7489FF]"
+    )}>
       <MenuBar editor={editor} />
       {/* 
         Tiptap editor container.

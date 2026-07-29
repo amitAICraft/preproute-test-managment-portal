@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { FormProvider, useWatch, Controller } from 'react-hook-form';
 import { Trash2, ChevronLeft, ChevronRight, Plus, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -44,17 +45,6 @@ export function QuestionEditorMain({
   setDraftQuestions,
   onSaveSuccess,
 }: QuestionEditorMainProps) {
-  const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder(testId, onSaveSuccess);
-  const {
-    watch,
-    setValue,
-    formState: { isDirty },
-  } = form;
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-
-  const options = watch('options') || [];
-  const correctOptionId = watch('correctOptionId');
-
   // Stable references for taxonomy arrays when undefined
   const { data: subjectsData } = useGetSubjectsQuery();
   const subjects = subjectsData || [];
@@ -64,6 +54,18 @@ export function QuestionEditorMain({
     (s) => s.id === test?.subject || s.name.toLowerCase() === test?.subject?.toLowerCase(),
   );
   const subjectId = currentSubjectObj?.id || test?.subject || '';
+
+  const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder(testId, subjectId, onSaveSuccess);
+  const {
+    watch,
+    setValue,
+    formState: { isDirty },
+  } = form;
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const options = watch('options') || [];
+  const correctOptionId = watch('correctOptionId');
 
   // Fetch topics for this subject
   const { data: topicsData } = useGetTopicsBySubjectQuery(subjectId, {
@@ -88,11 +90,10 @@ export function QuestionEditorMain({
   });
   const subTopics = subTopicsData || [];
 
-  const topicOptions = topics.map((t) => ({ label: t.name, value: t.name }));
-  const subTopicOptions = subTopics.map((st) => ({ label: st.name, value: st.name }));
+  const topicOptions = topics.map((t) => ({ label: t.name, value: t.id }));
+  const subTopicOptions = subTopics.map((st) => ({ label: st.name, value: st.id }));
 
-  const currentTopicName = currentTopicObj?.name;
-  const firstSubTopicName = subTopics.length > 0 ? subTopics[0]?.name : undefined;
+  const firstSubTopicId = subTopics.length > 0 ? subTopics[0]?.id : undefined;
 
   // Sync form state when switching questions or when questions data arrives
   // Only run when activeQuestionIndex or questions array changes, to avoid resetting form while typing.
@@ -125,8 +126,8 @@ export function QuestionEditorMain({
         correctOptionId: '',
         solutionText: '',
         difficulty: test?.difficultyLevel || 'easy',
-        topic: currentTopicName || test?.topics?.[0] || '',
-        subTopic: firstSubTopicName || test?.subTopics?.[0] || '',
+        topic: currentTopicObj?.id || test?.topics?.[0] || '',
+        subTopic: firstSubTopicId || test?.subTopics?.[0] || '',
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -200,18 +201,24 @@ export function QuestionEditorMain({
           </div>
 
           {/* Question Text Editor */}
-          <Controller
-            name="questionText"
-            control={form.control}
-            render={({ field }) => (
-              <RichTextEditor
-                value={field.value}
-                onChange={field.onChange}
-                placeholder={QUESTION_BUILDER_MESSAGES.PLACEHOLDERS.EDITOR}
-                className="min-h-[150px]"
-              />
+          <div className="space-y-1">
+            <Controller
+              name="questionText"
+              control={form.control}
+              render={({ field }) => (
+                <RichTextEditor
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder={QUESTION_BUILDER_MESSAGES.PLACEHOLDERS.EDITOR}
+                  className="min-h-[150px]"
+                  error={form.formState.errors.questionText?.message}
+                />
+              )}
+            />
+            {form.formState.errors.questionText && (
+              <p className="text-sm text-red-500">{form.formState.errors.questionText.message}</p>
             )}
-          />
+          </div>
 
           {/* Options Section — Editable with immutable array updates */}
           <div className="space-y-3">
@@ -219,30 +226,38 @@ export function QuestionEditorMain({
               {QUESTION_BUILDER_MESSAGES.OPTIONS_HEADING}
             </h3>
             {options.map((opt, index) => (
-              <OptionField
-                key={opt.id}
-                id={opt.id}
-                text={opt.text}
-                isCorrect={correctOptionId === opt.id}
-                onTextChange={(val) => {
-                  const newOpts = options.map((item, i) =>
-                    i === index ? { ...item, text: val } : item,
-                  );
-                  setValue('options', newOpts, { shouldDirty: true, shouldTouch: true });
-                }}
-                onSelectCorrect={() =>
-                  setValue('correctOptionId', opt.id, { shouldDirty: true, shouldTouch: true })
-                }
-                onDelete={
-                  options.length > 1
-                    ? () => {
-                        const newOpts = options.filter((_, i) => i !== index);
-                        setValue('options', newOpts, { shouldDirty: true, shouldTouch: true });
-                      }
-                    : undefined
-                }
-              />
+              <div key={opt.id} className="space-y-1">
+                <OptionField
+                  id={opt.id}
+                  text={opt.text}
+                  isCorrect={correctOptionId === opt.id}
+                  error={form.formState.errors.options?.[index]?.text?.message}
+                  onTextChange={(val) => {
+                    const newOpts = options.map((item, i) =>
+                      i === index ? { ...item, text: val } : item,
+                    );
+                    setValue('options', newOpts, { shouldDirty: true, shouldTouch: true });
+                  }}
+                  onSelectCorrect={() =>
+                    setValue('correctOptionId', opt.id, { shouldDirty: true, shouldTouch: true })
+                  }
+                  onDelete={
+                    options.length > 4
+                      ? () => {
+                          const newOpts = options.filter((_, i) => i !== index);
+                          setValue('options', newOpts, { shouldDirty: true, shouldTouch: true });
+                        }
+                      : undefined
+                  }
+                />
+                {form.formState.errors.options?.[index]?.text && (
+                  <p className="text-sm text-red-500">{form.formState.errors.options[index]?.text?.message}</p>
+                )}
+              </div>
             ))}
+            {form.formState.errors.correctOptionId && (
+              <p className="text-sm text-red-500 mt-1">{form.formState.errors.correctOptionId.message}</p>
+            )}
           </div>
 
           {/* Solution Section — Plain Textarea */}
@@ -302,8 +317,10 @@ export function QuestionEditorMain({
           {/* Footer Actions */}
           <div className="flex items-center justify-between pt-6 pb-2">
             <Button
+              type="button"
               variant="destructive"
               className="h-10 rounded-lg bg-[#FF6B6B] px-6 font-medium hover:bg-[#E55555]"
+              onClick={() => navigate('/tests')}
             >
               {QUESTION_BUILDER_MESSAGES.EXIT_TEST_CREATION}
             </Button>

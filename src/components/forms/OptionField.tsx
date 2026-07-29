@@ -10,6 +10,7 @@ interface OptionFieldProps {
   onDelete?: () => void;
   placeholder?: string;
   className?: string;
+  error?: string;
 }
 
 export function OptionField({
@@ -20,12 +21,13 @@ export function OptionField({
   onDelete,
   placeholder = 'Type Option here',
   className,
+  error,
 }: OptionFieldProps) {
   return (
     <div
       className={cn(
         'flex items-center gap-3 rounded-lg border bg-white px-4 py-2.5 transition-colors',
-        isCorrect ? 'border-blue-500 bg-blue-50/40' : 'border-slate-200 hover:border-slate-300',
+        error ? 'border-red-500' : isCorrect ? 'border-blue-500 bg-blue-50/40' : 'border-slate-200 hover:border-slate-300',
         className,
       )}
     >
@@ -45,6 +47,7 @@ export function OptionField({
         value={text}
         onChange={(e) => onTextChange(e.target.value)}
         placeholder={placeholder}
+        aria-invalid={!!error}
         className="flex-1 border-0 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:ring-0 focus:outline-none"
       />
 
