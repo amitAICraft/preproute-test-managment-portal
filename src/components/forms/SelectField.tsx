@@ -19,7 +19,7 @@ export interface SelectFieldProps extends Omit<ComponentProps<'select'>, 'childr
 export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   ({ label, name, error, options, placeholder, className, id, ...props }, ref) => {
     const fieldId = id || name;
-    
+
     return (
       <FormField label={label} name={name} error={error} className={className}>
         <Select
@@ -28,7 +28,10 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
           ref={ref}
           aria-invalid={!!error}
           aria-describedby={error ? `${fieldId}-error` : undefined}
-          className={cn(error && 'border-destructive focus-visible:ring-destructive/50', !props.value && 'text-muted-foreground')}
+          className={cn(
+            error && 'border-destructive focus-visible:ring-destructive/50',
+            !props.value && 'text-muted-foreground',
+          )}
           {...props}
         >
           {placeholder && (
@@ -44,7 +47,7 @@ export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
         </Select>
       </FormField>
     );
-  }
+  },
 );
 
 SelectField.displayName = 'SelectField';

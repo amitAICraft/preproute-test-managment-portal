@@ -20,7 +20,22 @@ export interface MultiSelectFieldProps extends Omit<ComponentProps<'div'>, 'onCh
 }
 
 export const MultiSelectField = forwardRef<HTMLDivElement, MultiSelectFieldProps>(
-  ({ label, name, error, options, placeholder, className, value = [], onChange, disabled, id, ...props }, ref) => {
+  (
+    {
+      label,
+      name,
+      error,
+      options,
+      placeholder,
+      className,
+      value = [],
+      onChange,
+      disabled,
+      id,
+      ...props
+    },
+    ref,
+  ) => {
     const fieldId = id || name;
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -53,13 +68,13 @@ export const MultiSelectField = forwardRef<HTMLDivElement, MultiSelectFieldProps
             aria-describedby={error ? `${fieldId}-error` : undefined}
             onClick={() => !disabled && setIsOpen(!isOpen)}
             className={cn(
-              'flex min-h-[48px] w-full flex-wrap items-center gap-1 rounded-md border border-input bg-transparent px-3 py-1.5 pr-8 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50',
-              disabled ? 'cursor-not-allowed opacity-50 bg-slate-50' : 'cursor-pointer',
+              'border-input focus-visible:ring-ring/50 flex min-h-[48px] w-full flex-wrap items-center gap-1 rounded-md border bg-transparent px-3 py-1.5 pr-8 text-sm shadow-xs transition-colors focus-visible:ring-[3px] focus-visible:outline-none',
+              disabled ? 'cursor-not-allowed bg-slate-50 opacity-50' : 'cursor-pointer',
               error && 'border-destructive focus-visible:ring-destructive/50',
             )}
             {...props}
           >
-            {(!value || value.length === 0) ? (
+            {!value || value.length === 0 ? (
               <span className="text-muted-foreground">{placeholder}</span>
             ) : (
               value.map((v) => {
@@ -85,13 +100,15 @@ export const MultiSelectField = forwardRef<HTMLDivElement, MultiSelectFieldProps
                 );
               })
             )}
-            <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+            <ChevronDown className="text-muted-foreground pointer-events-none absolute top-1/2 right-2.5 size-4 -translate-y-1/2" />
           </div>
 
           {isOpen && (
-            <div className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md bg-white">
+            <div className="bg-popover text-popover-foreground absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-white shadow-md">
               {options.length === 0 ? (
-                <div className="p-2 text-sm text-muted-foreground text-center">No options available</div>
+                <div className="text-muted-foreground p-2 text-center text-sm">
+                  No options available
+                </div>
               ) : (
                 options.map((opt) => {
                   const isSelected = value.includes(opt.value);
@@ -101,7 +118,7 @@ export const MultiSelectField = forwardRef<HTMLDivElement, MultiSelectFieldProps
                       onClick={() => toggleOption(opt.value)}
                       className={cn(
                         'flex cursor-pointer items-center justify-between px-3 py-2 text-sm hover:bg-slate-50',
-                        isSelected && 'bg-blue-50 text-blue-900 font-medium'
+                        isSelected && 'bg-blue-50 font-medium text-blue-900',
                       )}
                     >
                       {opt.label}
@@ -114,7 +131,7 @@ export const MultiSelectField = forwardRef<HTMLDivElement, MultiSelectFieldProps
         </div>
       </FormField>
     );
-  }
+  },
 );
 
 MultiSelectField.displayName = 'MultiSelectField';

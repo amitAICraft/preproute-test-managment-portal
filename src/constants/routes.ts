@@ -11,4 +11,3 @@ export const ROUTES = {
     PUBLISH: '/tests/create/publish',
   },
 } as const;
-

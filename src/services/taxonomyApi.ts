@@ -49,8 +49,5 @@ export const taxonomyApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  useGetSubjectsQuery,
-  useGetTopicsBySubjectQuery,
-  useGetSubTopicsQuery,
-} = taxonomyApi;
+export const { useGetSubjectsQuery, useGetTopicsBySubjectQuery, useGetSubTopicsQuery } =
+  taxonomyApi;

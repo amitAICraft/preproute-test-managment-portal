@@ -29,7 +29,7 @@ export const QUESTION_BUILDER_MESSAGES = {
 export const DIFFICULTY_OPTIONS = [
   { value: 'easy', label: 'Easy' },
   { value: 'medium', label: 'Medium' },
-  { value: 'hard', label: 'Hard' },
+  { value: 'difficult', label: 'Difficult' },
 ] as const;
 
 // Mock options for the other dropdowns

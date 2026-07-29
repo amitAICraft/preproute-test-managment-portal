@@ -12,17 +12,7 @@ import type { ReactNode } from 'react';
  */
 export function LoginCard({ children }: { children: ReactNode }) {
   return (
-    <div
-      className="
-        w-full h-full
-        bg-white
-        rounded-lg
-        border border-blue-100
-        shadow-sm
-        flex flex-col justify-center
-        px-8 sm:px-12 lg:px-16 py-10 lg:py-16
-      "
-    >
+    <div className="flex h-full w-full flex-col justify-center rounded-lg border border-blue-100 bg-white px-8 py-10 shadow-sm sm:px-12 lg:px-16 lg:py-16">
       {children}
     </div>
   );

@@ -3,16 +3,16 @@ import { Controller, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '@/constants/routes';
 import { useCreateTest } from '../hooks/useCreateTest';
-import { 
-  TEST_TYPES, 
+import {
+  TEST_TYPES,
   DIFFICULTY_LEVELS,
   CREATE_TEST_ACTIONS,
-  TEST_FORM_CONSTANTS
+  TEST_FORM_CONSTANTS,
 } from '../constants/test.constants';
-import { 
-  useGetSubjectsQuery, 
-  useGetTopicsBySubjectQuery, 
-  useGetSubTopicsQuery 
+import {
+  useGetSubjectsQuery,
+  useGetTopicsBySubjectQuery,
+  useGetSubTopicsQuery,
 } from '@/services/taxonomyApi';
 import { SelectField } from '@/components/forms/SelectField';
 import { MultiSelectField } from '@/components/forms/MultiSelectField';
@@ -24,14 +24,19 @@ import { LoadingButton } from '@/components/common/LoadingButton';
 
 export function CreateTestForm() {
   const navigate = useNavigate();
-  
+
   const { form, onSubmit, isLoading } = useCreateTest({
     onSuccess: (createdTest) => {
-      navigate(`/tests/create/questions?testId=${createdTest.id}`); 
+      navigate(`/tests/create/questions?testId=${createdTest.id}`);
     },
   });
 
-  const { register, control, handleSubmit, formState: { errors } } = form;
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = form;
 
   const selectedSubject = useWatch({ control, name: 'subject' });
   const selectedTopics = useWatch({ control, name: 'topics' });
@@ -43,9 +48,12 @@ export function CreateTestForm() {
   const { data: topics = [] } = useGetTopicsBySubjectQuery(selectedSubject, {
     skip: !selectedSubject,
   });
-  const { data: subTopics = [] } = useGetSubTopicsQuery(selectedTopics?.length ? selectedTopics : [], {
-    skip: !selectedTopics?.length,
-  });
+  const { data: subTopics = [] } = useGetSubTopicsQuery(
+    selectedTopics?.length ? selectedTopics : [],
+    {
+      skip: !selectedTopics?.length,
+    },
+  );
 
   // Clear subTopics whenever Topic selection CHANGES (not just when empty)
   const prevTopicsRef = useRef<string[]>([]);
@@ -65,22 +73,17 @@ export function CreateTestForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-      
       {/* Test Type Tabs */}
       <div>
         <Controller
           name="testType"
           control={control}
           render={({ field }) => (
-            <Tabs
-              options={TEST_TYPES}
-              value={field.value}
-              onChange={field.onChange}
-            />
+            <Tabs options={TEST_TYPES} value={field.value} onChange={field.onChange} />
           )}
         />
         {errors.testType && (
-          <p className="mt-2 text-sm text-destructive">{errors.testType.message}</p>
+          <p className="text-destructive mt-2 text-sm">{errors.testType.message}</p>
         )}
       </div>
 
@@ -159,8 +162,10 @@ export function CreateTestForm() {
 
       {/* Marking Scheme & Questions Row */}
       <div className="space-y-6">
-        <h3 className="text-base font-medium text-[#374151]">{TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}</h3>
-        <div className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-12 items-start">
+        <h3 className="text-base font-medium text-[#374151]">
+          {TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}
+        </h3>
+        <div className="grid grid-cols-1 items-start gap-x-6 gap-y-4 md:grid-cols-12">
           <div className="md:col-span-2">
             <TextField
               label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}
@@ -205,7 +210,7 @@ export function CreateTestForm() {
               placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.MARKS}
               disabled
               value={totalMarks > 0 ? `${totalMarks} Marks` : ''}
-              className="bg-slate-50 cursor-not-allowed text-slate-400 border-slate-200 opacity-70"
+              className="cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400 opacity-70"
             />
           </div>
         </div>
@@ -216,7 +221,7 @@ export function CreateTestForm() {
           type="button"
           variant="ghost"
           onClick={() => navigate(ROUTES.DASHBOARD)}
-          className="px-12 h-12 rounded-lg bg-[#F4F6FF] text-[#7489FF] hover:bg-[#EBEEFF] hover:text-[#5B73E8] font-medium"
+          className="h-12 rounded-lg bg-[#F4F6FF] px-12 font-medium text-[#7489FF] hover:bg-[#EBEEFF] hover:text-[#5B73E8]"
         >
           {CREATE_TEST_ACTIONS.CANCEL}
         </Button>
@@ -224,12 +229,11 @@ export function CreateTestForm() {
           type="submit"
           isLoading={isLoading}
           loadingText={CREATE_TEST_ACTIONS.SAVING}
-          className="px-14 h-12 rounded-lg bg-[#7489FF] text-white hover:bg-[#5B73E8] font-medium"
+          className="h-12 rounded-lg bg-[#7489FF] px-14 font-medium text-white hover:bg-[#5B73E8]"
         >
           {CREATE_TEST_ACTIONS.NEXT}
         </LoadingButton>
       </div>
-
     </form>
   );
 }

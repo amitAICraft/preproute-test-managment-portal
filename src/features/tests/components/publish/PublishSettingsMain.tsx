@@ -34,36 +34,32 @@ interface PublishSettingsMainProps {
 
 export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) {
   const { form, onSubmit, onCancel, isLoading } = usePublishTest(testId);
-  const { control, handleSubmit, watch, formState: { errors } } = form;
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = form;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   const publishType = watch('publishType');
   const duration = watch('duration');
 
   return (
-    <div className="w-full flex flex-col space-y-6">
+    <div className="flex w-full flex-col space-y-6">
       {/* Test Details Card */}
       <TestDetailsCard onEdit={() => setEditDialogOpen(true)} test={test} />
-      <EditTestDialog
-        open={editDialogOpen}
-        onOpenChange={setEditDialogOpen}
-        existingTest={test}
-      />
+      <EditTestDialog open={editDialogOpen} onOpenChange={setEditDialogOpen} existingTest={test} />
 
       {/* Form Area */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        
         {/* Publish Type Tabs */}
         <div className="w-fit">
           <Controller
             name="publishType"
             control={control}
             render={({ field }) => (
-              <Tabs
-                options={PUBLISH_TABS}
-                value={field.value}
-                onChange={field.onChange}
-              />
+              <Tabs options={PUBLISH_TABS} value={field.value} onChange={field.onChange} />
             )}
           />
         </div>
@@ -71,8 +67,10 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
         {/* Schedule Publish Date & Time Pickers */}
         {publishType === 'schedule_publish' && (
           <div className="space-y-4 pt-2">
-            <h2 className="text-base font-semibold text-slate-800">{PUBLISH_TEST_MESSAGES.SELECT_DATE_AND_TIME}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl">
+            <h2 className="text-base font-semibold text-slate-800">
+              {PUBLISH_TEST_MESSAGES.SELECT_DATE_AND_TIME}
+            </h2>
+            <div className="grid w-full max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
               {/* Schedule Date — shared DatePickerField */}
               <Controller
                 name="scheduleDate"
@@ -111,7 +109,9 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
         {/* Live Until Section */}
         <div className="space-y-4 pt-2">
           <div>
-            <h2 className="text-base font-semibold text-slate-800">{PUBLISH_TEST_MESSAGES.LIVE_UNTIL}</h2>
+            <h2 className="text-base font-semibold text-slate-800">
+              {PUBLISH_TEST_MESSAGES.LIVE_UNTIL}
+            </h2>
             <p className="mt-1 text-xs text-slate-500">{PUBLISH_TEST_MESSAGES.LIVE_UNTIL_DESC}</p>
           </div>
 
@@ -120,7 +120,7 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
             name="duration"
             control={control}
             render={({ field }) => (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-5 w-full max-w-2xl pt-2">
+              <div className="grid w-full max-w-2xl grid-cols-1 gap-x-16 gap-y-5 pt-2 sm:grid-cols-2">
                 {GRID_ORDERED_DURATIONS.map((option) => {
                   const isSelected = field.value === option.value;
                   return (
@@ -133,14 +133,12 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
                           'flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-all',
                           isSelected
                             ? 'border-[#7489FF] bg-white'
-                            : 'border-slate-300 group-hover:border-slate-400'
+                            : 'border-slate-300 group-hover:border-slate-400',
                         )}
                       >
                         {isSelected && <div className="size-2.5 rounded-full bg-[#7489FF]" />}
                       </div>
-                      <span className="text-sm font-medium text-slate-700">
-                        {option.label}
-                      </span>
+                      <span className="text-sm font-medium text-slate-700">{option.label}</span>
                       <input
                         type="radio"
                         name={field.name}
@@ -161,7 +159,7 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
 
           {/* Fix 5: Custom Duration Date & Time Pickers */}
           {duration === 'custom' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-2xl pt-4">
+            <div className="grid w-full max-w-2xl grid-cols-1 gap-6 pt-4 sm:grid-cols-2">
               {/* End Date — shared DatePickerField */}
               <Controller
                 name="endDate"
@@ -198,24 +196,23 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
         </div>
 
         {/* Fix 6: Footer Buttons */}
-        <div className="flex items-center justify-end gap-4 pt-8 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-4 border-t border-slate-100 pt-8">
           <Button
             type="button"
             variant="ghost"
             onClick={onCancel}
-            className="h-11 px-8 rounded-lg bg-[#F4F6FF] text-[#7489FF] hover:bg-[#EBEEFF] hover:text-[#5B73E8] font-medium"
+            className="h-11 rounded-lg bg-[#F4F6FF] px-8 font-medium text-[#7489FF] hover:bg-[#EBEEFF] hover:text-[#5B73E8]"
           >
             {PUBLISH_TEST_MESSAGES.CANCEL}
           </Button>
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-11 px-10 rounded-lg bg-[#7489FF] hover:bg-[#5B73E8] text-white font-medium shadow-xs"
+            className="h-11 rounded-lg bg-[#7489FF] px-10 font-medium text-white shadow-xs hover:bg-[#5B73E8]"
           >
             {PUBLISH_TEST_MESSAGES.CONFIRM}
           </Button>
         </div>
-
       </form>
     </div>
   );

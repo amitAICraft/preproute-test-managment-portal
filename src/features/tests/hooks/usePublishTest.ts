@@ -9,7 +9,7 @@ import { usePublishTestMutation } from '@/services/publishApi';
 export function usePublishTest(testId?: string) {
   const navigate = useNavigate();
   const [publishTest, { isLoading }] = usePublishTestMutation();
-  
+
   const form = useForm<PublishTestFormValues>({
     resolver: zodResolver(publishTestSchema),
     defaultValues: {
@@ -40,6 +40,6 @@ export function usePublishTest(testId?: string) {
     form,
     onSubmit,
     onCancel,
-    isLoading
+    isLoading,
   };
 }

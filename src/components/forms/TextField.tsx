@@ -13,7 +13,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   ({ label, name, error, className, id, ...props }, ref) => {
     // We expect 'name' to be passed by react-hook-form
     const fieldId = id || name;
-    
+
     return (
       <FormField label={label} name={name} error={error} className={className}>
         <Input
@@ -27,7 +27,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         />
       </FormField>
     );
-  }
+  },
 );
 
 TextField.displayName = 'TextField';

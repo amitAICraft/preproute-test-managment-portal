@@ -39,6 +39,7 @@ const mapBackendToFrontendTest = (backendTest: any): Test => ({
   totalQuestions: backendTest.total_questions || 0,
   totalMarks: backendTest.total_marks || 0,
   status: backendTest.status || 'draft',
+  questions: backendTest.questions || [],
   createdAt: backendTest.created_at || new Date().toISOString(),
   updatedAt: backendTest.updated_at || new Date().toISOString(),
 });

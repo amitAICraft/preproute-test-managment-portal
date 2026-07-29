@@ -8,18 +8,27 @@ interface EmptyStateProps extends HTMLAttributes<HTMLDivElement> {
   action?: ReactNode;
 }
 
-export function EmptyState({ icon, title, description, action, className, ...props }: EmptyStateProps) {
+export function EmptyState({
+  icon,
+  title,
+  description,
+  action,
+  className,
+  ...props
+}: EmptyStateProps) {
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center p-8 text-center rounded-xl border border-dashed border-border bg-slate-50/50',
-        className
+        'border-border flex flex-col items-center justify-center rounded-xl border border-dashed bg-slate-50/50 p-8 text-center',
+        className,
       )}
       {...props}
     >
-      {icon && <div className="mb-4 text-muted-foreground/60">{icon}</div>}
-      <h3 className="text-lg font-medium text-foreground mb-1">{title}</h3>
-      {description && <p className="text-sm text-muted-foreground max-w-sm mx-auto mb-4">{description}</p>}
+      {icon && <div className="text-muted-foreground/60 mb-4">{icon}</div>}
+      <h3 className="text-foreground mb-1 text-lg font-medium">{title}</h3>
+      {description && (
+        <p className="text-muted-foreground mx-auto mb-4 max-w-sm text-sm">{description}</p>
+      )}
       {action && <div>{action}</div>}
     </div>
   );

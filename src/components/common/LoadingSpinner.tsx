@@ -10,7 +10,7 @@ export function LoadingSpinner({ className, size = 24, ...props }: LoadingSpinne
   return (
     <Loader2
       size={size}
-      className={cn('animate-spin text-muted-foreground', className)}
+      className={cn('text-muted-foreground animate-spin', className)}
       aria-hidden="true"
       {...props}
     />

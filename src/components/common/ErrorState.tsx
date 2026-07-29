@@ -11,12 +11,15 @@ export function ErrorState({ title, message, className, ...props }: ErrorStatePr
   return (
     <div
       role="alert"
-      className={cn('flex items-start gap-3 rounded-md bg-destructive/10 p-4 text-destructive', className)}
+      className={cn(
+        'bg-destructive/10 text-destructive flex items-start gap-3 rounded-md p-4',
+        className,
+      )}
       {...props}
     >
-      <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+      <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
       <div className="space-y-1">
-        {title && <h4 className="font-medium leading-none">{title}</h4>}
+        {title && <h4 className="leading-none font-medium">{title}</h4>}
         <div className="text-sm">{message}</div>
       </div>
     </div>

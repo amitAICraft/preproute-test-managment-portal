@@ -41,6 +41,7 @@ export interface Test {
   totalQuestions: number;
   totalMarks: number;
   status: TestStatus;
+  questions?: string[];
   createdAt: string;
   updatedAt: string;
 }

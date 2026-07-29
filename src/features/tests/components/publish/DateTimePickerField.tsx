@@ -76,11 +76,15 @@ export function DatePickerField({
   const openPicker = () => {
     const el = inputRef.current;
     if (!el) return;
-    try { el.showPicker(); } catch { el.focus(); }
+    try {
+      el.showPicker();
+    } catch {
+      el.focus();
+    }
   };
 
   return (
-    <div className={cn('flex flex-col gap-1 w-full', className)}>
+    <div className={cn('flex w-full flex-col gap-1', className)}>
       <div className="relative w-full">
         {/* Native input — functional picker, browser chrome hidden via CSS */}
         <input
@@ -94,7 +98,7 @@ export function DatePickerField({
             NATIVE_INPUT_BASE,
             error ? 'border-red-400' : 'border-slate-200',
             // When no value, make the native date segments transparent so our overlay shows
-            !value ? 'text-transparent' : 'text-slate-800'
+            !value ? 'text-transparent' : 'text-slate-800',
           )}
         />
 
@@ -112,9 +116,9 @@ export function DatePickerField({
       </div>
 
       {/* Reserve a fixed-height row for validation message so layout never jumps */}
-      <div className="h-4 flex items-start">
+      <div className="flex h-4 items-start">
         {error && errorMessage && (
-          <p className="text-xs text-red-500 leading-none">{errorMessage}</p>
+          <p className="text-xs leading-none text-red-500">{errorMessage}</p>
         )}
       </div>
     </div>
@@ -149,11 +153,15 @@ export function TimePickerField({
   const openPicker = () => {
     const el = inputRef.current;
     if (!el) return;
-    try { el.showPicker(); } catch { el.focus(); }
+    try {
+      el.showPicker();
+    } catch {
+      el.focus();
+    }
   };
 
   return (
-    <div className={cn('flex flex-col gap-1 w-full', className)}>
+    <div className={cn('flex w-full flex-col gap-1', className)}>
       <div className="relative w-full">
         {/* Native input — functional picker, browser chrome hidden via CSS */}
         <input
@@ -166,7 +174,7 @@ export function TimePickerField({
           className={cn(
             NATIVE_INPUT_BASE,
             error ? 'border-red-400' : 'border-slate-200',
-            !value ? 'text-transparent' : 'text-slate-800'
+            !value ? 'text-transparent' : 'text-slate-800',
           )}
         />
 
@@ -184,9 +192,9 @@ export function TimePickerField({
       </div>
 
       {/* Reserve a fixed-height row for validation message so layout never jumps */}
-      <div className="h-4 flex items-start">
+      <div className="flex h-4 items-start">
         {error && errorMessage && (
-          <p className="text-xs text-red-500 leading-none">{errorMessage}</p>
+          <p className="text-xs leading-none text-red-500">{errorMessage}</p>
         )}
       </div>
     </div>

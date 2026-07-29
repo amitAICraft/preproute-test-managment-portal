@@ -139,11 +139,7 @@ interface DialogBodyProps {
  * Scrollable content area inside the dialog.
  */
 export function DialogBody({ children, className }: DialogBodyProps) {
-  return (
-    <div className={cn('flex-1 overflow-y-auto px-8 py-6', className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn('flex-1 overflow-y-auto px-8 py-6', className)}>{children}</div>;
 }
 
 // ── DialogFooter ─────────────────────────────────────────

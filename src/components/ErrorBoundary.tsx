@@ -44,18 +44,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
 
       return (
-        <div className="flex h-screen w-screen flex-col items-center justify-center gap-6 bg-background px-4">
+        <div className="bg-background flex h-screen w-screen flex-col items-center justify-center gap-6 px-4">
           <div className="flex flex-col items-center gap-4 text-center">
-            <div className="flex size-16 items-center justify-center rounded-full bg-destructive/10">
-              <AlertTriangle className="size-8 text-destructive" />
+            <div className="bg-destructive/10 flex size-16 items-center justify-center rounded-full">
+              <AlertTriangle className="text-destructive size-8" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground">Something went wrong</h1>
-            <p className="max-w-md text-sm text-muted-foreground">
+            <h1 className="text-foreground text-2xl font-bold">Something went wrong</h1>
+            <p className="text-muted-foreground max-w-md text-sm">
               An unexpected error occurred. Please try again or contact support if the problem
               persists.
             </p>
             {import.meta.env.DEV && this.state.error && (
-              <pre className="mt-2 max-w-lg overflow-auto rounded-md bg-muted p-4 text-left text-xs text-muted-foreground">
+              <pre className="bg-muted text-muted-foreground mt-2 max-w-lg overflow-auto rounded-md p-4 text-left text-xs">
                 {this.state.error.message}
               </pre>
             )}

@@ -11,21 +11,13 @@ export function LoginHeader() {
     <>
       {/* Logo */}
       <div className="mb-8">
-        <img
-          src="/preproute-logo.svg"
-          alt="PrepRoute"
-          className="h-8 w-auto"
-        />
+        <img src="/preproute-logo.svg" alt="PrepRoute" className="h-8 w-auto" />
       </div>
 
       {/* Titles */}
       <div className="mb-8 space-y-3">
-        <h1 className="text-2xl font-bold tracking-tight text-slate-800">
-          {MESSAGES.LOGIN.TITLE}
-        </h1>
-        <p className="text-sm text-slate-500">
-          Use your company provided Login credentials
-        </p>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-800">{MESSAGES.LOGIN.TITLE}</h1>
+        <p className="text-sm text-slate-500">Use your company provided Login credentials</p>
       </div>
     </>
   );

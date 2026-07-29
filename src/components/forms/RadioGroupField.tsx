@@ -11,15 +11,18 @@ export interface RadioGroupFieldProps {
   className?: string;
 }
 
-export function RadioGroupField({ label, name, error, options, value, onChange, className }: RadioGroupFieldProps) {
+export function RadioGroupField({
+  label,
+  name,
+  error,
+  options,
+  value,
+  onChange,
+  className,
+}: RadioGroupFieldProps) {
   return (
     <FormField label={label} name={name} error={error} className={className}>
-      <RadioGroup
-        options={options}
-        value={value}
-        onChange={onChange}
-        name={name}
-      />
+      <RadioGroup options={options} value={value} onChange={onChange} name={name} />
     </FormField>
   );
 }

@@ -61,17 +61,14 @@ export function DashboardPage() {
 
         {isLoading ? (
           <div
-            className="flex justify-center items-center py-20"
+            className="flex items-center justify-center py-20"
             role="status"
             aria-label={DASHBOARD_MESSAGES.LOADING_LABEL}
           >
             <LoadingSpinner size={40} />
           </div>
         ) : isError ? (
-          <ErrorState
-            title={DASHBOARD_MESSAGES.ERROR_TITLE}
-            message={errorMessage}
-          />
+          <ErrorState title={DASHBOARD_MESSAGES.ERROR_TITLE} message={errorMessage} />
         ) : tests.length > 0 ? (
           <DashboardTable
             tests={tests}
@@ -102,7 +99,9 @@ export function DashboardPage() {
       {/* Edit Test Dialog — rendered at page level so it overlays the table */}
       <EditTestDialog
         open={editTestId !== null}
-        onOpenChange={(open) => { if (!open) closeEditDialog(); }}
+        onOpenChange={(open) => {
+          if (!open) closeEditDialog();
+        }}
         existingTest={testToEdit}
       />
     </PageContainer>

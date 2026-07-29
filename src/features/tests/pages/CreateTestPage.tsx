@@ -10,7 +10,9 @@ export function CreateTestPage() {
         <span className="px-2">/</span>
         <span>{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CREATE_TEST}</span>
         <span className="px-2">/</span>
-        <span className="font-medium text-slate-800">{QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CHAPTER_WISE}</span>
+        <span className="font-medium text-slate-800">
+          {QUESTION_BUILDER_MESSAGES.BREADCRUMBS.CHAPTER_WISE}
+        </span>
       </div>
 
       {/* Form Container */}

@@ -33,6 +33,4 @@ export const publishApi = baseApi.injectEndpoints({
   }),
 });
 
-export const {
-  usePublishTestMutation,
-} = publishApi;
+export const { usePublishTestMutation } = publishApi;

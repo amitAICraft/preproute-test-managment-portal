@@ -63,14 +63,16 @@ const mapBackendToFrontendQuestion = (backendQ: BackendQuestion): Question => ({
 // ── Injected endpoints ───────────────────────────────────
 export const questionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    fetchBulkQuestions: builder.mutation<Question[], FetchBulkQuestionsRequest>({
+    fetchBulkQuestions: builder.query<Question[], FetchBulkQuestionsRequest>({
       query: (body) => ({
         url: '/questions/fetchBulk',
         method: 'POST',
         body,
       }),
-      transformResponse: (response: ApiResponse<BackendQuestion[]>) => 
+      transformResponse: (response: ApiResponse<BackendQuestion[]>) =>
         response.data.map(mapBackendToFrontendQuestion),
+      providesTags: (result) =>
+        result ? result.map(({ id }) => ({ type: 'Question' as const, id })) : [],
     }),
 
     bulkCreateQuestions: builder.mutation<Question[], BulkCreateQuestionsRequest>({
@@ -79,13 +81,13 @@ export const questionApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      transformResponse: (response: ApiResponse<BackendQuestion[]>) => 
+      transformResponse: (response: ApiResponse<BackendQuestion[]>) =>
         response.data.map(mapBackendToFrontendQuestion),
+      invalidatesTags: (_result, _error, arg) => [
+        { type: 'Test' as const, id: arg.questions[0]?.test_id },
+      ],
     }),
   }),
 });
 
-export const {
-  useFetchBulkQuestionsMutation,
-  useBulkCreateQuestionsMutation,
-} = questionApi;
+export const { useFetchBulkQuestionsQuery, useBulkCreateQuestionsMutation } = questionApi;

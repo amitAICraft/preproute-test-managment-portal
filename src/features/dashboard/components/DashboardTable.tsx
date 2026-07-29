@@ -11,10 +11,7 @@ import {
 } from '@/components/ui/table';
 import { formatDate } from '@/lib/utils';
 import type { Test, TestStatus } from '@/features/tests';
-import {
-  DASHBOARD_MESSAGES,
-  TEST_STATUS_BADGE_VARIANT,
-} from '@/features/tests';
+import { DASHBOARD_MESSAGES, TEST_STATUS_BADGE_VARIANT } from '@/features/tests';
 
 interface DashboardTableProps {
   tests: Test[];
@@ -37,7 +34,7 @@ export function DashboardTable({ tests, onEdit, onView, onDelete }: DashboardTab
     TEST_STATUS_BADGE_VARIANT[status as TestStatus] ?? 'secondary';
 
   return (
-    <div className="rounded-md border bg-white overflow-hidden">
+    <div className="overflow-hidden rounded-md border bg-white">
       <div className="overflow-x-auto">
         <Table aria-label="Tests list">
           <TableHeader>
@@ -46,23 +43,16 @@ export function DashboardTable({ tests, onEdit, onView, onDelete }: DashboardTab
               <TableHead>{DASHBOARD_MESSAGES.TABLE.COL_SUBJECT}</TableHead>
               <TableHead>{DASHBOARD_MESSAGES.TABLE.COL_STATUS}</TableHead>
               <TableHead>{DASHBOARD_MESSAGES.TABLE.COL_DATE}</TableHead>
-              <TableHead className="text-right">
-                {DASHBOARD_MESSAGES.TABLE.COL_ACTIONS}
-              </TableHead>
+              <TableHead className="text-right">{DASHBOARD_MESSAGES.TABLE.COL_ACTIONS}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {tests.map((test) => (
               <TableRow key={test.id}>
                 <TableCell className="font-medium">{test.title}</TableCell>
+                <TableCell>{test.subject || DASHBOARD_MESSAGES.TABLE.NO_SUBJECT}</TableCell>
                 <TableCell>
-                  {test.subject || DASHBOARD_MESSAGES.TABLE.NO_SUBJECT}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={getVariant(test.status)}
-                    className="capitalize"
-                  >
+                  <Badge variant={getVariant(test.status)} className="capitalize">
                     {test.status}
                   </Badge>
                 </TableCell>

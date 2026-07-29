@@ -41,9 +41,10 @@ export function LoginForm() {
       toast.success(MESSAGES.LOGIN.SUCCESS);
       navigate(ROUTES.DASHBOARD, { replace: true });
     } catch (err: any) {
-      const errMsg = err?.status === 'FETCH_ERROR'
-        ? 'Network connection failed. Please check your internet connection.'
-        : (err?.data?.message || MESSAGES.LOGIN.ERROR);
+      const errMsg =
+        err?.status === 'FETCH_ERROR'
+          ? 'Network connection failed. Please check your internet connection.'
+          : err?.data?.message || MESSAGES.LOGIN.ERROR;
       toast.error(errMsg);
     }
   };
@@ -64,7 +65,7 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-7 w-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-7">
       <TextField
         label={MESSAGES.LOGIN.USER_ID_LABEL}
         placeholder={MESSAGES.LOGIN.USER_ID_PLACEHOLDER}
@@ -85,18 +86,16 @@ export function LoginForm() {
       />
 
       {/* Forgot password — Figma: blue, regular weight, left-aligned */}
-      <div className="flex justify-start mt-2">
+      <div className="mt-2 flex justify-start">
         <a
           href="#"
-          className="text-sm font-normal text-blue-500 hover:text-blue-600 hover:underline underline-offset-4 transition-colors"
+          className="text-sm font-normal text-blue-500 underline-offset-4 transition-colors hover:text-blue-600 hover:underline"
         >
           {MESSAGES.LOGIN.FORGOT_PASSWORD}
         </a>
       </div>
 
-      {error && (
-        <ErrorState message={getErrorMessage()} />
-      )}
+      {error && <ErrorState message={getErrorMessage()} />}
 
       {/* Button disabled until form is valid — reuses react-hook-form isValid */}
       <LoadingButton
@@ -104,7 +103,7 @@ export function LoginForm() {
         isLoading={isLoading}
         loadingText={MESSAGES.LOGIN.BUTTON_LOADING}
         disabled={!isValid || isLoading}
-        className="w-full h-12 mt-1 text-base font-semibold rounded-lg bg-blue-500 hover:bg-blue-600 disabled:opacity-60 disabled:cursor-not-allowed"
+        className="mt-1 h-12 w-full rounded-lg bg-blue-500 text-base font-semibold hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {MESSAGES.LOGIN.BUTTON_DEFAULT}
       </LoadingButton>

@@ -26,15 +26,15 @@ export function OptionField({
       className={cn(
         'flex items-center gap-3 rounded-lg border bg-white px-4 py-2.5 transition-colors',
         isCorrect ? 'border-blue-500 bg-blue-50/40' : 'border-slate-200 hover:border-slate-300',
-        className
+        className,
       )}
     >
       <button
         type="button"
         onClick={onSelectCorrect}
         className={cn(
-          "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-all focus:outline-none",
-          isCorrect ? "border-[#7489FF] bg-white" : "border-slate-300 hover:border-slate-400"
+          'flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-all focus:outline-none',
+          isCorrect ? 'border-[#7489FF] bg-white' : 'border-slate-300 hover:border-slate-400',
         )}
       >
         {isCorrect && <div className="size-2.5 rounded-full bg-[#7489FF]" />}
@@ -45,14 +45,14 @@ export function OptionField({
         value={text}
         onChange={(e) => onTextChange(e.target.value)}
         placeholder={placeholder}
-        className="flex-1 border-0 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-0"
+        className="flex-1 border-0 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:ring-0 focus:outline-none"
       />
 
       {onDelete && (
         <button
           type="button"
           onClick={onDelete}
-          className="text-slate-400 hover:text-red-500 transition-colors focus:outline-none"
+          className="text-slate-400 transition-colors hover:text-red-500 focus:outline-none"
         >
           <Trash2 className="size-4" />
         </button>

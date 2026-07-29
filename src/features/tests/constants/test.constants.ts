@@ -171,4 +171,5 @@ export const TEST_STATUS_BADGE_VARIANT = {
   archived: 'secondary',
 } as const satisfies Record<string, 'success' | 'warning' | 'secondary'>;
 
-export type TestStatusBadgeVariant = (typeof TEST_STATUS_BADGE_VARIANT)[keyof typeof TEST_STATUS_BADGE_VARIANT];
+export type TestStatusBadgeVariant =
+  (typeof TEST_STATUS_BADGE_VARIANT)[keyof typeof TEST_STATUS_BADGE_VARIANT];

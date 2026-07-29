@@ -11,7 +11,7 @@ export function LoginHero() {
       <img
         src="/login-left-bar-icon.svg"
         alt="PrepRoute illustration"
-        className="w-full max-w-[75%] max-h-[100%] object-contain"
+        className="max-h-[100%] w-full max-w-[75%] object-contain"
       />
     </div>
   );

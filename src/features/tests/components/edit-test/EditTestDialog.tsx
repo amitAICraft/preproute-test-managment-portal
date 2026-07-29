@@ -9,15 +9,11 @@ import { Tabs } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { LoadingButton } from '@/components/common/LoadingButton';
 import { useUpdateTest } from '../../hooks/useUpdateTest';
+import { TEST_TYPES, DIFFICULTY_LEVELS, TEST_FORM_CONSTANTS } from '../../constants/test.constants';
 import {
-  TEST_TYPES,
-  DIFFICULTY_LEVELS,
-  TEST_FORM_CONSTANTS,
-} from '../../constants/test.constants';
-import { 
-  useGetSubjectsQuery, 
-  useGetTopicsBySubjectQuery, 
-  useGetSubTopicsQuery 
+  useGetSubjectsQuery,
+  useGetTopicsBySubjectQuery,
+  useGetSubTopicsQuery,
 } from '@/services/taxonomyApi';
 import type { Test } from '../../types';
 
@@ -44,7 +40,12 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
     },
   });
 
-  const { register, control, handleSubmit, formState: { errors } } = form;
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = form;
 
   const handleClose = () => {
     if (!isLoading) {
@@ -85,11 +86,11 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
   }, [existingTest, open, form, hasPrefilledSubject]);
 
   const { data: subjects = [] } = useGetSubjectsQuery(undefined, { skip: !open });
-  
+
   // 2. Prefill Subject (mapping name to id)
   useEffect(() => {
     if (existingTest && open && !hasPrefilledSubject && subjects.length > 0) {
-      const sId = subjects.find(s => s.name === existingTest.subject)?.id;
+      const sId = subjects.find((s) => s.name === existingTest.subject)?.id;
       if (sId) {
         form.setValue('subject', sId);
       }
@@ -98,7 +99,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
   }, [existingTest, open, hasPrefilledSubject, subjects, form]);
 
   const selectedSubject = useWatch({ control, name: 'subject' });
-  
+
   const { data: topics = [] } = useGetTopicsBySubjectQuery(selectedSubject, {
     skip: !selectedSubject || !open,
   });
@@ -106,7 +107,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
   // 3. Prefill Topics (mapping names to ids)
   useEffect(() => {
     if (existingTest && open && hasPrefilledSubject && !hasPrefilledTopics && topics.length > 0) {
-      const tIds = topics.filter(t => existingTest.topics.includes(t.name)).map(t => t.id);
+      const tIds = topics.filter((t) => existingTest.topics.includes(t.name)).map((t) => t.id);
       if (tIds.length > 0) {
         form.setValue('topics', tIds);
       }
@@ -116,9 +117,12 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
 
   const selectedTopics = useWatch({ control, name: 'topics' });
 
-  const { data: subTopics = [] } = useGetSubTopicsQuery(selectedTopics?.length ? selectedTopics : [], {
-    skip: !selectedTopics?.length || !open,
-  });
+  const { data: subTopics = [] } = useGetSubTopicsQuery(
+    selectedTopics?.length ? selectedTopics : [],
+    {
+      skip: !selectedTopics?.length || !open,
+    },
+  );
 
   // Clear subTopics whenever Topic selection CHANGES (not just when empty)
   // Use a ref to track previous value and skip the initial prefill trigger
@@ -143,8 +147,16 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
 
   // 4. Prefill SubTopics (mapping names to ids)
   useEffect(() => {
-    if (existingTest && open && hasPrefilledTopics && !hasPrefilledSubTopics && subTopics.length > 0) {
-      const stIds = subTopics.filter(st => existingTest.subTopics?.includes(st.name)).map(st => st.id);
+    if (
+      existingTest &&
+      open &&
+      hasPrefilledTopics &&
+      !hasPrefilledSubTopics &&
+      subTopics.length > 0
+    ) {
+      const stIds = subTopics
+        .filter((st) => existingTest.subTopics?.includes(st.name))
+        .map((st) => st.id);
       if (stIds.length > 0) {
         form.setValue('subTopics', stIds);
       }
@@ -171,15 +183,11 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
                 name="testType"
                 control={control}
                 render={({ field }) => (
-                  <Tabs
-                    options={TEST_TYPES}
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
+                  <Tabs options={TEST_TYPES} value={field.value} onChange={field.onChange} />
                 )}
               />
               {errors.testType && (
-                <p className="mt-2 text-sm text-destructive">{errors.testType.message}</p>
+                <p className="text-destructive mt-2 text-sm">{errors.testType.message}</p>
               )}
             </div>
 
@@ -257,10 +265,10 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
 
             {/* Marking Scheme & Questions */}
             <div className="space-y-4">
-              <h3 className="text-base font-medium text-foreground">
+              <h3 className="text-foreground text-base font-medium">
                 {TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}
               </h3>
-              <div className="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-12 items-end">
+              <div className="grid grid-cols-1 items-end gap-x-6 gap-y-6 md:grid-cols-12">
                 <div className="md:col-span-2">
                   <TextField
                     label={TEST_FORM_CONSTANTS.LABELS.WRONG_ANSWER}

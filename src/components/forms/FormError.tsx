@@ -19,14 +19,14 @@ export function FormError({ error, className, id, ...props }: FormErrorProps) {
       role={error ? 'alert' : undefined}
       aria-live="polite"
       className={cn(
-        'absolute top-0 left-0 z-10 w-full block min-h-[1.25rem] text-xs text-destructive leading-tight',
+        'text-destructive absolute top-0 left-0 z-10 block min-h-[1.25rem] w-full text-xs leading-tight',
         !error && 'invisible',
         className,
       )}
       {...props}
     >
-      {error ?? '\u00A0'}{/* non-breaking space keeps line height when empty */}
+      {error ?? '\u00A0'}
+      {/* non-breaking space keeps line height when empty */}
     </span>
   );
 }
-
