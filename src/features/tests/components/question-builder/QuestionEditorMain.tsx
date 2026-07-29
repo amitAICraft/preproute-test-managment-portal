@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { FormProvider, useWatch, Controller } from 'react-hook-form';
 import { Trash2, ChevronLeft, ChevronRight, Plus, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -55,7 +56,18 @@ export function QuestionEditorMain({
   );
   const subjectId = currentSubjectObj?.id || test?.subject || '';
 
-  const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder(testId, subjectId, onSaveSuccess);
+  const savedQ = questions[activeQuestionIndex];
+  const isReadOnly = !!savedQ;
+
+  const { form, handleNext, handleDeleteAllEdits } = useQuestionBuilder(
+    testId,
+    subjectId,
+    // Provide functions to get the set of valid topic/subTopic UUIDs dynamically.
+    // This resolves Temporal Dead Zone issues during form/state initialization.
+    () => topics.map((t) => t.id),
+    () => subTopics.map((st) => st.id),
+    onSaveSuccess,
+  );
   const {
     watch,
     setValue,
@@ -82,7 +94,10 @@ export function QuestionEditorMain({
       t.id === test?.topics?.[0] ||
       (test?.topics?.[0] && t.name.toLowerCase() === test.topics[0].toLowerCase()),
   );
-  const topicId = currentTopicObj?.id || selectedTopicInForm || test?.topics?.[0] || '';
+  // topicId for sub-topic fetching: MUST be a UUID from the loaded topics list.
+  // currentTopicObj.id is the only safe source — never fall back to test.topics[0]
+  // because that field stores display names, not UUIDs.
+  const topicId = currentTopicObj?.id || '';
 
   // Fetch sub-topics for topicId
   const { data: subTopicsData } = useGetSubTopicsQuery(topicId ? [topicId] : [], {
@@ -92,6 +107,17 @@ export function QuestionEditorMain({
 
   const topicOptions = topics.map((t) => ({ label: t.name, value: t.id }));
   const subTopicOptions = subTopics.map((st) => ({ label: st.name, value: st.id }));
+
+  // Resolve the test's default topic/subTopic names → UUIDs.
+  // test.topics[] and test.subTopics[] store display names, NOT ids.
+  // Only use a value if it resolves to an actual UUID in the loaded taxonomy.
+  const defaultTopicId = currentTopicObj?.id || '';
+  const defaultSubTopicObj = subTopics.find(
+    (st) =>
+      st.id === test?.subTopics?.[0] ||
+      (test?.subTopics?.[0] && st.name.toLowerCase() === test.subTopics[0].toLowerCase()),
+  );
+  const defaultSubTopicId = defaultSubTopicObj?.id || '';
 
   const firstSubTopicId = subTopics.length > 0 ? subTopics[0]?.id : undefined;
 
@@ -110,8 +136,9 @@ export function QuestionEditorMain({
         correctOptionId: savedQ.correctAnswer,
         solutionText: savedQ.explanation || '',
         difficulty: savedQ.difficulty || test?.difficultyLevel || 'easy',
-        topic: test?.topics?.[0] || '',
-        subTopic: test?.subTopics?.[0] || '',
+        // Use resolved UUIDs — never fall back to test.topics[] name strings
+        topic: defaultTopicId,
+        subTopic: defaultSubTopicId,
       });
     } else {
       // New question defaults
@@ -126,8 +153,9 @@ export function QuestionEditorMain({
         correctOptionId: '',
         solutionText: '',
         difficulty: test?.difficultyLevel || 'easy',
-        topic: currentTopicObj?.id || test?.topics?.[0] || '',
-        subTopic: firstSubTopicId || test?.subTopics?.[0] || '',
+        // Use resolved UUID only — never fall back to test.topics[] name strings
+        topic: defaultTopicId,
+        subTopic: defaultSubTopicId || firstSubTopicId || '',
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -145,6 +173,18 @@ export function QuestionEditorMain({
     });
     return () => subscription.unsubscribe();
   }, [watch, activeQuestionIndex, setDraftQuestions]);
+
+  // Inform the user when they open a previously saved (read-only) question
+  useEffect(() => {
+    if (isReadOnly) {
+      toast.info(
+        'Editing previously saved questions is currently unavailable because the backend does not support question updates.',
+        { duration: 5000 },
+      );
+    }
+    // Only re-fire when the active index changes, not on every render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeQuestionIndex]);
 
   return (
     <div className="flex min-w-0 flex-1 flex-col space-y-5">
@@ -186,10 +226,10 @@ export function QuestionEditorMain({
           <div className="flex justify-start">
             <Button
               variant="ghost"
-              disabled={!isDirty}
+              disabled={!isDirty || isReadOnly}
               className={cn(
                 'h-auto gap-2 p-0 text-sm font-medium transition-colors',
-                isDirty
+                isDirty && !isReadOnly
                   ? 'cursor-pointer text-red-500 hover:bg-red-50 hover:text-red-600'
                   : 'cursor-not-allowed text-slate-300 opacity-60 hover:bg-transparent',
               )}
@@ -212,6 +252,7 @@ export function QuestionEditorMain({
                   placeholder={QUESTION_BUILDER_MESSAGES.PLACEHOLDERS.EDITOR}
                   className="min-h-[150px]"
                   error={form.formState.errors.questionText?.message}
+                  disabled={isReadOnly}
                 />
               )}
             />
@@ -231,7 +272,7 @@ export function QuestionEditorMain({
                   id={opt.id}
                   text={opt.text}
                   isCorrect={correctOptionId === opt.id}
-                  error={form.formState.errors.options?.[index]?.text?.message}
+                  disabled={isReadOnly}
                   onTextChange={(val) => {
                     const newOpts = options.map((item, i) =>
                       i === index ? { ...item, text: val } : item,
@@ -242,7 +283,7 @@ export function QuestionEditorMain({
                     setValue('correctOptionId', opt.id, { shouldDirty: true, shouldTouch: true })
                   }
                   onDelete={
-                    options.length > 4
+                    options.length > 2 && !isReadOnly
                       ? () => {
                           const newOpts = options.filter((_, i) => i !== index);
                           setValue('options', newOpts, { shouldDirty: true, shouldTouch: true });
@@ -266,8 +307,12 @@ export function QuestionEditorMain({
               {QUESTION_BUILDER_MESSAGES.ADD_SOLUTION}
             </h3>
             <textarea
-              className="min-h-[120px] w-full resize-y rounded-lg border border-slate-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#7489FF] focus:outline-none focus:ring-1 focus:ring-[#7489FF]"
+              className={cn(
+                "min-h-[120px] w-full resize-y rounded-lg border border-slate-200 p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#7489FF] focus:outline-none focus:ring-1 focus:ring-[#7489FF]",
+                isReadOnly ? "bg-slate-50 border-slate-200 cursor-not-allowed opacity-75 focus:ring-0" : "bg-white"
+              )}
               placeholder={QUESTION_BUILDER_MESSAGES.PLACEHOLDERS.EDITOR}
+              disabled={isReadOnly}
               {...form.register('solutionText')}
             />
           </div>
@@ -293,6 +338,7 @@ export function QuestionEditorMain({
                 label={QUESTION_BUILDER_MESSAGES.LEVEL_OF_DIFFICULTY}
                 options={DIFFICULTY_OPTIONS}
                 error={form.formState.errors.difficulty?.message}
+                disabled={isReadOnly}
                 {...form.register('difficulty')}
               />
 
@@ -301,6 +347,7 @@ export function QuestionEditorMain({
                 options={topicOptions}
                 placeholder="Select from Drop-down"
                 error={form.formState.errors.topic?.message}
+                disabled={isReadOnly}
                 {...form.register('topic')}
               />
 
@@ -309,6 +356,7 @@ export function QuestionEditorMain({
                 options={subTopicOptions}
                 placeholder="Select from Drop-down"
                 error={form.formState.errors.subTopic?.message}
+                disabled={isReadOnly}
                 {...form.register('subTopic')}
               />
             </div>
@@ -319,15 +367,27 @@ export function QuestionEditorMain({
             <Button
               type="button"
               variant="destructive"
-              className="h-10 rounded-lg bg-[#FF6B6B] px-6 font-medium hover:bg-[#E55555]"
-              onClick={() => navigate('/tests')}
+              disabled={isReadOnly}
+              className={cn(
+                'h-10 rounded-lg px-6 font-medium',
+                isReadOnly
+                  ? 'cursor-not-allowed bg-[#FF6B6B]/40 opacity-60'
+                  : 'bg-[#FF6B6B] hover:bg-[#E55555]',
+              )}
+              onClick={() => !isReadOnly && navigate('/tests')}
             >
               {QUESTION_BUILDER_MESSAGES.EXIT_TEST_CREATION}
             </Button>
 
             <Button
-              onClick={handleNext}
-              className="h-10 rounded-lg bg-[#7489FF] px-8 font-medium hover:bg-[#5B73E8]"
+              disabled={isReadOnly}
+              onClick={isReadOnly ? undefined : handleNext}
+              className={cn(
+                'h-10 rounded-lg px-8 font-medium',
+                isReadOnly
+                  ? 'cursor-not-allowed bg-[#7489FF]/40 opacity-60'
+                  : 'bg-[#7489FF] hover:bg-[#5B73E8]',
+              )}
             >
               {QUESTION_BUILDER_MESSAGES.NEXT}
             </Button>

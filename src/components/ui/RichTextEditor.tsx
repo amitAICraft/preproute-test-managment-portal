@@ -22,10 +22,11 @@ interface RichTextEditorProps {
   placeholder?: string;
   className?: string;
   error?: string;
+  disabled?: boolean;
 }
 
-const MenuBar = ({ editor }: { editor: any }) => {
-  if (!editor) {
+const MenuBar = ({ editor, disabled }: { editor: any; disabled?: boolean }) => {
+  if (!editor || disabled) {
     return null;
   }
 
@@ -131,7 +132,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
   );
 };
 
-export function RichTextEditor({ value, onChange, placeholder, className, error }: RichTextEditorProps) {
+export function RichTextEditor({ value, onChange, placeholder, className, error, disabled }: RichTextEditorProps) {
   // Stable ref to prevent unnecessary updates or feedback loops
   const lastPushedRef = useRef(value);
 
@@ -148,6 +149,7 @@ export function RichTextEditor({ value, onChange, placeholder, className, error 
       }),
     ],
     content: value || '',
+    editable: !disabled,
     editorProps: {
       attributes: {
         class: cn(
@@ -180,11 +182,19 @@ export function RichTextEditor({ value, onChange, placeholder, className, error 
     }
   }, [value, editor]);
 
+  // Sync disabled prop changes to editor
+  useEffect(() => {
+    if (editor) {
+      editor.setEditable(!disabled);
+    }
+  }, [editor, disabled]);
+
   return (
-    <div className={cn("rich-text-editor-container flex flex-col rounded-lg border bg-white focus-within:ring-1 transition-all overflow-hidden",
-      error ? "border-red-500 focus-within:border-red-500 focus-within:ring-red-500" : "border-slate-200 focus-within:border-[#7489FF] focus-within:ring-[#7489FF]"
+    <div className={cn("rich-text-editor-container flex flex-col rounded-lg border focus-within:ring-1 transition-all overflow-hidden",
+      error ? "border-red-500 focus-within:border-red-500 focus-within:ring-red-500" : "border-slate-200 focus-within:border-[#7489FF] focus-within:ring-[#7489FF]",
+      disabled && "bg-slate-50 border-slate-200 cursor-not-allowed opacity-75 focus-within:ring-0"
     )}>
-      <MenuBar editor={editor} />
+      <MenuBar editor={editor} disabled={disabled} />
       {/* 
         Tiptap editor container.
         We apply a min-height directly on the ProseMirror editable element via editorProps, 

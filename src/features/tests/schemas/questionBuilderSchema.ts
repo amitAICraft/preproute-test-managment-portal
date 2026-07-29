@@ -9,7 +9,7 @@ export const questionBuilderSchema = z.object({
   questionText: z.string().min(1, 'Question text is required'),
   options: z
     .array(questionOptionSchema)
-    .min(4, 'Exactly 4 options are required')
+    .min(2, 'At least 2 options are required')
     .max(4, 'Maximum 4 options allowed'),
   correctOptionId: z.string().min(1, 'Please select the correct option'),
   solutionText: z.string().optional(),

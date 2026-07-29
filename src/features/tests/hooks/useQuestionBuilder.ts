@@ -7,7 +7,13 @@ import {
 } from '../schemas/questionBuilderSchema';
 import { useBulkCreateQuestionsMutation } from '@/services/questionApi';
 
-export function useQuestionBuilder(testId?: string, subjectId?: string, onSaveSuccess?: () => void) {
+export function useQuestionBuilder(
+  testId?: string,
+  subjectId?: string,
+  getValidTopicIds?: () => string[],
+  getValidSubTopicIds?: () => string[],
+  onSaveSuccess?: () => void,
+) {
   const [bulkCreate, { isLoading }] = useBulkCreateQuestionsMutation();
   const form = useForm<QuestionBuilderFormValues>({
     resolver: zodResolver(questionBuilderSchema),
@@ -33,6 +39,29 @@ export function useQuestionBuilder(testId?: string, subjectId?: string, onSaveSu
           // The form stores the option's id which is already 'option1'...'option4'.
           const correctOption = data.correctOptionId;
 
+          // ── Defensive topic/subTopic validation ───────────────────────
+          const validTopicIds = getValidTopicIds ? getValidTopicIds() : [];
+          const validSubTopicIds = getValidSubTopicIds ? getValidSubTopicIds() : [];
+
+          // Check if topics are selected but the valid lists are empty (loading) or the selected ID is invalid
+          if (data.topic && validTopicIds.length === 0) {
+            toast.error('Please wait for topics to load.');
+            return;
+          }
+          if (data.topic && !validTopicIds.includes(data.topic)) {
+            toast.error('Selected topic is invalid or no longer exists.');
+            return;
+          }
+          
+          if (data.subTopic && validSubTopicIds.length === 0) {
+            toast.error('Please wait for sub-topics to load.');
+            return;
+          }
+          if (data.subTopic && !validSubTopicIds.includes(data.subTopic)) {
+            toast.error('Selected sub-topic is invalid or no longer exists.');
+            return;
+          }
+
           const questionPayload: any = {
             type: 'mcq',
             question: data.questionText,
@@ -46,8 +75,6 @@ export function useQuestionBuilder(testId?: string, subjectId?: string, onSaveSu
             test_id: testId || '',
             subject: subjectId || '',
           };
-          if (data.topic) questionPayload.topic = data.topic;
-          if (data.subTopic) questionPayload.sub_topic = data.subTopic;
 
           await bulkCreate({
             questions: [questionPayload],

@@ -45,12 +45,27 @@ export function QuestionBuilderPage() {
   const [draftQuestions, setDraftQuestions] = useState<Record<number, any>>({});
 
   const handleSaveSuccess = () => {
+    const savedIndex = activeQuestion;
+    const isReEdit = completedQuestions.includes(savedIndex);
+
+    // Always clear the draft for this index
     setDraftQuestions((prev) => {
       const next = { ...prev };
-      delete next[activeQuestion];
+      delete next[savedIndex];
       return next;
     });
-    setCompletedQuestions((prev) => Array.from(new Set([...prev, activeQuestion])));
+
+    // Always mark as completed
+    const newCompleted = new Set([...completedQuestions, savedIndex]);
+    setCompletedQuestions(Array.from(newCompleted));
+
+    // If all questions are now completed, automatically continue to Publish workflow
+    if (newCompleted.size >= totalQuestions || savedIndex === totalQuestions - 1) {
+      navigate(`/tests/create/publish?testId=${testId}`);
+      return;
+    }
+
+    // "Next always opens currentIndex + 1"
     setActiveQuestion((prev) => Math.min(prev + 1, totalQuestions - 1));
   };
 
