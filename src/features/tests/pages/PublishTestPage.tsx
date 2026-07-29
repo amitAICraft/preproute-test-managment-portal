@@ -36,9 +36,11 @@ export function PublishTestPage() {
 
       {/* Sidebar + Main Content */}
       <div className="flex w-full min-w-0 flex-1 items-start gap-5">
-        {/* Left sidebar: shows only created questions as green, future as disabled */}
+        {/* Left sidebar: shows ONLY created questions (not configured count).
+            totalQuestions drives both the slot list AND the "Total Questions . X" sub-header,
+            so passing createdCount here fixes both issues simultaneously. */}
         <QuestionListSidebar
-          totalQuestions={totalQuestions}
+          totalQuestions={createdCount}
           activeQuestionIndex={-1}
           completedQuestions={completedQuestions}
           onSelectQuestion={() => {}}
