@@ -17,9 +17,9 @@ export const createTestSchema = z.object({
 
   title: z.string().min(1, 'Name of Test is required'),
 
-  topic: z.string().min(1, 'Topic is required'),
+  topics: z.array(z.string()).min(1, 'At least one topic is required'),
 
-  subTopic: z.string().optional(),
+  subTopics: z.array(z.string()).optional(),
 
   duration: z
     .number({ error: 'Duration is required' })

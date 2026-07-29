@@ -33,8 +33,8 @@ export interface Test {
   testType: TestType;
   subject: string;
   title: string;
-  topic: string;
-  subTopic?: string;
+  topics: string[];
+  subTopics?: string[];
   duration: number;
   difficultyLevel: DifficultyLevel;
   markingScheme: MarkingScheme;
@@ -52,12 +52,13 @@ export interface CreateTestRequest {
   testType: TestType;
   subject: string;
   title: string;
-  topic: string;
-  subTopic?: string;
+  topics: string[];
+  subTopics?: string[];
   duration: number;
   difficultyLevel: DifficultyLevel;
   markingScheme: MarkingScheme;
   totalQuestions: number;
+  totalMarks: number;
 }
 
 /** Payload for `PUT /tests/:id`. */
@@ -66,12 +67,13 @@ export interface UpdateTestRequest {
   testType: TestType;
   subject: string;
   title: string;
-  topic: string;
-  subTopic?: string;
+  topics: string[];
+  subTopics?: string[];
   duration: number;
   difficultyLevel: DifficultyLevel;
   markingScheme: MarkingScheme;
   totalQuestions: number;
+  totalMarks: number;
 }
 
 // ── Query params ─────────────────────────────────────────

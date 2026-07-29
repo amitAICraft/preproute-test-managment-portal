@@ -19,7 +19,7 @@ export function FormError({ error, className, id, ...props }: FormErrorProps) {
       role={error ? 'alert' : undefined}
       aria-live="polite"
       className={cn(
-        'block min-h-[1.25rem] text-xs text-destructive leading-[2.375]',
+        'absolute top-0 left-0 z-10 w-full block min-h-[1.25rem] text-xs text-destructive leading-tight',
         !error && 'invisible',
         className,
       )}

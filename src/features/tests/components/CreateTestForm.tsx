@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '@/constants/routes';
@@ -13,8 +14,9 @@ import {
   useGetTopicsBySubjectQuery, 
   useGetSubTopicsQuery 
 } from '@/services/taxonomyApi';
-import { TextField } from '@/components/forms/TextField';
 import { SelectField } from '@/components/forms/SelectField';
+import { MultiSelectField } from '@/components/forms/MultiSelectField';
+import { TextField } from '@/components/forms/TextField';
 import { RadioGroupField } from '@/components/forms/RadioGroupField';
 import { Tabs } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -32,7 +34,7 @@ export function CreateTestForm() {
   const { register, control, handleSubmit, formState: { errors } } = form;
 
   const selectedSubject = useWatch({ control, name: 'subject' });
-  const selectedTopic = useWatch({ control, name: 'topic' });
+  const selectedTopics = useWatch({ control, name: 'topics' });
   const totalQuestions = useWatch({ control, name: 'totalQuestions' });
   const correctAnswerMarks = useWatch({ control, name: 'markingScheme.correctAnswer' });
   const totalMarks = (totalQuestions || 0) * (correctAnswerMarks || 0);
@@ -41,9 +43,21 @@ export function CreateTestForm() {
   const { data: topics = [] } = useGetTopicsBySubjectQuery(selectedSubject, {
     skip: !selectedSubject,
   });
-  const { data: subTopics = [] } = useGetSubTopicsQuery(selectedTopic ? [selectedTopic] : [], {
-    skip: !selectedTopic,
+  const { data: subTopics = [] } = useGetSubTopicsQuery(selectedTopics?.length ? selectedTopics : [], {
+    skip: !selectedTopics?.length,
   });
+
+  // Clear subTopics whenever Topic selection CHANGES (not just when empty)
+  const prevTopicsRef = useRef<string[]>([]);
+  useEffect(() => {
+    const prev = prevTopicsRef.current;
+    const curr = selectedTopics ?? [];
+    const changed = curr.length !== prev.length || curr.some((t, i) => t !== prev[i]);
+    if (changed) {
+      form.setValue('subTopics', []);
+    }
+    prevTopicsRef.current = curr;
+  }, [selectedTopics, form]);
 
   const subjectOptions = subjects.map((s) => ({ label: s.name, value: s.id }));
   const topicOptions = topics.map((t) => ({ label: t.name, value: t.id }));
@@ -86,22 +100,37 @@ export function CreateTestForm() {
           {...register('title')}
         />
 
-        {/* Topic & Sub Topic */}
-        <SelectField
-          label={TEST_FORM_CONSTANTS.LABELS.TOPIC}
-          options={topicOptions}
-          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
-          error={errors.topic?.message}
-          disabled={!selectedSubject}
-          {...register('topic')}
+        <Controller
+          name="topics"
+          control={control}
+          render={({ field }) => (
+            <MultiSelectField
+              label={TEST_FORM_CONSTANTS.LABELS.TOPIC}
+              name={field.name}
+              options={topicOptions}
+              placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
+              error={errors.topics?.message}
+              disabled={!selectedSubject}
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
         />
-        <SelectField
-          label={TEST_FORM_CONSTANTS.LABELS.SUB_TOPIC}
-          options={subTopicOptions}
-          placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
-          error={errors.subTopic?.message}
-          disabled={!selectedTopic}
-          {...register('subTopic')}
+        <Controller
+          name="subTopics"
+          control={control}
+          render={({ field }) => (
+            <MultiSelectField
+              label={TEST_FORM_CONSTANTS.LABELS.SUB_TOPIC}
+              name={field.name}
+              options={subTopicOptions}
+              placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
+              error={errors.subTopics?.message}
+              disabled={!selectedTopics?.length}
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
         />
 
         {/* Duration & Difficulty */}

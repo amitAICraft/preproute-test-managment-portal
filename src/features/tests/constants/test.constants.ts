@@ -26,7 +26,7 @@ export const DIFFICULTY_LEVELS: readonly { label: string; value: DifficultyLevel
 // ── Default marking scheme ───────────────────────────────
 
 export const DEFAULT_MARKING_SCHEME: MarkingScheme = {
-  wrongAnswer: -1,
+  wrongAnswer: 0,
   unattempted: 0,
   correctAnswer: 5,
 } as const;
@@ -46,8 +46,8 @@ export const TEST_FORM_DEFAULTS = {
   testType: 'chapterwise' as TestType,
   subject: '',
   title: '',
-  topic: '',
-  subTopic: '',
+  topics: [] as string[],
+  subTopics: [] as string[],
   duration: 0,
   difficultyLevel: 'easy' as DifficultyLevel,
   markingScheme: { ...DEFAULT_MARKING_SCHEME },
@@ -127,9 +127,9 @@ export const TEST_FORM_CONSTANTS = {
     DROPDOWN: 'Choose from Drop-down',
     TEST_NAME: 'Enter name of Test',
     DURATION: 'Enter the time',
-    WRONG_ANSWER: '-1',
-    UNATTEMPTED: '+0',
-    CORRECT_ANSWER: '+5',
+    WRONG_ANSWER: '0',
+    UNATTEMPTED: '0',
+    CORRECT_ANSWER: '5',
     QUESTIONS: 'Ex:250 Marks',
     MARKS: 'Ex:250 Marks',
   },

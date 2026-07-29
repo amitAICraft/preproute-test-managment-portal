@@ -27,7 +27,11 @@ export function useCreateTest(options?: { onSuccess?: (test: Test) => void }) {
   const onSubmit = useCallback(
     async (data: CreateTestFormValues) => {
       try {
-        const created = await createTest(data).unwrap();
+        const payload = {
+          ...data,
+          totalMarks: (data.totalQuestions || 0) * (data.markingScheme.correctAnswer || 0)
+        };
+        const created = await createTest(payload as any).unwrap();
         toast.success(TEST_MESSAGES.CREATE.SUCCESS);
         form.reset();
         options?.onSuccess?.(created);

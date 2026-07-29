@@ -56,10 +56,10 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
     (t) =>
       t.id === selectedTopicInForm ||
       t.name.toLowerCase() === selectedTopicInForm?.toLowerCase() ||
-      t.id === test?.topic ||
-      (test?.topic && t.name.toLowerCase() === test.topic.toLowerCase())
+      t.id === test?.topics?.[0] ||
+      (test?.topics?.[0] && t.name.toLowerCase() === test.topics[0].toLowerCase())
   );
-  const topicId = currentTopicObj?.id || selectedTopicInForm || test?.topic || '';
+  const topicId = currentTopicObj?.id || selectedTopicInForm || test?.topics?.[0] || '';
 
   // Fetch sub-topics for topicId
   const { data: subTopics = [] } = useGetSubTopicsQuery(
@@ -76,17 +76,19 @@ export function QuestionEditorMain({ activeQuestionIndex, totalQuestions, testId
       if (test.difficultyLevel && !form.getValues('difficulty')) {
         form.setValue('difficulty', test.difficultyLevel);
       }
-      if (test.topic && !form.getValues('topic')) {
+      if (test.topics && test.topics.length > 0 && !form.getValues('topic')) {
+        const firstTopic = test.topics[0] || '';
         const foundTopic = topics.find(
-          (t) => t.id === test.topic || (test.topic && t.name.toLowerCase() === test.topic.toLowerCase())
+          (t) => t.id === firstTopic || (firstTopic && t.name.toLowerCase() === firstTopic.toLowerCase())
         );
-        form.setValue('topic', foundTopic?.name || test.topic);
+        form.setValue('topic', foundTopic?.name || firstTopic);
       }
-      if (test.subTopic && !form.getValues('subTopic')) {
+      if (test.subTopics && test.subTopics.length > 0 && !form.getValues('subTopic')) {
+        const firstSubTopic = test.subTopics[0] || '';
         const foundSubTopic = subTopics.find(
-          (st) => st.id === test.subTopic || (test.subTopic && st.name.toLowerCase() === test.subTopic.toLowerCase())
+          (st) => st.id === firstSubTopic || (firstSubTopic && st.name.toLowerCase() === firstSubTopic.toLowerCase())
         );
-        form.setValue('subTopic', foundSubTopic?.name || test.subTopic);
+        form.setValue('subTopic', foundSubTopic?.name || firstSubTopic);
       }
     }
   }, [test, topics, subTopics, form]);

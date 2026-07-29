@@ -1,7 +1,9 @@
+import { useEffect, useRef, useState } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
 import { Dialog, DialogHeader, DialogBody, DialogFooter } from '@/components/ui/dialog';
 import { TextField } from '@/components/forms/TextField';
 import { SelectField } from '@/components/forms/SelectField';
+import { MultiSelectField } from '@/components/forms/MultiSelectField';
 import { RadioGroupField } from '@/components/forms/RadioGroupField';
 import { Tabs } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -50,19 +52,107 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
     }
   };
 
-  const selectedSubject = useWatch({ control, name: 'subject' });
-  const selectedTopic = useWatch({ control, name: 'topic' });
-  const totalQuestions = useWatch({ control, name: 'totalQuestions' });
-  const correctAnswerMarks = useWatch({ control, name: 'markingScheme.correctAnswer' });
-  const totalMarks = (totalQuestions || 0) * (correctAnswerMarks || 0);
+  const [hasPrefilledSubject, setHasPrefilledSubject] = useState(false);
+  const [hasPrefilledTopics, setHasPrefilledTopics] = useState(false);
+  const [hasPrefilledSubTopics, setHasPrefilledSubTopics] = useState(false);
+
+  // Reset prefill state when modal closes
+  useEffect(() => {
+    if (!open) {
+      setHasPrefilledSubject(false);
+      setHasPrefilledTopics(false);
+      setHasPrefilledSubTopics(false);
+      form.reset();
+    }
+  }, [open, form]);
+
+  // 1. Prefill basic fields (non-taxonomy)
+  useEffect(() => {
+    if (existingTest && open && !hasPrefilledSubject) {
+      form.reset({
+        id: existingTest.id,
+        testType: existingTest.testType,
+        title: existingTest.title,
+        duration: existingTest.duration,
+        difficultyLevel: existingTest.difficultyLevel,
+        markingScheme: { ...existingTest.markingScheme },
+        totalQuestions: existingTest.totalQuestions,
+        subject: '',
+        topics: [],
+        subTopics: [],
+      });
+    }
+  }, [existingTest, open, form, hasPrefilledSubject]);
 
   const { data: subjects = [] } = useGetSubjectsQuery(undefined, { skip: !open });
+  
+  // 2. Prefill Subject (mapping name to id)
+  useEffect(() => {
+    if (existingTest && open && !hasPrefilledSubject && subjects.length > 0) {
+      const sId = subjects.find(s => s.name === existingTest.subject)?.id;
+      if (sId) {
+        form.setValue('subject', sId);
+      }
+      setHasPrefilledSubject(true);
+    }
+  }, [existingTest, open, hasPrefilledSubject, subjects, form]);
+
+  const selectedSubject = useWatch({ control, name: 'subject' });
+  
   const { data: topics = [] } = useGetTopicsBySubjectQuery(selectedSubject, {
     skip: !selectedSubject || !open,
   });
-  const { data: subTopics = [] } = useGetSubTopicsQuery(selectedTopic ? [selectedTopic] : [], {
-    skip: !selectedTopic || !open,
+
+  // 3. Prefill Topics (mapping names to ids)
+  useEffect(() => {
+    if (existingTest && open && hasPrefilledSubject && !hasPrefilledTopics && topics.length > 0) {
+      const tIds = topics.filter(t => existingTest.topics.includes(t.name)).map(t => t.id);
+      if (tIds.length > 0) {
+        form.setValue('topics', tIds);
+      }
+      setHasPrefilledTopics(true);
+    }
+  }, [existingTest, open, hasPrefilledSubject, hasPrefilledTopics, topics, form]);
+
+  const selectedTopics = useWatch({ control, name: 'topics' });
+
+  const { data: subTopics = [] } = useGetSubTopicsQuery(selectedTopics?.length ? selectedTopics : [], {
+    skip: !selectedTopics?.length || !open,
   });
+
+  // Clear subTopics whenever Topic selection CHANGES (not just when empty)
+  // Use a ref to track previous value and skip the initial prefill trigger
+  const prevTopicsRef = useRef<string[]>([]);
+  useEffect(() => {
+    const prev = prevTopicsRef.current;
+    const curr = selectedTopics ?? [];
+    // Skip clearing during initial prefill (prev is empty and we're adding topics)
+    const isInitialLoad = prev.length === 0 && curr.length > 0 && !hasPrefilledSubTopics;
+    if (!isInitialLoad) {
+      const changed = curr.length !== prev.length || curr.some((t, i) => t !== prev[i]);
+      if (changed) {
+        form.setValue('subTopics', []);
+        if (curr.length > 0) {
+          // Reset the subtopic prefill flag so new topics can trigger refetch
+          setHasPrefilledSubTopics(false);
+        }
+      }
+    }
+    prevTopicsRef.current = curr;
+  }, [selectedTopics, form, hasPrefilledSubTopics]);
+
+  // 4. Prefill SubTopics (mapping names to ids)
+  useEffect(() => {
+    if (existingTest && open && hasPrefilledTopics && !hasPrefilledSubTopics && subTopics.length > 0) {
+      const stIds = subTopics.filter(st => existingTest.subTopics?.includes(st.name)).map(st => st.id);
+      if (stIds.length > 0) {
+        form.setValue('subTopics', stIds);
+      }
+      setHasPrefilledSubTopics(true);
+    }
+  }, [existingTest, open, hasPrefilledTopics, hasPrefilledSubTopics, subTopics, form]);
+
+  const totalMarks = existingTest?.totalMarks || 0;
 
   const subjectOptions = subjects.map((s) => ({ label: s.name, value: s.id }));
   const topicOptions = topics.map((t) => ({ label: t.name, value: t.id }));
@@ -109,21 +199,37 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
                 {...register('title')}
               />
 
-              <SelectField
-                label={TEST_FORM_CONSTANTS.LABELS.TOPIC}
-                options={topicOptions}
-                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
-                error={errors.topic?.message}
-                disabled={!selectedSubject}
-                {...register('topic')}
+              <Controller
+                name="topics"
+                control={control}
+                render={({ field }) => (
+                  <MultiSelectField
+                    label={TEST_FORM_CONSTANTS.LABELS.TOPIC}
+                    name={field.name}
+                    options={topicOptions}
+                    placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
+                    error={errors.topics?.message}
+                    disabled={!selectedSubject}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
               />
-              <SelectField
-                label={TEST_FORM_CONSTANTS.LABELS.SUB_TOPIC}
-                options={subTopicOptions}
-                placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
-                error={errors.subTopic?.message}
-                disabled={!selectedTopic}
-                {...register('subTopic')}
+              <Controller
+                name="subTopics"
+                control={control}
+                render={({ field }) => (
+                  <MultiSelectField
+                    label={TEST_FORM_CONSTANTS.LABELS.SUB_TOPIC}
+                    name={field.name}
+                    options={subTopicOptions}
+                    placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DROPDOWN}
+                    error={errors.subTopics?.message}
+                    disabled={!selectedTopics?.length}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
               />
 
               <TextField

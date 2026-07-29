@@ -55,9 +55,9 @@ export function TestDetailsCard({ onEdit, test }: TestDetailsCardProps) {
           <span className="text-slate-400">{QUESTION_BUILDER_MESSAGES.TOPIC}</span>
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-slate-400">:</span>
-            {test?.topic ? (
+            {test?.topics && test.topics.length > 0 ? (
               <span className="inline-flex items-center rounded-md border border-[#E9B406] bg-transparent px-2.5 py-0.5 text-xs font-medium text-[#FFC82C]">
-                {test.topic}
+                {test.topics.join(', ')}
               </span>
             ) : (
               <>
@@ -74,9 +74,9 @@ export function TestDetailsCard({ onEdit, test }: TestDetailsCardProps) {
           <span className="text-slate-400">{QUESTION_BUILDER_MESSAGES.SUB_TOPIC}</span>
           <div className="flex flex-wrap items-center gap-2">
             <span className="text-slate-400">:</span>
-            {test?.subTopic ? (
+            {test?.subTopics && test.subTopics.length > 0 ? (
               <span className="inline-flex items-center rounded-md border border-[#E9B406] bg-transparent px-2.5 py-0.5 text-xs font-medium text-[#FFC82C]">
-                {test.subTopic}
+                {test.subTopics.join(', ')}
               </span>
             ) : (
               <span className="inline-flex items-center rounded-md border border-[#E9B406] bg-transparent px-2.5 py-0.5 text-xs font-medium text-[#FFC82C]">

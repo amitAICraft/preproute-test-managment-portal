@@ -26,7 +26,9 @@ export function FormField({ label, name, error, children, className, ...props }:
         {label}
       </label>
       {children}
-      <FormError id={`${name}-error`} error={error} />
+      <div className="relative w-full h-[1.25rem] mt-0.5">
+        <FormError id={`${name}-error`} error={error} />
+      </div>
     </div>
   );
 }

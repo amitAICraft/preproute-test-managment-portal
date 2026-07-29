@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -29,8 +29,8 @@ export function useUpdateTest(
       testType: 'chapterwise',
       subject: '',
       title: '',
-      topic: '',
-      subTopic: '',
+      topics: [],
+      subTopics: [],
       duration: 0,
       difficultyLevel: 'easy',
       markingScheme: { wrongAnswer: -1, unattempted: 0, correctAnswer: 5 },
@@ -38,38 +38,23 @@ export function useUpdateTest(
     },
   });
 
-  /**
-   * Sync form values when the existing test data arrives
-   * (e.g. from a network fetch or cache hit).
-   */
-  useEffect(() => {
-    if (existingTest) {
-      form.reset({
-        id: existingTest.id,
-        testType: existingTest.testType,
-        subject: existingTest.subject,
-        title: existingTest.title,
-        topic: existingTest.topic,
-        subTopic: existingTest.subTopic ?? '',
-        duration: existingTest.duration,
-        difficultyLevel: existingTest.difficultyLevel,
-        markingScheme: { ...existingTest.markingScheme },
-        totalQuestions: existingTest.totalQuestions,
-      });
-    }
-  }, [existingTest, form]);
+  // Prefill logic is handled in EditTestDialog.tsx to allow cascading taxonomy API resolution
 
   const onSubmit = useCallback(
     async (data: UpdateTestFormValues) => {
       try {
-        const updated = await updateTest(data).unwrap();
+        const payload = {
+          ...data,
+          totalMarks: existingTest?.totalMarks || 0,
+        };
+        const updated = await updateTest(payload).unwrap();
         toast.success(TEST_MESSAGES.UPDATE.SUCCESS);
         options?.onSuccess?.(updated);
       } catch {
         toast.error(TEST_MESSAGES.UPDATE.ERROR);
       }
     },
-    [updateTest, options],
+    [updateTest, existingTest, options],
   );
 
   return {
