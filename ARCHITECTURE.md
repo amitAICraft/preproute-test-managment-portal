@@ -227,5 +227,3 @@ Built using Tailwind CSS, implementing a fluid mobile-first breakpoint configura
 # Future Improvements
 
 1. **Server-Side Search & Pagination**: Transition dashboard searches to remote pagination to optimize performance.
-2. **Drag-and-Drop Sequencer**: Integrate a sorting library like `@dnd-kit` to allow test administrators to reorder questions visually.
-3. **Draft Cache Auto-Save**: Implement local storage backup for drafts in the Question Builder.
