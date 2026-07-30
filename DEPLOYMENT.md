@@ -20,7 +20,7 @@ To set up the project on your machine, clone the repository and navigate into th
 
 ```bash
 git clone <repository-url>
-cd Preproute-Assignment
+cd preproute-test-managment-portal
 ```
 
 ---
@@ -121,7 +121,7 @@ Verify that all screens and functionalities operate correctly post-deployment:
 
 1. **Login**:
    - Navigate to the login screen.
-   - Enter credentials (`vedant-admin` / `vedant123`) and verify redirect.
+   - Enter credentials (`xxxx` / `xxxx`) and verify redirect.
 2. **Dashboard**:
    - Verify the test list loads and displays test cards.
    - Test the search input, filters (subject, status, date), and column headers sorting.
