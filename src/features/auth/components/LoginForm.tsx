@@ -43,7 +43,7 @@ export function LoginForm() {
     } catch (err: any) {
       const errMsg =
         err?.status === 'FETCH_ERROR'
-          ? 'Network connection failed. Please check your internet connection.'
+          ? 'Error: CORS error on backend. Kindly allow this domain for whitelisting from backend'
           : err?.data?.message || MESSAGES.LOGIN.ERROR;
       toast.error(errMsg);
     }
@@ -53,7 +53,7 @@ export function LoginForm() {
     if (!error) return null;
     if ('status' in error) {
       if (error.status === 'FETCH_ERROR') {
-        return 'Network connection failed. Please check your internet connection.';
+        return 'Error: CORS error on backend. Kindly allow this domain for whitelisting from backend';
       }
       if (error.status === 500) {
         return 'An unexpected server error occurred. Please try again later.';
