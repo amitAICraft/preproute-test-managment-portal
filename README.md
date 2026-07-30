@@ -153,6 +153,13 @@ The application compiles cleanly into a static build via Vite. It can be easily 
 
 # Known Backend Limitations
 - **CORS ISSUE**: The backend does not currently support to allow backend api access to all domain. Hence its not working on https://preproute-test-managment-portal.vercel.app/ yet. Backend team, need to whitelist this domain to acccess for this domain.
+**CSV Upload**
+The assignment mentions CSV upload, however:
+
+no API endpoint was available in documentation
+no CSV structure/specification was provided
+no sample CSV file was included
+Therefore this functionality can not be implemented reliably with the available information.
 - **Question Update API Unavailable**: The backend does not currently support modifying existing questions individually via a `PUT` endpoint. As a result, questions are deleted and recreated or saved in bulk.
 - **Delete API Unavailable**: A DELETE endpoint for deleting whole tests (`DELETE /tests/:id`) is not exposed in the API; therefore, the delete action remains disabled in the user interface.
 
