@@ -155,7 +155,7 @@ The application compiles cleanly into a static build via Vite. It can be easily 
 - **CORS ISSUE**: The backend does not currently support to allow backend api access to all domain. Hence its not working on https://preproute-test-managment-portal.vercel.app/ yet. Backend team, need to whitelist this domain to acccess for this domain.
 
 
-**CSV Upload**
+-  **CSV Upload**
 The assignment mentions CSV upload, however:
 
    no API endpoint was available in documentation
