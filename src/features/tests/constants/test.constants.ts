@@ -134,7 +134,7 @@ export const TEST_FORM_CONSTANTS = {
     WRONG_ANSWER: '0',
     UNATTEMPTED: '0',
     CORRECT_ANSWER: '5',
-    QUESTIONS: 'Ex:250 Marks',
+    QUESTIONS: '5',
     MARKS: 'Ex:250 Marks',
   },
 } as const;

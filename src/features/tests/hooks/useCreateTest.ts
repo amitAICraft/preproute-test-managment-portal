@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/utils';
 import { createTestSchema, type CreateTestFormValues } from '../schemas';
 import { useCreateTestMutation } from '../api/testApi';
 import { TEST_FORM_DEFAULTS, TEST_MESSAGES } from '../constants';
@@ -36,15 +37,7 @@ export function useCreateTest(options?: { onSuccess?: (test: Test) => void }) {
         form.reset();
         options?.onSuccess?.(created);
       } catch (err: any) {
-        let errorMsg = TEST_MESSAGES.CREATE.ERROR;
-        if (err && typeof err === 'object') {
-          const responseData = (err as any).data;
-          if (responseData && typeof responseData === 'object' && typeof responseData.message === 'string') {
-            errorMsg = responseData.message;
-          } else if (typeof (err as any).message === 'string') {
-            errorMsg = (err as any).message;
-          }
-        }
+        const errorMsg = getApiErrorMessage(err, TEST_MESSAGES.CREATE.ERROR);
         toast.error(errorMsg);
       }
     },

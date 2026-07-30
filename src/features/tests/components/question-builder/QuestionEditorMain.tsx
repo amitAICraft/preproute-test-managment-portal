@@ -374,7 +374,7 @@ export function QuestionEditorMain({
                   ? 'cursor-not-allowed bg-[#FF6B6B]/40 opacity-60'
                   : 'bg-[#FF6B6B] hover:bg-[#E55555]',
               )}
-              onClick={() => !isReadOnly && navigate('/tests')}
+              onClick={() => !isReadOnly && navigate('/tests/create')}
             >
               {QUESTION_BUILDER_MESSAGES.EXIT_TEST_CREATION}
             </Button>

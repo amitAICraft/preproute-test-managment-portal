@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/utils';
 import { updateTestSchema, type UpdateTestFormValues } from '../schemas';
 import { useUpdateTestMutation } from '../api/testApi';
 import { TEST_MESSAGES } from '../constants';
@@ -50,8 +51,9 @@ export function useUpdateTest(
         const updated = await updateTest(payload).unwrap();
         toast.success(TEST_MESSAGES.UPDATE.SUCCESS);
         options?.onSuccess?.(updated);
-      } catch {
-        toast.error(TEST_MESSAGES.UPDATE.ERROR);
+      } catch (err: any) {
+        const errorMsg = getApiErrorMessage(err, TEST_MESSAGES.UPDATE.ERROR);
+        toast.error(errorMsg);
       }
     },
     [updateTest, existingTest, options],
