@@ -2,9 +2,9 @@
 
 # Project Overview
 
-The Preproute Test Management Portal is a comprehensive, production grade test management application designed for educational coordinators and test administrators. Built to facilitate the end-to-end lifecycle of academic evaluations, the portal enables users to seamlessly authenticate, manage tests, configure detailed test structures, construct questions with rich text formatting, and publish or schedule tests for students.
+The Preproute Test Management Portal is a comprehensive, production grade test management application designed for educational coordinators and test administrators. Built to facilitate the end to end lifecycle of academic evaluations, the portal enables users to seamlessly authenticate, manage tests, configure detailed test structures, construct questions with rich text formatting, and publish or schedule tests for students.
 
-The application leverages a domain-driven, feature-first architecture, separating concerns across distinct, self-contained feature folders. It coordinates multiple API integrations (such as subjects, topics, and question creation) with precise client-side validation using React Hook Form and Zod. The design strictly implements Figma specifications, delivering a premium, fully responsive dashboard that guarantees a consistent user experience across device viewports.
+The application leverages a domain driven, feature first architecture, separating concerns across distinct, self contained feature folders. It coordinates multiple API integrations (such as subjects, topics, and question creation) with precise client-side validation using React Hook Form and Zod. The design strictly implements Figma specifications, delivering a premium, fully responsive dashboard that guarantees a consistent user experience across device viewports.
 
 # Features
 
@@ -18,7 +18,7 @@ The application leverages a domain-driven, feature-first architecture, separatin
 ## Dashboard
 
 - Centralized view showing the complete list of available tests.
-- Detailed metadata cards displaying the test type, duration, difficulty, and marking scheme.
+- Detailed metadata cards displaying the test type, duration, difficulty and marking scheme.
 - Navigation paths directly into the test creation wizard or the question builder.
 - Built-in empty states and loading skeletons to match UX guidelines.
 
@@ -54,7 +54,7 @@ The application leverages a domain-driven, feature-first architecture, separatin
 - **Multi Filters**: Simultaneous cascading filters for test status, subjects, and creation dates.
 - **Column Sorting**: Fully interactive header columns to sort tests in ascending or descending order.
 - **Live Result Counter**: Instant display of matched search results and filtered test counts.
-- **Responsive UI**: Pixel-perfect implementation of Figma breakpoints ensuring compatibility with desktop, tablet, and mobile screens.
+- **Responsive UI**: Pixel perfect implementation of Figma breakpoints ensuring compatibility with desktop, tablet, and mobile screens.
 
 # Tech Stack
 
@@ -64,7 +64,7 @@ The application leverages a domain-driven, feature-first architecture, separatin
 - **Editor**: TipTap 3 (RichTextEditor)
 - **Routing**: React Router 7
 - **Styling**: Tailwind CSS 4, Lucide React Icons
-- **Deployment**: Vercel / Railway support (Process/Vite Env hybrid configuration)
+- **Deployment**: Vercel 
 
 # Folder Structure
 
@@ -88,6 +88,10 @@ Preproute-Assignment/
 │   ├── package.json           # Project dependencies and run scripts
 │   └── vite.config.ts         # Vite bundler options
 └── README.md
+└── ARCHITECTURE.md
+└── API_INTEGRATION.md
+└── BEST_PRACTICES.md
+└── DEPLOYMENT.md
 ```
 
 # Installation
@@ -154,33 +158,36 @@ The application compiles cleanly into a static build via Vite. It can be easily 
 
 # Screenshots
 
+### Login
+
+<img width="1917" height="962" alt="image" src="https://github.com/user-attachments/assets/6cf5c8b7-8e07-4a83-969c-52d5ae34cafc" />
+
 ### Dashboard
 
-_Placeholder: e:/per/per/Amit/work/project/AI/Project/Preproute-Assignment/assets/screenshots/dashboard.png_
+<img width="1917" height="970" alt="image" src="https://github.com/user-attachments/assets/cd819ca3-6118-435f-a24a-417f6ba444f5" />
 
 ### Create Test
 
-_Placeholder: e:/per/per/Amit/work/project/AI/Project/Preproute-Assignment/assets/screenshots/create_test.png_
+<img width="1912" height="972" alt="image" src="https://github.com/user-attachments/assets/9dee31e8-6110-49db-99ac-ce871a4b15eb" />
 
 ### Question Builder
-
-_Placeholder: e:/per/per/Amit/work/project/AI/Project/Preproute-Assignment/assets/screenshots/question_builder.png_
+<img width="1906" height="967" alt="image" src="https://github.com/user-attachments/assets/f2a31343-a5f4-4ae6-a9bb-48542d9e07c8" />
+<img width="1916" height="960" alt="image" src="https://github.com/user-attachments/assets/6b654df1-4ce5-4bef-af98-04c0c18723f6" />
 
 ### Publish
-
-_Placeholder: e:/per/per/Amit/work/project/AI/Project/Preproute-Assignment/assets/screenshots/publish.png_
+<img width="1896" height="960" alt="image" src="https://github.com/user-attachments/assets/b7e4445c-7fa6-492c-bf41-d160abb4064a" />
 
 ### Schedule
 
-_Placeholder: e:/per/per/Amit/work/project/AI/Project/Preproute-Assignment/assets/screenshots/schedule.png_
+<img width="1886" height="962" alt="image" src="https://github.com/user-attachments/assets/9e5bc5f5-266d-4f65-8dad-6c7e9b8bc5cc" />
 
 # Live Demo
 
-_Placeholder: Live URL will be provided upon deployment_
+_Placeholder: [Live URL will be provided upon deployment_](https://preproute-test-managment-portal.vercel.app/)
 
 # GitHub Repository
 
-_Placeholder: GitHub Repository URL will be provided upon submission_
+_Placeholder: [GitHub Repository URL will be provided upon submission_](https://github.com/amitAICraft/preproute-test-managment-portal)
 
 # Project Documentation
 
