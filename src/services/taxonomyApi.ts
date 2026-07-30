@@ -1,7 +1,7 @@
 import { baseApi } from './baseApi';
 import type { ApiResponse } from '@/types';
 
-// ── Types ────────────────────────────────────────────────
+// Types
 
 export interface Subject {
   id: string;
@@ -24,13 +24,13 @@ export interface MultiTopicsRequest {
   topicIds: string[];
 }
 
-// ── Injected endpoints ───────────────────────────────────
+// ******************** All subjects topics endpoints ***********************
 export const taxonomyApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getSubjects: builder.query<Subject[], void>({
       query: () => '/subjects',
       transformResponse: (response: ApiResponse<Subject[]>) => response.data,
-      providesTags: ['Test'], // Simplification: re-fetch when tests change or manually
+      providesTags: ['Test'], // Simplification- re-fetch when tests change or manually
     }),
 
     getTopicsBySubject: builder.query<Topic[], string>({

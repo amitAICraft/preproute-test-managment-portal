@@ -1,6 +1,6 @@
 import { baseApi } from './baseApi';
 
-// ── Types ────────────────────────────────────────────────
+//  Types
 export interface PublishRequest {
   testId: string;
 }
@@ -15,7 +15,7 @@ export interface UnpublishRequest {
   testId: string;
 }
 
-// ── Injected endpoints ───────────────────────────────────
+// publish tests injected endpoints
 export const publishApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     publishTest: builder.mutation<PublishResponse, PublishRequest>({

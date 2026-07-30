@@ -24,14 +24,8 @@ interface DashboardTableProps {
   onSort?: (field: string) => void;
 }
 
-/**
- * DashboardTable — renders the tests list.
- *
- * - All strings come from DASHBOARD_MESSAGES constants.
- * - Status variant mapping is a constant lookup (no inline logic).
- * - Delete is disabled when `onDelete` is undefined.
- * - Every icon-only button has an accessible aria-label.
- */
+// DashboardTable — renders the tests list.
+
 export function DashboardTable({
   tests,
   onEdit,

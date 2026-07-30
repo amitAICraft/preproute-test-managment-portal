@@ -28,7 +28,7 @@ export function QuestionListSidebar({
         isCollapsed ? 'w-16 items-center p-3' : 'w-[220px] p-4',
       )}
     >
-      {/* Header */}
+      {/* header section goes here*/}
       <div
         className={cn(
           'mb-3 flex w-full items-center justify-between border-b border-slate-100 pb-3',
@@ -56,14 +56,14 @@ export function QuestionListSidebar({
         </button>
       </div>
 
-      {/* Total Questions sub-header */}
+      {/* total questions sub header */}
       {!isCollapsed && (
         <div className="pb-3 text-xs font-medium text-slate-500">
           {QUESTION_BUILDER_MESSAGES.TOTAL_QUESTIONS} . {totalQuestions}
         </div>
       )}
 
-      {/* Question list */}
+      {/* question list */}
       <div className="custom-scrollbar max-h-[calc(100vh-16rem)] w-full flex-1 space-y-2 overflow-y-auto pr-0.5">
         {questions.map((index) => {
           const isCompleted = completedQuestions.includes(index);

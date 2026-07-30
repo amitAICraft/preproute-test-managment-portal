@@ -13,6 +13,7 @@ interface RadioGroupProps {
   className?: string;
 }
 
+// Radio group ui
 export function RadioGroup({ options, value, onChange, name, className }: RadioGroupProps) {
   return (
     <div className={cn('flex h-12 w-full items-center justify-between', className)}>

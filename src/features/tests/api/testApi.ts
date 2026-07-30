@@ -8,18 +8,8 @@ import type {
   PaginatedTests,
 } from '../types';
 
-/**
- * Test API — RTK Query endpoints injected into the shared `baseApi`.
- *
- * Implements:
- *   GET  /tests       → paginated list
- *   GET  /tests/:id   → single test
- *   POST /tests       → create test
- *   PUT  /tests/:id   → update test (full replacement)
- *
- * Uses `transformResponse` to unwrap the `ApiResponse<T>` envelope,
- * consistent with the pattern established in `authApi`.
- */
+// Test API — RTK Query endpoints injected into the shared `baseApi`.
+
 // ── Mapping Helpers ──────────────────────────────────────
 
 const mapBackendToFrontendTest = (backendTest: any): Test => ({

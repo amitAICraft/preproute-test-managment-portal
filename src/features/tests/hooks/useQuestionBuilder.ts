@@ -36,10 +36,8 @@ export function useQuestionBuilder(
   const onSubmit = async (data: QuestionBuilderFormValues) => {
     try {
           // correct_option must be 'option1'|'option2'|'option3'|'option4' per API contract.
-          // The form stores the option's id which is already 'option1'...'option4'.
           const correctOption = data.correctOptionId;
 
-          // ── Defensive topic/subTopic validation ───────────────────────
           const validTopicIds = getValidTopicIds ? getValidTopicIds() : [];
           const validSubTopicIds = getValidSubTopicIds ? getValidSubTopicIds() : [];
 

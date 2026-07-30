@@ -3,13 +3,8 @@ import { useNavigate } from 'react-router';
 import { useTests } from '@/features/tests';
 import { ROUTES } from '@/constants/routes';
 
-/**
- * useDashboard — encapsulates all business logic for the Dashboard page.
- *
- * Edit opens the EditTestDialog (modal) — matching Figma 04-edit-test-details-modal.png.
- * View navigates to the Question Builder so the user can review questions.
- * Delete is intentionally omitted — no DELETE endpoint exists in the API.
- */
+// useDashboard — encapsulates all business logic for the Dashboard page.
+
 export function useDashboard() {
   const navigate = useNavigate();
   const { tests, isLoading, isFetching, isError, error } = useTests();
@@ -21,33 +16,24 @@ export function useDashboard() {
     navigate(ROUTES.TESTS.CREATE);
   };
 
-  /**
-   * Edit — opens the EditTestDialog modal with the selected test pre-loaded.
-   * Matches Figma: 04-edit-test-details-modal.png shows a modal, not a page nav.
-   */
+// Edit — opens the EditTestDialog modal with the selected test pre-loaded.
   const handleEdit = (id: string) => {
     setEditTestId(id);
   };
 
-  /** Close the Edit dialog and clear the selected test id. */
+//Close the Edit dialog and clear the selected test id.
   const closeEditDialog = () => {
     setEditTestId(null);
   };
 
-  /**
-   * View — navigates to the Question Builder for the selected test.
-   * No separate read-only preview route is defined in the assignment or API docs,
-   * so the Question Builder (which loads test data by testId) is the correct destination.
-   */
+//  View — navigates to the Question Builder for the selected test.
+
   const handleView = (id: string) => {
     navigate(`${ROUTES.TESTS.QUESTIONS}?testId=${id}`);
   };
 
-  /**
-   * DELETE /tests/:id does not exist in the backend API documentation.
-   * The button is left permanently disabled rather than wired to a no-op.
-   * Wire useDeleteTestMutation here if the endpoint is added in future.
-   */
+// DELETE /tests/:id does not exist in the backend API documentation.
+
   const handleDelete = undefined;
 
   return {

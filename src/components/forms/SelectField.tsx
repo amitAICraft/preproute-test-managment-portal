@@ -16,6 +16,7 @@ export interface SelectFieldProps extends Omit<ComponentProps<'select'>, 'childr
   placeholder?: string;
 }
 
+//reusable selectField component
 export const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   ({ label, name, error, options, placeholder, className, id, ...props }, ref) => {
     const fieldId = id || name;

@@ -8,24 +8,14 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { logout, selectCurrentUser } from '@/features/auth/authSlice';
 import { ROUTES } from '@/constants/routes';
 
-/**
- * Navigation items matching the Figma sidebar exactly.
- * Icons are loaded from the official Figma SVG exports.
- */
+//All nav items with routs
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', iconSrc: '/dash-icon.svg' },
   { label: 'Test Creation', href: '/tests/create', iconSrc: '/create-test-icon.svg' },
   { label: 'Test Tracking', href: '/tests/tracking', iconSrc: '/test-tracking-icon.svg' },
 ];
 
-/**
- * AppLayout — shared layout for all protected pages.
- *
- * Provides:
- * - Collapsible sidebar with active navigation state
- * - Top header bar with profile section
- * - Content area via <Outlet />
- */
+//AppLayout — shared layout for all protected pages. 
 export function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -66,7 +56,7 @@ export function AppLayout() {
         {/* Nav Links */}
         <nav className="mt-8 flex-1 space-y-1">
           {navItems.map((item) => {
-            // Determine active state; /tests/create handles builder, publish etc.
+            // Determine active state, /tests/create handles builder, publish etc.
             const isActive = location.pathname.startsWith(item.href);
             return (
               <Link

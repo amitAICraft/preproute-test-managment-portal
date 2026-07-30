@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { QUESTION_BUILDER_MESSAGES } from '../constants/questionBuilder.constants';
 import type { Test, DifficultyLevel } from '../types/test.types';
 
-/** Maps difficulty level → color palette + label */
+/** Maps difficulty level - color palette + label */
 const DIFFICULTY_CONFIG: Record<DifficultyLevel, { bg: string; text: string; label: string }> = {
   easy: { bg: '#2AB7A9', text: '#FEFEFF', label: 'Easy' },
   medium: { bg: '#E9B406', text: '#FEFEFF', label: 'Medium' },
@@ -17,18 +17,12 @@ interface TestDetailsCardProps {
 
 /**
  * TestDetailsCard — Chapter summary card shown at the top of the Question Builder.
- *
- * Layout matches 03-question-builder-page.png exactly:
- * - "Chapter Wise" dark badge top-left
- * - chaptor-icon.svg + title + easy-icon.svg (moved slightly to the right) on the title row
- * - Subject / Topic / Sub Topic label grid on the left
- * - ⏱ Minutes / 📝 Questions / 📊 Marks in a rounded pill at bottom-right inside the card
- * - Edit pencil top-right
+ * - "Chapter Wise" dark badge top to left
  */
 export function TestDetailsCard({ onEdit, test }: TestDetailsCardProps) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      {/* Top row: badge left, edit button right */}
+      {/* Top row- badge left, edit button right */}
       <div className="mb-3 flex items-start justify-between">
         <Badge variant="dark" className="rounded-md px-3 font-normal capitalize">
           {test?.testType?.replace('-', ' ') || QUESTION_BUILDER_MESSAGES.CHAPTER_WISE}
@@ -43,7 +37,7 @@ export function TestDetailsCard({ onEdit, test }: TestDetailsCardProps) {
         )}
       </div>
 
-      {/* Chapter title row: chaptor-icon + title + difficulty badge */}
+      {/* Chapter title row- chaptor-icon + title + difficulty badge */}
       <div className="mb-4 flex items-center gap-3">
         <img src="/chaptor-icon.svg" alt="" className="size-6 shrink-0" />
         <h3 className="text-base font-bold text-slate-900">{test?.title || 'Chapter 1'}</h3>
@@ -81,7 +75,6 @@ export function TestDetailsCard({ onEdit, test }: TestDetailsCardProps) {
 
       {/* Info grid & Bottom-Right Stats container */}
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-        {/* Info grid: Subject / Topic / Sub-Topic */}
         <div className="grid grid-cols-[90px_1fr] gap-y-2 text-sm">
           <span className="text-slate-400">{QUESTION_BUILDER_MESSAGES.SUBJECT}</span>
           <span className="font-medium text-[#6B7280]">: {test?.subject || 'English'}</span>

@@ -73,7 +73,6 @@ export function QuestionBuilderPage() {
 
   return (
     <div className="flex min-h-[calc(100vh-3.5rem)] w-full flex-col space-y-5 overflow-x-hidden bg-slate-50/50 p-6">
-      {/* ── Breadcrumb / Publish Container ── */}
       {/* Wrapped in its own container with border, border-radius, 20px left/right padding */}
       <div className="flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-[20px] py-4 shadow-xs">
         <div className="flex items-center gap-2 text-sm text-slate-500">
@@ -100,9 +99,9 @@ export function QuestionBuilderPage() {
         </Button>
       </div>
 
-      {/* ── Split Content Area: Secondary Sidebar + Question Editor ── */}
+      {/* Split Content Area: Secondary Sidebar + Question Editor  */}
       <div className="flex w-full min-w-0 flex-1 items-start gap-5">
-        {/* Secondary sidebar — standalone card sitting beside main editor */}
+        {/* Secondary sidebar  standalone card sitting beside main editor */}
         <QuestionListSidebar
           totalQuestions={totalQuestions}
           activeQuestionIndex={activeQuestion}
@@ -112,7 +111,7 @@ export function QuestionBuilderPage() {
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
 
-        {/* Main editor — takes remaining space */}
+        {/* Main editor takes remaining space */}
         <QuestionEditorMain 
           activeQuestionIndex={activeQuestion}
           totalQuestions={totalQuestions}

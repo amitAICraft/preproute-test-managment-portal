@@ -7,15 +7,13 @@ import type { TestType, DifficultyLevel, MarkingScheme } from '../types';
  * Everything here is scoped to the Test feature.
  */
 
-// ── Test type options (tab component) ────────────────────
-
 export const TEST_TYPES: readonly { label: string; value: TestType; disabled?: boolean }[] = [
   { label: 'Chapterwise', value: 'chapterwise' },
   { label: 'PYQ', value: 'pyq', disabled: true },
   { label: 'Mock Test', value: 'mock-test', disabled: true },
 ] as const;
 
-// ── Difficulty level options (radio group) ───────────────
+// ..... Difficulty level options (radio group) ******************
 
 export const DIFFICULTY_LEVELS: readonly { label: string; value: DifficultyLevel }[] = [
   { label: 'Easy', value: 'easy' },
@@ -23,7 +21,7 @@ export const DIFFICULTY_LEVELS: readonly { label: string; value: DifficultyLevel
   { label: 'Difficult', value: 'difficult' },
 ] as const;
 
-// ── Default marking scheme ───────────────────────────────
+// .... Default marking scheme ***************************
 
 export const DEFAULT_MARKING_SCHEME: MarkingScheme = {
   wrongAnswer: 0,
@@ -31,7 +29,7 @@ export const DEFAULT_MARKING_SCHEME: MarkingScheme = {
   correctAnswer: 5,
 } as const;
 
-// ── Form constraints ─────────────────────────────────────
+// .... Form constraints ******************************
 
 export const TEST_LIMITS = {
   MIN_DURATION: 1,
@@ -40,7 +38,7 @@ export const TEST_LIMITS = {
   MAX_QUESTIONS: 500,
 } as const;
 
-// ── Default form values ──────────────────────────────────
+// ---- Default form values *********************************
 
 export const TEST_FORM_DEFAULTS = {
   testType: 'chapterwise' as TestType,
@@ -58,7 +56,7 @@ export const TEST_FORM_DEFAULTS = {
   totalQuestions: undefined as any,
 } as const;
 
-// ── User-facing messages ─────────────────────────────────
+// .... User-facing messages *********************************
 
 export const TEST_MESSAGES = {
   CREATE: {
@@ -139,7 +137,7 @@ export const TEST_FORM_CONSTANTS = {
   },
 } as const;
 
-// ── Dashboard strings ─────────────────────────────────────
+// ----- Dashboard stri******************************************
 
 export const DASHBOARD_MESSAGES = {
   PAGE_TITLE: 'Dashboard',
@@ -166,7 +164,7 @@ export const DASHBOARD_MESSAGES = {
   },
 } as const;
 
-// ── Status → Badge variant map ────────────────────────────
+// ---- Status → Badge variant map ------------------------------------
 // Kept here (constants layer) so the component stays logic-free.
 
 export const TEST_STATUS_BADGE_VARIANT = {

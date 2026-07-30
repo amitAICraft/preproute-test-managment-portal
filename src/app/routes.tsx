@@ -9,7 +9,7 @@ import { CreateTestPage, QuestionBuilderPage, PublishTestPage } from '@/features
 import { DashboardPage } from '@/features/dashboard';
 
 /**
- * Application route configuration.
+ * Routing Structure are explained here
  *
  * Structure:
  * ├── / (ProtectedRoute)
@@ -22,7 +22,7 @@ import { DashboardPage } from '@/features/dashboard';
  */
 export const router = createBrowserRouter([
   {
-    // Protected routes — require authentication
+    // Protected routes — require any kind of authentication to access
     element: <ProtectedRoute />,
     children: [
       {
@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    // Public routes — accessible only when NOT authenticated
+    // Public routes — accessible only when routes are not authenticated
     path: '/login',
     element: <PublicRoute />,
     children: [
@@ -64,7 +64,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    // Catch-all — 404
+    // Catch-all — 404 page not found
     path: '*',
     element: <NotFound />,
   },

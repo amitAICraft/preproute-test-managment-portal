@@ -8,7 +8,7 @@ export interface TextFieldProps extends ComponentProps<'input'> {
   name: string;
   error?: string;
 }
-
+//Reusable text field
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   ({ label, name, error, className, id, ...props }, ref) => {
     // We expect 'name' to be passed by react-hook-form

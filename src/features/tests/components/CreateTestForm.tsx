@@ -55,7 +55,7 @@ export function CreateTestForm() {
     },
   );
 
-  // Clear subTopics whenever Topic selection CHANGES (not just when empty)
+  // clear subtopics whenever topic selection changes (not just when empty)
   const prevTopicsRef = useRef<string[]>([]);
   useEffect(() => {
     const prev = prevTopicsRef.current;
@@ -73,7 +73,7 @@ export function CreateTestForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
-      {/* Test Type Tabs */}
+      {/* test type tabs */}
       <div>
         <Controller
           name="testType"
@@ -88,7 +88,7 @@ export function CreateTestForm() {
       </div>
 
       <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
-        {/* Subject & Name */}
+        {/* subject & name */}
         <SelectField
           label={TEST_FORM_CONSTANTS.LABELS.SUBJECT}
           options={subjectOptions}
@@ -136,7 +136,7 @@ export function CreateTestForm() {
           )}
         />
 
-        {/* Duration & Difficulty */}
+        {/* duration and difficulty leve displayed here */}
         <TextField
           label={TEST_FORM_CONSTANTS.LABELS.DURATION}
           placeholder={TEST_FORM_CONSTANTS.PLACEHOLDERS.DURATION}
@@ -160,7 +160,7 @@ export function CreateTestForm() {
         />
       </div>
 
-      {/* Marking Scheme & Questions Row */}
+      {/* marking Scheme and questions Row */}
       <div className="space-y-6">
         <h3 className="text-base font-medium text-[#374151]">
           {TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}

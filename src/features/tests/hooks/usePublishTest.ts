@@ -33,8 +33,6 @@ export function usePublishTest(testId?: string) {
 
     try {
       // API contract: PUT /tests/:id with { status: 'live' }
-      // "Live Until", "Custom Duration", and schedule datetime fields are frontend-only UI.
-      // The documented API does not accept these as payload parameters.
       await publishTest({ testId }).unwrap();
       toast.success('Test published successfully!');
       navigate(ROUTES.DASHBOARD);
@@ -44,7 +42,6 @@ export function usePublishTest(testId?: string) {
   };
 
   // Cancel must return to the Question Builder for the SAME test, preserving testId.
-  // Never redirect to Dashboard (which loses context).
   const onCancel = () => {
     if (testId) {
       navigate(`${ROUTES.TESTS.QUESTIONS}?testId=${testId}`);

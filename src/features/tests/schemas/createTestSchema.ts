@@ -1,13 +1,8 @@
 import { z } from 'zod';
 import { TEST_LIMITS } from '../constants/test.constants';
 
-/**
- * Zod schema for the Create Test form.
- *
- * Validates all fields shown in the Figma "Create Test" screen:
- * test type tabs, subject/topic dropdowns, name, duration,
- * difficulty radios, marking scheme, and question count.
- */
+//Zod schema for the Create Test form.
+
 const preprocessNumber = (val: unknown) => {
   if (val === '' || val === null || val === undefined || (typeof val === 'number' && isNaN(val))) {
     return undefined;

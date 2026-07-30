@@ -3,7 +3,7 @@ import { FileQuestion, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 /**
- * NotFound — 404 page for unmatched routes.
+ * NotFound -404 page for ny unmatched routes.
  */
 export function NotFound() {
   return (

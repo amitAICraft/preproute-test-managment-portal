@@ -4,6 +4,7 @@ import { Providers } from '@/app/providers';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { router } from '@/app/routes';
 
+//Main app start here
 function App() {
   return (
     <ErrorBoundary>

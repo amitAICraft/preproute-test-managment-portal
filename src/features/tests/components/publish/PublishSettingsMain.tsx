@@ -16,8 +16,8 @@ const PUBLISH_TABS = [
 ] as const;
 
 // Reorder durations so 2 columns map visually:
-// Col 1: Always Available (0), 1 Week (1), 2 Weeks (2)
-// Col 2: 3 Weeks (3), 1 Month (4), Custom Duration (5)
+// For ex- col 1: Always Available (0), 1 Week (1), 2 Weeks (2)
+// For ex- col 2: 3 Weeks (3), 1 Month (4), Custom Duration (5)
 const GRID_ORDERED_DURATIONS = [
   PUBLISH_DURATIONS[0], // Always Available
   PUBLISH_DURATIONS[3], // 3 Weeks
@@ -53,7 +53,6 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
 
       {/* Form Area */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Publish Type Tabs */}
         <div className="w-fit">
           <Controller
             name="publishType"
@@ -64,14 +63,14 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
           />
         </div>
 
-        {/* Schedule Publish Date & Time Pickers */}
+        {/* schedule publish date nad time pickers */}
         {publishType === 'schedule_publish' && (
           <div className="space-y-4 pt-2">
             <h2 className="text-base font-semibold text-slate-800">
               {PUBLISH_TEST_MESSAGES.SELECT_DATE_AND_TIME}
             </h2>
             <div className="grid w-full max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
-              {/* Schedule Date — shared DatePickerField */}
+              {/* schedule date - shared DatePickerField */}
               <Controller
                 name="scheduleDate"
                 control={control}
@@ -87,7 +86,7 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
                 )}
               />
 
-              {/* Schedule Time — shared TimePickerField */}
+              {/* Schedule time  shared timePickerField */}
               <Controller
                 name="scheduleTime"
                 control={control}
@@ -115,7 +114,7 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
             <p className="mt-1 text-xs text-slate-500">{PUBLISH_TEST_MESSAGES.LIVE_UNTIL_DESC}</p>
           </div>
 
-          {/* Fix 4: Live Until Radio Group with 2-Column Grid Layout matching Figma */}
+          {/* This is Fix 4: Live Until Radio Group with 2-Column Grid Layout matching Figma */}
           <Controller
             name="duration"
             control={control}
@@ -157,7 +156,7 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
             <p className="text-xs text-red-500">{errors.duration.message}</p>
           )}
 
-          {/* Fix 5: Custom Duration Date & Time Pickers */}
+          {/* here fix 5: Custom Duration Date and Time Pickers */}
           {duration === 'custom' && (
             <div className="grid w-full max-w-2xl grid-cols-1 gap-6 pt-4 sm:grid-cols-2">
               {/* End Date — shared DatePickerField */}
@@ -195,7 +194,7 @@ export function PublishSettingsMain({ testId, test }: PublishSettingsMainProps) 
           )}
         </div>
 
-        {/* Fix 6: Footer Buttons */}
+        {/* Fix 6: here footer Buttons */}
         <div className="flex items-center justify-end gap-4 border-t border-slate-100 pt-8">
           <Button
             type="button"

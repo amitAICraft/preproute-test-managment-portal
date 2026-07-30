@@ -40,7 +40,7 @@ export const MultiSelectField = forwardRef<HTMLDivElement, MultiSelectFieldProps
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Close when clicking outside
+    // Close dropdown , when clicking outside
     useEffect(() => {
       const handleOutsideClick = (e: MouseEvent) => {
         if (containerRef.current && !containerRef.current.contains(e.target as Node)) {

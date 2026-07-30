@@ -8,15 +8,8 @@ import { useCreateTestMutation } from '../api/testApi';
 import { TEST_FORM_DEFAULTS, TEST_MESSAGES } from '../constants';
 import type { Test } from '../types';
 
-/**
- * Hook — business logic for creating a test.
- *
- * Integrates react-hook-form + Zod validation + RTK mutation
- * into a single composable unit. Components only need to render
- * form fields and call `onSubmit`.
- *
- * @param options.onSuccess - Callback invoked with the created Test on success.
- */
+// Hook - business logic for creating a test.
+
 export function useCreateTest(options?: { onSuccess?: (test: Test) => void }) {
   const [createTest, { isLoading }] = useCreateTestMutation();
 
@@ -45,11 +38,8 @@ export function useCreateTest(options?: { onSuccess?: (test: Test) => void }) {
   );
 
   return {
-    /** react-hook-form instance — spread into form fields. */
     form,
-    /** Submit handler — pass to `form.handleSubmit(onSubmit)`. */
     onSubmit,
-    /** True while the mutation is in flight. */
     isLoading,
   };
 }

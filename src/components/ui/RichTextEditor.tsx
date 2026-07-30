@@ -25,6 +25,7 @@ interface RichTextEditorProps {
   disabled?: boolean;
 }
 
+//Menu Bar
 const MenuBar = ({ editor, disabled }: { editor: any; disabled?: boolean }) => {
   if (!editor || disabled) {
     return null;

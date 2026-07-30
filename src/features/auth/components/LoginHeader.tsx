@@ -1,11 +1,7 @@
 import { MESSAGES } from '@/constants/messages';
 
-/**
- * LoginHeader — Logo + page title + subtitle for the login form.
- *
- * Uses the official preproute-logo.svg asset instead of text.
- * Vertical rhythm is tuned to match 01-login-page.png.
- */
+//LoginHeader — Logo + page title + subtitle for the login form.
+
 export function LoginHeader() {
   return (
     <>

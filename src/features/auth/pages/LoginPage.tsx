@@ -1,11 +1,5 @@
-/**
- * LoginPage — Full-screen split layout matching 01-login-page.png.
- *
- * Both panels share the same light blue-gray page background.
- * Left (~50%): hero illustration centered.
- * Right (~50%): tall white card centered vertically with content
- *               positioned in the upper-middle of the card.
- */
+// LoginPage — Full-screen split layout matching 01-login-page.png.
+
 import { LoginForm } from '../components/LoginForm';
 import { LoginHero } from '../components/LoginHero';
 import { LoginHeader } from '../components/LoginHeader';

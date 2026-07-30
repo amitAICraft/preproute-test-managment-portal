@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import type { HTMLAttributes } from 'react';
 
+//Reusable SectionCard layout
 export function SectionCard({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div

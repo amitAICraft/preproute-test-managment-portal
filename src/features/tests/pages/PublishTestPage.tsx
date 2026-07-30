@@ -18,8 +18,6 @@ export function PublishTestPage() {
   const totalQuestions = testResponse?.totalQuestions || 50;
 
   // Use the actual list of created question IDs returned by the backend.
-  // The API response maps backendTest.questions (UUID array) → test.questions.
-  // This gives us the REAL count of successfully created questions.
   const createdCount = testResponse?.questions?.length ?? 0;
 
   // Sidebar: mark only the created question slots green; future slots stay disabled.
@@ -36,9 +34,6 @@ export function PublishTestPage() {
 
       {/* Sidebar + Main Content */}
       <div className="flex w-full min-w-0 flex-1 items-start gap-5">
-        {/* Left sidebar: shows ONLY created questions (not configured count).
-            totalQuestions drives both the slot list AND the "Total Questions . X" sub-header,
-            so passing createdCount here fixes both issues simultaneously. */}
         <QuestionListSidebar
           totalQuestions={createdCount}
           activeQuestionIndex={-1}

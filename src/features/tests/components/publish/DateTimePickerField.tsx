@@ -1,30 +1,10 @@
-/**
- * DateTimePickerField
- *
- * Shared, pixel-perfect Date & Time picker components for Screen 05 and Screen 06.
- *
- * Design contract (Figma 05 & 06):
- *   Height     : 48px (h-12)
- *   Border     : 1px solid #E2E8F0 (slate-200) → red-400 on error
- *   Radius     : 8px (rounded-lg)
- *   BG         : white
- *   Placeholder: #94A3B8 (slate-400), text-sm
- *   Value text : #1E293B (slate-800), text-sm
- *   Icon       : Calendar (date) / ChevronDown (time), slate-400, right-3.5, vertically centred
- *   Padding L  : 16px (px-4)
- *   No native browser date/time chrome visible
- *   Layout stable before and after value change (error row is always reserved)
- */
-
+//DateTimePickerField
 import { useRef } from 'react';
 import { Calendar, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-/* ─────────────────────────────────────────────────────────── */
-/* Shared tokens                                               */
-/* ─────────────────────────────────────────────────────────── */
 
-/** Native input — full-area, functionally active, visually invisible browser chrome */
+// Native input — full-area, functionally active, visually invisible browser chrome
 const NATIVE_INPUT_BASE =
   'block h-12 w-full rounded-lg border bg-white px-4 pr-10 text-sm ' +
   'focus:outline-none focus:ring-2 focus:ring-[#7489FF]/50 cursor-pointer ' +
@@ -40,18 +20,13 @@ const NATIVE_INPUT_BASE =
   '[&::-webkit-inner-spin-button]:hidden ' +
   '[&::-webkit-clear-button]:hidden';
 
-/** Placeholder / value overlay — pointer-events-none so clicks pass to the native input */
 const OVERLAY_BASE =
   'pointer-events-none absolute inset-0 flex items-center px-4 pr-10 text-sm select-none';
-
-/** Icon wrapper */
+//icon wrapper
 const ICON_WRAPPER =
   'absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none';
 
-/* ─────────────────────────────────────────────────────────── */
-/* DatePickerField                                             */
-/* ─────────────────────────────────────────────────────────── */
-
+//Date picker field
 export interface DatePickerFieldProps {
   id: string;
   value: string;
@@ -125,9 +100,9 @@ export function DatePickerField({
   );
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/* TimePickerField                                             */
-/* ─────────────────────────────────────────────────────────── */
+
+
+//TimePickerField
 
 export interface TimePickerFieldProps {
   id: string;

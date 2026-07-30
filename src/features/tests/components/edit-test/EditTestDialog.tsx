@@ -18,21 +18,12 @@ import {
 import type { Test } from '../../types';
 
 interface EditTestDialogProps {
-  /** Controls dialog visibility. */
   open: boolean;
-  /** Called when the dialog requests to close. */
   onOpenChange: (open: boolean) => void;
-  /** The test entity to edit. When undefined, the form shows empty defaults. */
   existingTest: Test | undefined;
 }
 
-/**
- * Edit Test Details modal dialog.
- *
- * Reuses the `useUpdateTest` hook for business logic and validation,
- * and renders the same form fields as the Create Test form.
- * All user-facing strings are pulled from `TEST_FORM_CONSTANTS` constants.
- */
+//Edit Test Details modal dialog.
 export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDialogProps) {
   const { form, onSubmit, isLoading } = useUpdateTest(existingTest, {
     onSuccess: () => {
@@ -57,7 +48,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
   const [hasPrefilledTopics, setHasPrefilledTopics] = useState(false);
   const [hasPrefilledSubTopics, setHasPrefilledSubTopics] = useState(false);
 
-  // Reset prefill state when modal closes
+  // Reset prefill state when modal closes here
   useEffect(() => {
     if (!open) {
       setHasPrefilledSubject(false);
@@ -67,7 +58,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
     }
   }, [open, form]);
 
-  // 1. Prefill basic fields (non-taxonomy)
+  // 1. Prefill basic fields
   useEffect(() => {
     if (existingTest && open && !hasPrefilledSubject) {
       form.reset({
@@ -87,7 +78,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
 
   const { data: subjects = [] } = useGetSubjectsQuery(undefined, { skip: !open });
 
-  // 2. Prefill Subject (mapping name to id)
+  // 2. Prefill subject (mapping name to id here)
   useEffect(() => {
     if (existingTest && open && !hasPrefilledSubject && subjects.length > 0) {
       const sId = subjects.find((s) => s.name === existingTest.subject)?.id;
@@ -104,7 +95,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
     skip: !selectedSubject || !open,
   });
 
-  // 3. Prefill Topics (mapping names to ids)
+  // 3. prefill topics (mapping names to ids here)
   useEffect(() => {
     if (existingTest && open && hasPrefilledSubject && !hasPrefilledTopics && topics.length > 0) {
       const tIds = topics.filter((t) => existingTest.topics.includes(t.name)).map((t) => t.id);
@@ -124,13 +115,11 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
     },
   );
 
-  // Clear subTopics whenever Topic selection CHANGES (not just when empty)
-  // Use a ref to track previous value and skip the initial prefill trigger
+  // Clear subTopics whenever Topic selection changes (not just when empty)
   const prevTopicsRef = useRef<string[]>([]);
   useEffect(() => {
     const prev = prevTopicsRef.current;
     const curr = selectedTopics ?? [];
-    // Skip clearing during initial prefill (prev is empty and we're adding topics)
     const isInitialLoad = prev.length === 0 && curr.length > 0 && !hasPrefilledSubTopics;
     if (!isInitialLoad) {
       const changed = curr.length !== prev.length || curr.some((t, i) => t !== prev[i]);
@@ -145,7 +134,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
     prevTopicsRef.current = curr;
   }, [selectedTopics, form, hasPrefilledSubTopics]);
 
-  // 4. Prefill SubTopics (mapping names to ids)
+  // 4. prefill subTopics (mapping names to ids)
   useEffect(() => {
     if (
       existingTest &&
@@ -191,7 +180,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
               )}
             </div>
 
-            {/* Two-column form grid */}
+            {/* Two column form grid written here*/}
             <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2">
               <SelectField
                 label={TEST_FORM_CONSTANTS.LABELS.SUBJECT}
@@ -263,7 +252,7 @@ export function EditTestDialog({ open, onOpenChange, existingTest }: EditTestDia
               />
             </div>
 
-            {/* Marking Scheme & Questions */}
+            {/* Marking Scheme and Questions displayes */}
             <div className="space-y-4">
               <h3 className="text-foreground text-base font-medium">
                 {TEST_FORM_CONSTANTS.LABELS.MARKING_SCHEME}

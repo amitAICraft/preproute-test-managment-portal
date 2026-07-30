@@ -12,5 +12,4 @@ export const updateTestSchema = createTestSchema.extend({
   id: z.string().min(1, 'Test ID is required'),
 });
 
-/** Inferred type for the Update Test form values. */
 export type UpdateTestFormValues = z.infer<typeof updateTestSchema>;

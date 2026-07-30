@@ -1,9 +1,4 @@
-/**
- * Test feature — public API.
- *
- * Import from `@/features/tests` in consuming code.
- * Never import directly from subdirectories outside this feature.
- */
+// Test feature — public API.
 
 // Types
 export type {

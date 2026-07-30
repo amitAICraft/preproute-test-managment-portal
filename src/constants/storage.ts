@@ -1,6 +1,5 @@
-/**
- * Local storage keys.
- */
+// Local storage keys.
+
 export const STORAGE_KEYS = {
   TOKEN: 'token',
   USER: 'user',

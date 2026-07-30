@@ -1,7 +1,7 @@
 import { baseApi } from './baseApi';
 import type { ApiResponse } from '@/types';
 
-// ── Types ────────────────────────────────────────────────
+//Types
 
 export interface BackendQuestion {
   id: string;
@@ -29,7 +29,7 @@ export interface Question {
 }
 
 export interface QuestionOption {
-  id: string; // usually 'option1', 'option2', etc for frontend mapping
+  id: string;
   text: string;
   isCorrect: boolean;
 }
@@ -42,7 +42,7 @@ export interface FetchBulkQuestionsRequest {
   question_ids: string[];
 }
 
-// ── Mapping Helpers ──────────────────────────────────────
+// all Mapping helpers are written here
 
 const mapBackendToFrontendQuestion = (backendQ: BackendQuestion): Question => ({
   id: backendQ.id,
@@ -60,7 +60,7 @@ const mapBackendToFrontendQuestion = (backendQ: BackendQuestion): Question => ({
   difficulty: backendQ.difficulty,
 });
 
-// ── Injected endpoints ───────────────────────────────────
+// **************** questions all endpoints **************************
 export const questionApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     fetchBulkQuestions: builder.query<Question[], FetchBulkQuestionsRequest>({

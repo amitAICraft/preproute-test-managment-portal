@@ -5,14 +5,14 @@
  * Feature-specific types should live in their respective feature directories.
  */
 
-/** Generic API response wrapper */
+/** generic API response wrapper */
 export interface ApiResponse<T> {
   success: boolean;
   data: T;
   message?: string;
 }
 
-/** Generic paginated response */
+/** generic paginated response */
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;
@@ -27,7 +27,7 @@ export interface ApiError {
   errors?: Record<string, string[]>;
 }
 
-/** Authentication User */
+/** Authentication user types here */
 export interface AuthUser {
   id: string;
   email: string;

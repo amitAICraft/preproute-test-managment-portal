@@ -1,6 +1,6 @@
-/**
- * Application routing constants.
- */
+
+// Application routing constants.
+
 export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',

@@ -1,6 +1,5 @@
-/**
- * User-facing messages and standard text.
- */
+// User-facing messages and standard text written here
+
 export const MESSAGES = {
   LOGIN: {
     APP_NAME_PREFIX: 'Prep',

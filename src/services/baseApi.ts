@@ -8,9 +8,8 @@ import {
 import type { RootState } from '@/app/store';
 import { logout } from '@/features/auth/authSlice';
 
-/**
- * Inner fetchBaseQuery — reads token from Redux state.
- */
+// Inner fetchBaseQuery - reads token from Redux state.
+
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: 'https://admin-moderator-backend-staging.up.railway.app/api',
   prepareHeaders: (headers, { getState }) => {
@@ -22,9 +21,7 @@ const rawBaseQuery = fetchBaseQuery({
   },
 });
 
-/**
- * Wrapper that intercepts 401 / 403 / 500 globally.
- */
+//Wrapper that intercepts 401 / 403 / 500 globally.
 const baseQueryWithGlobalHandlers: BaseQueryFn<
   string | FetchArgs,
   unknown,
@@ -52,10 +49,9 @@ const baseQueryWithGlobalHandlers: BaseQueryFn<
   return result;
 };
 
-/**
- * Base API — single createApi instance for the entire app.
- * Feature APIs inject endpoints via `baseApi.injectEndpoints()`.
- */
+//Base API — single createApi instance for the entire app.
+//Feature APIs inject endpoints via `baseApi.injectEndpoints()`.
+
 export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithGlobalHandlers,
