@@ -50,11 +50,10 @@ The application leverages a domain driven, feature first architecture, separatin
 
 # Bonus Features
 
-- **Dashboard Local Search**: High-performance, client-side searching across test names and metadata.
+- **Dashboard UI + API Inntegration**: (Dashboard data, view, edit)
 - **Multi Filters**: Simultaneous cascading filters for test status, subjects, and creation dates.
 - **Column Sorting**: Fully interactive header columns to sort tests in ascending or descending order.
 - **Live Result Counter**: Instant display of matched search results and filtered test counts.
-- **Responsive UI**: Pixel perfect implementation of Figma breakpoints ensuring compatibility with desktop, tablet, and mobile screens.
 
 # Tech Stack
 
