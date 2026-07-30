@@ -158,9 +158,9 @@ The application compiles cleanly into a static build via Vite. It can be easily 
 -  **CSV Upload**
 The assignment mentions CSV upload, however:
 
-   no API endpoint was available in documentation
-   no CSV structure/specification was provided
-   no sample CSV file was included
+   - no API endpoint was available in documentation
+   - no CSV structure/specification was provided
+   - no sample CSV file was included
 Therefore this functionality can not be implemented reliably with the available information.
 
 - **Question Update API Unavailable**: The backend does not currently support modifying existing questions individually via a `PUT` endpoint. As a result, questions are deleted and recreated or saved in bulk.
