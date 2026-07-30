@@ -183,11 +183,11 @@ The application compiles cleanly into a static build via Vite. It can be easily 
 
 # Live Demo
 
-_Placeholder: [Live URL will be provided upon deployment_](https://preproute-test-managment-portal.vercel.app/)
+[Click Here_](https://preproute-test-managment-portal.vercel.app/)
 
 # GitHub Repository
 
-_Placeholder: [GitHub Repository URL will be provided upon submission_](https://github.com/amitAICraft/preproute-test-managment-portal)
+[Click here](https://github.com/amitAICraft/preproute-test-managment-portal)
 
 # Project Documentation
 
