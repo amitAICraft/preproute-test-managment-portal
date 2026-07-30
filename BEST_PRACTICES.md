@@ -124,22 +124,6 @@ Separating these concerns prevents component files from swelling and keeps UI st
 
 ---
 
-# Accessibility
-
-* **Semantic HTML**: Pages are built using semantic elements (`<nav>`, `<main>`, `<header>`, `<footer>`, `<dialog>`).
-* **Keyboard Navigation**: Dialogs use native browser configurations for ESC close triggers.
-* **Focus States**: Buttons and inputs implement visual focus borders.
-* **Form Labels**: Reusable fields map custom IDs to form elements.
-
----
-
-# Responsive Design
-
-* **Desktop (1024px+)**: Two-column forms and sidebar layouts.
-* **Tablet (768px - 1023px)**: Layouts stack vertically, and the sidebar collapses to an icon-only strip.
-* **Mobile (<767px)**: Forms collapse to a single-column layout, and the sidebar transitions to a toggleable overlay.
-
----
 
 # Backend Limitations
 
@@ -157,5 +141,3 @@ These limitations are handled gracefully without inventing mock client states.
 # Future Improvements
 
 1. **Pagination**: Fetch dashboard listings using backend-driven pagination.
-2. **Debounced Auto-Save**: Auto-save drafts in the Question Builder to prevent data loss.
-3. **Optimistic Updates**: Add optimistic updates to dashboard actions to improve responsiveness.
