@@ -8,19 +8,21 @@ import {
 import type { RootState } from '@/app/store';
 import { logout } from '@/features/auth/authSlice';
 
-// Inner fetchBaseQuery - reads token from Redux state.
-
-// const getBaseUrl = (): string => {
-//   const globalObj = typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : {});
-//   const processEnv = (globalObj as any).process?.env;
-//   if (processEnv && processEnv.VITE_API_URL) {
-//     return processEnv.VITE_API_URL;
-//   }
-//   return import.meta.env.VITE_API_URL || '';
-// };
+// Determine the API base URL based on the runtime environment.
+//
+// Production (Vercel): route through /api/proxy so requests go server-side.
+//   Server-side requests are not subject to browser CORS, which lets the
+//   frontend communicate with Railway regardless of its CORS allowlist.
+//
+// Development (localhost): call Railway directly. The dev server runs on
+//   localhost and there is no CORS issue because the backend allows localhost.
+const BASE_URL = import.meta.env.PROD
+  ? '/api/proxy'
+  : (import.meta.env.VITE_API_URL || 'https://admin-moderator-backend-staging.up.railway.app/api');
 
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: "https://admin-moderator-backend-staging.up.railway.app/api",//getBaseUrl(),
+  baseUrl: BASE_URL,
+
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
     if (token) {
