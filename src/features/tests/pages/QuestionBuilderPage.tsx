@@ -46,7 +46,6 @@ export function QuestionBuilderPage() {
 
   const handleSaveSuccess = () => {
     const savedIndex = activeQuestion;
-    const isReEdit = completedQuestions.includes(savedIndex);
 
     // Always clear the draft for this index
     setDraftQuestions((prev) => {

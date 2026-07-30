@@ -30,7 +30,6 @@ export function DashboardTable({
   tests,
   onEdit,
   onView,
-  onDelete,
   sortBy,
   sortOrder,
   onSort,

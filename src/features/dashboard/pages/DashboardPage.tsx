@@ -12,7 +12,6 @@ import { useTest } from '@/features/tests';
 import { EditTestDialog } from '@/features/tests/components/edit-test/EditTestDialog';
 import { DashboardTable } from '../components/DashboardTable';
 import { useDashboard } from '../hooks/useDashboard';
-import { cn } from '@/lib/utils';
 
 export function DashboardPage() {
   const {

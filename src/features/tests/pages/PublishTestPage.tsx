@@ -15,7 +15,7 @@ export function PublishTestPage() {
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const totalQuestions = testResponse?.totalQuestions || 50;
+
 
   // Use the actual list of created question IDs returned by the backend.
   const createdCount = testResponse?.questions?.length ?? 0;

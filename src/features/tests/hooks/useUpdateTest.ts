@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
+import type { Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { getApiErrorMessage } from '@/utils';
@@ -17,7 +18,7 @@ export function useUpdateTest(
   const [updateTest, { isLoading }] = useUpdateTestMutation();
 
   const form = useForm<UpdateTestFormValues>({
-    resolver: zodResolver(updateTestSchema),
+    resolver: zodResolver(updateTestSchema) as Resolver<UpdateTestFormValues>,
     defaultValues: {
       id: '',
       testType: 'chapterwise',

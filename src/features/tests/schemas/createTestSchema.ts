@@ -26,7 +26,7 @@ export const createTestSchema = z.object({
   duration: z.preprocess(
     preprocessNumber,
     z
-      .number({ required_error: 'Duration is required', invalid_type_error: 'Duration is required' })
+      .number({ error: 'Duration is required' })
       .int('Duration must be a whole number')
       .min(TEST_LIMITS.MIN_DURATION, `Minimum duration is ${TEST_LIMITS.MIN_DURATION} minute(s)`)
       .max(TEST_LIMITS.MAX_DURATION, `Maximum duration is ${TEST_LIMITS.MAX_DURATION} minutes`),
@@ -39,16 +39,16 @@ export const createTestSchema = z.object({
   markingScheme: z.object({
     wrongAnswer: z.preprocess(
       preprocessNumber,
-      z.number({ required_error: 'Wrong answer marks are required', invalid_type_error: 'Wrong answer marks are required' }),
+      z.number({ error: 'Wrong answer marks are required' }),
     ),
     unattempted: z.preprocess(
       preprocessNumber,
-      z.number({ required_error: 'Unattempted marks are required', invalid_type_error: 'Unattempted marks are required' }),
+      z.number({ error: 'Unattempted marks are required' }),
     ),
     correctAnswer: z.preprocess(
       preprocessNumber,
       z
-        .number({ required_error: 'Correct answer marks are required', invalid_type_error: 'Correct answer marks are required' })
+        .number({ error: 'Correct answer marks are required' })
         .positive('Correct answer marks must be positive'),
     ),
   }),
@@ -56,7 +56,7 @@ export const createTestSchema = z.object({
   totalQuestions: z.preprocess(
     preprocessNumber,
     z
-      .number({ required_error: 'Number of questions is required', invalid_type_error: 'Number of questions is required' })
+      .number({ error: 'Number of questions is required' })
       .int('Must be a whole number')
       .min(TEST_LIMITS.MIN_QUESTIONS, `Minimum ${TEST_LIMITS.MIN_QUESTIONS} question(s)`)
       .max(TEST_LIMITS.MAX_QUESTIONS, `Maximum ${TEST_LIMITS.MAX_QUESTIONS} questions`),
