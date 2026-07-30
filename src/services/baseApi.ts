@@ -10,17 +10,17 @@ import { logout } from '@/features/auth/authSlice';
 
 // Inner fetchBaseQuery - reads token from Redux state.
 
-const getBaseUrl = (): string => {
-  const globalObj = typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : {});
-  const processEnv = (globalObj as any).process?.env;
-  if (processEnv && processEnv.VITE_API_URL) {
-    return processEnv.VITE_API_URL;
-  }
-  return import.meta.env.VITE_API_URL || '';
-};
+// const getBaseUrl = (): string => {
+//   const globalObj = typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : {});
+//   const processEnv = (globalObj as any).process?.env;
+//   if (processEnv && processEnv.VITE_API_URL) {
+//     return processEnv.VITE_API_URL;
+//   }
+//   return import.meta.env.VITE_API_URL || '';
+// };
 
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: getBaseUrl(),
+  baseUrl: "https://admin-moderator-backend-staging.up.railway.app/api",//getBaseUrl(),
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
     if (token) {
