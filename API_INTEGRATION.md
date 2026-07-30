@@ -202,8 +202,6 @@ The table below lists all endpoints integrated into the application:
 
 # Assumptions
 
-* **Frontend Scheduling**: Because scheduling properties were omitted from the API documentation, scheduling parameters are validated and stored on the client side, and the test is updated to `live` status during publication.
-* **Test Type Support**: Support for `PYQ` and `Mock-Test` is disabled in the form tabs, as the backend currently only supports `Chapterwise` tests.
 * **Delete Functionality**: The delete option is left disabled in the user interface because the backend API documentation does not expose a deletion method.
 
 ---
